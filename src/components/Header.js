@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
-import { View, Image, TextInput, Text, StyleSheet } from 'react-native';
+import { View, Image, TextInput, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome } from '@expo/vector-icons';
 
 export default function Header() {
   const [searchText, setSearchText] = useState('');
+
+  const handleMenuPress = (menu) => {
+    Alert.alert('Menu clicado', `Você clicou em ${menu}`);
+    // Se usar React Navigation:
+    // navigation.navigate(menu);
+  };
 
   return (
     <LinearGradient
@@ -34,32 +40,32 @@ export default function Header() {
 
       {/* Linha de ícones */}
       <View style={styles.iconRow}>
-        <View style={styles.iconBox}>
+        <TouchableOpacity style={styles.iconBox} onPress={() => handleMenuPress('Cidades')}>
           <Image
             source={require('../../assets/icons/cidades.png')}
             style={styles.iconImage}
             resizeMode="contain"
           />
           <Text style={styles.iconLabel}>Cidades</Text>
-        </View>
+        </TouchableOpacity>
 
-        <View style={styles.iconBox}>
+        <TouchableOpacity style={styles.iconBox} onPress={() => handleMenuPress('Atrações')}>
           <Image
             source={require('../../assets/icons/atracoes.png')}
             style={styles.iconImage}
             resizeMode="contain"
           />
           <Text style={styles.iconLabel}>Atrações</Text>
-        </View>
+        </TouchableOpacity>
 
-        <View style={styles.iconBox}>
+        <TouchableOpacity style={styles.iconBox} onPress={() => handleMenuPress('Contato')}>
           <Image
             source={require('../../assets/icons/contato.png')}
             style={styles.iconImage}
             resizeMode="contain"
           />
           <Text style={styles.iconLabel}>Contato</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </LinearGradient>
   );
@@ -67,7 +73,7 @@ export default function Header() {
 
 const styles = StyleSheet.create({
   header: {
-    paddingTop: 60,
+    paddingTop: 34,
     paddingBottom: 20,
     paddingHorizontal: 20,
   },
@@ -106,5 +112,9 @@ const styles = StyleSheet.create({
     marginTop: 6,
     fontSize: 14,
     fontWeight: '500',
+  },
+  iconImage: {
+    width: 56,
+    height: 40,
   },
 });
