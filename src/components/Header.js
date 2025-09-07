@@ -25,13 +25,13 @@ export default function Header() {
           <FontAwesome
             name="search"
             size={20}
-            color="#24282D"
+            color="#666"
             style={styles.searchIcon}
           />
         )}
         <TextInput
           placeholder="Inicie sua busca"
-          placeholderTextColor="#24282D"
+          placeholderTextColor="#666"
           style={styles.searchInput}
           value={searchText}
           onChangeText={text => setSearchText(text)}
@@ -73,7 +73,7 @@ export default function Header() {
 
 const styles = StyleSheet.create({
   header: {
-    paddingTop: 34,
+    paddingTop: 49,
     paddingBottom: 20,
     paddingHorizontal: 20,
   },

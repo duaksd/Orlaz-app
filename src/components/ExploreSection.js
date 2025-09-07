@@ -59,6 +59,7 @@ export default function ExploreSection() {
                         </View>
                     </TouchableOpacity>
                 )}
+                contentContainerStyle={{ paddingLeft: 10, paddingRight: 20 }}
             />
         </View>
     );

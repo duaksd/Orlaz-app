@@ -1,45 +1,76 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import React from "react";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function BottomNav() {
-  const [activeTab, setActiveTab] = useState('home'); // estado da aba ativa
-
-  const handlePress = (tab) => {
-    setActiveTab(tab);
-    // Aqui você pode navegar para a tela correspondente se usar React Navigation
-    // navigation.navigate(tab);
-  };
-
+export default function BottomNav({ state, navigation }) {
   return (
-    <View style={styles.navContainer}>
-      <TouchableOpacity onPress={() => handlePress('home')}>
-        <Ionicons name="home-sharp" size={26} color={activeTab === 'home' ? '#1E4F6E' : '#000000'} />
-      </TouchableOpacity>
+    <SafeAreaView edges={["bottom"]} style={styles.safeArea}>
 
-      <TouchableOpacity onPress={() => handlePress('favorites')}>
-        <FontAwesome name="star" size={26} color={activeTab === 'favorites' ? '#1E4F6E' : '#000000'} />
-      </TouchableOpacity>
+      <View style={styles.navContainer}>
+        {state.routes.map((route, index) => {
+          const isFocused = state.index === index;
 
-      <TouchableOpacity onPress={() => handlePress('profile')}>
-        <FontAwesome name="user-circle" size={26} color={activeTab === 'profile' ? '#1E4F6E' : '#000000'} />
-      </TouchableOpacity>
-    </View>
+          let icon;
+          if (route.name === "Home") {
+            icon = (
+              <Ionicons
+                name="home-sharp"
+                size={26}
+                color={isFocused ? "#2A77A2" : "#000000"}
+              />
+            );
+          } else if (route.name === "Favoritos") {
+            icon = (
+              <FontAwesome
+                name="star"
+                size={26}
+                color={isFocused ? "#2A77A2" : "#000000"}
+              />
+            );
+          } else if (route.name === "Perfil") {
+            icon = (
+              <FontAwesome
+                name="user-circle"
+                size={26}
+                color={isFocused ? "#2A77A2" : "#000000"}
+              />
+            );
+          }
+
+          return (
+            <TouchableOpacity
+              key={route.key}
+              onPress={() => navigation.navigate(route.name)}
+              style={styles.tabButton}
+              activeOpacity={0.7}
+            >
+              {icon}
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    backgroundColor: "#EFEFEF",
+  },
   navContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
     height: 70,
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    elevation: 10,
-    shadowColor: '#000',
+    backgroundColor: "#EFEFEF",
+    shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 6,
+  },
+  tabButton: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
