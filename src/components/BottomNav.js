@@ -6,7 +6,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function BottomNav({ state, navigation }) {
   return (
     <SafeAreaView edges={["bottom"]} style={styles.safeArea}>
-
       <View style={styles.navContainer}>
         {state.routes.map((route, index) => {
           const isFocused = state.index === index;
@@ -41,7 +40,14 @@ export default function BottomNav({ state, navigation }) {
           return (
             <TouchableOpacity
               key={route.key}
-              onPress={() => navigation.navigate(route.name)}
+              onPress={() => {
+                if (route.name === "Home") {
+                  // Volta sempre para a tela principal do Stack
+                  navigation.navigate("Home", { screen: "HomeMain" });
+                } else {
+                  navigation.navigate(route.name);
+                }
+              }}
               style={styles.tabButton}
               activeOpacity={0.7}
             >

@@ -1,27 +1,29 @@
-import React, { useState } from 'react';
-import { View, Image, TextInput, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { FontAwesome } from '@expo/vector-icons';
+import React, { useState } from "react";
+import { View, TextInput, Text, StyleSheet, TouchableOpacity, Image, Alert } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { FontAwesome } from "@expo/vector-icons";
 
-export default function Header() {
-  const [searchText, setSearchText] = useState('');
+export default function Header({ navigation }) {
+  const [searchText, setSearchText] = useState("");
 
   const handleMenuPress = (menu) => {
-    Alert.alert('Menu clicado', `Você clicou em ${menu}`);
-    // Se usar React Navigation:
-    // navigation.navigate(menu);
+    if (menu === "Contato") {
+      navigation.navigate("Contato"); // ✅ navegação para ContactScreen
+    } else {
+      Alert.alert("Menu clicado", `Você clicou em ${menu}`);
+    }
   };
 
   return (
     <LinearGradient
-      colors={['#1E4F6E', '#2A77A2']}
+      colors={["#1E4F6E", "#2A77A2"]}
       start={{ x: 0.5, y: 0 }}
       end={{ x: 0.5, y: 1 }}
       style={styles.header}
     >
       {/* Barra de pesquisa */}
       <View style={styles.searchContainer}>
-        {searchText === '' && (
+        {searchText === "" && (
           <FontAwesome
             name="search"
             size={20}
@@ -40,31 +42,31 @@ export default function Header() {
 
       {/* Linha de ícones */}
       <View style={styles.iconRow}>
-        <TouchableOpacity style={styles.iconBox} onPress={() => handleMenuPress('Cidades')}>
+        <TouchableOpacity style={styles.iconBox} onPress={() => handleMenuPress("Cidades")}>
           <Image
-            source={require('../../assets/icons/cidades.png')}
+            source={require("../../assets/icons/cidades.png")}
             style={styles.iconImage}
             resizeMode="contain"
           />
-          <Text style={styles.iconLabel}>Cidades</Text>
+          <Text style={styles.iconLabel}>Cidades</Text> {/* ✅ dentro de Text */}
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.iconBox} onPress={() => handleMenuPress('Atrações')}>
+        <TouchableOpacity style={styles.iconBox} onPress={() => handleMenuPress("Atrações")}>
           <Image
-            source={require('../../assets/icons/atracoes.png')}
+            source={require("../../assets/icons/atracoes.png")}
             style={styles.iconImage}
             resizeMode="contain"
           />
-          <Text style={styles.iconLabel}>Atrações</Text>
+          <Text style={styles.iconLabel}>Atrações</Text> {/* ✅ dentro de Text */}
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.iconBox} onPress={() => handleMenuPress('Contato')}>
+        <TouchableOpacity style={styles.iconBox} onPress={() => handleMenuPress("Contato")}>
           <Image
-            source={require('../../assets/icons/contato.png')}
+            source={require("../../assets/icons/contato.png")}
             style={styles.iconImage}
             resizeMode="contain"
           />
-          <Text style={styles.iconLabel}>Contato</Text>
+          <Text style={styles.iconLabel}>Contato</Text> {/* ✅ dentro de Text */}
         </TouchableOpacity>
       </View>
     </LinearGradient>
@@ -78,40 +80,40 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FFFFFF",
     borderRadius: 25,
     height: 50,
     marginBottom: 25,
-    alignSelf: 'center',
-    width: '90%',
+    alignSelf: "center",
+    width: "90%",
     paddingHorizontal: 10,
   },
   searchIcon: {
     marginRight: 8,
   },
   searchInput: {
-    flex: 0, 
+    flex: 0,
     fontSize: 16,
-    color: '#24282D',
-    textAlign: 'center', 
-    textAlignVertical: 'center', 
+    color: "#24282D",
+    textAlign: "center",
+    textAlignVertical: "center",
     padding: 0,
   },
   iconRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   iconBox: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   iconLabel: {
-    color: '#fff',
+    color: "#fff",
     marginTop: 6,
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   iconImage: {
     width: 56,
