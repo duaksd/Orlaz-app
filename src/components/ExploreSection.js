@@ -46,20 +46,16 @@ export default function ExploreSection() {
                                 style={styles.favorite} 
                                 onPress={() => handleFavorite(item)}
                             >
-                                <View>
-                                    <FontAwesome 
-                                        name="star"  
-                                        size={20} 
-                                        color={favorites[item.id] ? "#2A77A2" : "rgba(6, 6, 6, 0.69)"} // transparente antes do clique
-                                    />
-                                </View>
+                                <FontAwesome 
+                                    name={favorites[item.id] ? "heart" : "heart-o"}  
+                                    size={20} 
+                                    color={favorites[item.id] ? "#1E77A5" : "rgba(6, 6, 6, 0.5)"} 
+                                />
                             </TouchableOpacity>
                         </View>
                         <Text style={styles.city}>{item.name}</Text>
                         <View style={styles.rating}>
-                            <View>
-                                <FontAwesome name="star" size={14} color="#000" />
-                            </View>
+                            <FontAwesome name="star" size={14} color="#000" />
                             <Text style={styles.ratingText}>{item.rating}</Text>
                         </View>
                     </TouchableOpacity>
@@ -99,7 +95,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 6,
         left: 95,
-        padding: 0,
         borderRadius: 12,
         width: 24,
         height: 24,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import {
   View,
   Text,
@@ -8,7 +8,6 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -26,9 +25,8 @@ export default function LoginScreen({ navigation }) {
 
     setLoading(true);
     try {
-      // Simulando usuário (em uma app real, isso viria do backend)
       const userData = {
-        name: 'Usuário', // No login real, o nome viria do backend
+        name: 'Usuário',
         email: email,
         visitHistory: [
           { place: 'Praia do Centro', date: '2025-09-01' },
@@ -38,7 +36,7 @@ export default function LoginScreen({ navigation }) {
 
       const success = await signIn(userData);
       if (success) {
-        navigation.navigate('ProfileMain');
+        navigation.replace('Profile');  // Changed from 'ProfileMain'
       } else {
         Alert.alert('Erro', 'Não foi possível fazer login. Tente novamente.');
       }
@@ -50,24 +48,25 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <LinearGradient
-      colors={['#1E4F6E', '#2A77A2']}
-      style={styles.container}
-    >
-      <View style={styles.card}>
-        <FontAwesome name="user-circle" size={60} color="#1E4F6E" />
-        
-        <Text style={styles.title}>Login</Text>
-        
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
+      
+      {/* Campo de email com ícone */}
+      <View style={styles.inputContainer}>
+        <FontAwesome name="envelope" size={18} color="#555" style={styles.icon}/>
         <TextInput
           style={styles.input}
-          placeholder="E-mail"
+          placeholder="Seu email"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
         />
-        
+      </View>
+
+      {/* Campo de senha com ícone */}
+      <View style={styles.inputContainer}>
+        <FontAwesome name="lock" size={20} color="#555" style={styles.icon}/>
         <TextInput
           style={styles.input}
           placeholder="Senha"
@@ -75,87 +74,97 @@ export default function LoginScreen({ navigation }) {
           onChangeText={setPassword}
           secureTextEntry
         />
-        
-        <TouchableOpacity 
-          style={styles.button} 
-          onPress={handleLogin}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#FFF" />
-          ) : (
-            <Text style={styles.buttonText}>Entrar</Text>
-          )}
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={styles.registerButton}
-          onPress={() => navigation.navigate('Register')}
-        >
-          <Text style={styles.registerText}>
-            Não tem uma conta? <Text style={styles.registerTextBold}>Cadastre-se</Text>
-          </Text>
-        </TouchableOpacity>
       </View>
-    </LinearGradient>
+
+      {/* Botão entrar */}
+      <TouchableOpacity 
+        style={styles.button} 
+        onPress={handleLogin}
+        disabled={loading}
+      >
+        {loading ? (
+          <ActivityIndicator color="#FFF" />
+        ) : (
+          <Text style={styles.buttonText}>Entrar</Text>
+        )}
+      </TouchableOpacity>
+
+      {/* Links */}
+      <TouchableOpacity>
+        <Text style={styles.forgotText}>Esqueceu sua senha?</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity 
+        style={styles.registerButton}
+        onPress={() => navigation.navigate('Register')}
+      >
+        <Text style={styles.registerText}>
+          Não tem uma conta? <Text style={styles.linkText}>Crie uma</Text>
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F5F5F5',
     justifyContent: 'center',
-    padding: 20,
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 15,
-    padding: 20,
     alignItems: 'center',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    paddingHorizontal: 25,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1E4F6E',
-    marginVertical: 20,
+    marginBottom: 25,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    width: '100%',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+    elevation: 2,
+  },
+  icon: {
+    marginRight: 8,
   },
   input: {
-    width: '100%',
-    height: 50,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    fontSize: 16,
+    flex: 1,
+    height: 45,
+    fontSize: 15,
   },
   button: {
+    backgroundColor: '#1E77A5',
     width: '100%',
-    height: 50,
-    backgroundColor: '#1E4F6E',
-    borderRadius: 10,
-    justifyContent: 'center',
+    paddingVertical: 12,
+    borderRadius: 6,
     alignItems: 'center',
     marginTop: 10,
+    elevation: 2,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
     fontWeight: 'bold',
+    fontSize: 16,
+  },
+  forgotText: {
+    marginTop: 12,
+    color: '#555',
+    fontSize: 13,
   },
   registerButton: {
     marginTop: 20,
   },
   registerText: {
-    color: '#666',
+    color: '#333',
     fontSize: 14,
   },
-  registerTextBold: {
-    color: '#1E4F6E',
-    fontWeight: 'bold',
+  linkText: {
+    color: '#1E77A5',
+    fontWeight: '500',
   },
 });

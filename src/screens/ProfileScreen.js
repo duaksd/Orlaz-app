@@ -10,17 +10,14 @@ export default function Profile({ navigation }) {
   const handleLogout = () => {
     Alert.alert(
       'Sair',
-      'Tem certeza que deseja sair?',
+      'Deseja realmente sair?',
       [
-        {
-          text: 'Cancelar',
-          style: 'cancel',
-        },
+        { text: 'Cancelar', style: 'cancel' },
         {
           text: 'Sim',
           onPress: async () => {
             await signOut();
-            navigation.replace('Login');
+            navigation.replace('Login');  // Changed from 'LoginScreen'
           },
         },
       ],
@@ -41,51 +38,47 @@ export default function Profile({ navigation }) {
     );
   }
 
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
-  // Se chegou aqui, o usuário está autenticado
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Meu Perfil</Text>
+      <Text style={styles.title}>Minha Conta</Text>
+
+      <View style={styles.profileContainer}>
+        <View style={styles.userInfoContainer}>
+          <FontAwesome name="user-circle" size={70} color="#2A77A2" />
+          <View style={{ marginLeft: 15, flexShrink: 1 }}>
+            {/* Linha do cumprimento */}
+            <Text style={styles.greeting}>Olá, {user.name || 'usuário'}! ☀️🏖️</Text>
+            {/* Linha do e-mail */}
+            <View style={styles.emailContainer}>
+              <FontAwesome name="envelope" size={14} color="#000" />
+              <Text style={styles.email}>{user.email}</Text>
+            </View>
+          </View>
+        </View>
       </View>
 
-      <View style={styles.content}>
-        <View style={styles.avatarContainer}>
-          <FontAwesome name="user-circle" size={80} color="#1E4F6E" />
-          <Text style={styles.name}>{user.name}</Text>
-          <Text style={styles.email}>{user.email}</Text>
-        </View>
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity style={[styles.button, styles.blueButton]}>
+          <FontAwesome name="check-square" size={16} color="#1E77A5" />
+          <Text style={styles.blueText}>Atualizar Email</Text>
+        </TouchableOpacity>
 
-        <View style={styles.infoContainer}>
-          <View style={styles.historyContainer}>
-            <TouchableOpacity style={styles.infoItem}>
-              <FontAwesome name="history" size={24} color="#1E4F6E" />
-              <Text style={styles.infoText}>Histórico de Visitas</Text>
-            </TouchableOpacity>
-            {user.visitHistory.map((visit, index) => (
-              <View key={index} style={styles.historyItem}>
-                <Text style={styles.historyPlace}>{visit.place}</Text>
-                <Text style={styles.historyDate}>{visit.date}</Text>
-              </View>
-            ))}
-          </View>
+        <TouchableOpacity style={[styles.button, styles.blueButton]}>
+          <FontAwesome name="lock" size={16} color="#1E77A5" />
+          <Text style={styles.blueText}>Mudar Senha</Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity style={styles.infoItem}>
-            <FontAwesome name="cog" size={24} color="#1E4F6E" />
-            <Text style={styles.infoText}>Configurações</Text>
-          </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, styles.redButton]}>
+          <FontAwesome name="exclamation-circle" size={16} color="#D32F2F" />
+          <Text style={styles.redText}>Deletar Conta</Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity 
-            style={[styles.infoItem, styles.logoutButton]} 
-            onPress={handleLogout}
-          >
-            <FontAwesome name="sign-out" size={24} color="#D32F2F" />
-            <Text style={[styles.infoText, styles.logoutText]}>Sair</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={[styles.button, styles.blackButton]} onPress={handleLogout}>
+          <FontAwesome name="sign-out" size={16} color="#000" />
+          <Text style={[styles.blackText, { marginLeft: 8 }]}>Sair</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -94,91 +87,80 @@ export default function Profile({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F7F7F7",
+    backgroundColor: "#F5F5F5",
+    alignItems: "center",
+    paddingTop: 80,
   },
-  header: {
-    backgroundColor: "#1E4F6E",
-    padding: 20,
-    paddingTop: 60,
-  },
-  headerTitle: {
-    fontSize: 24,
+  title: {
+    fontSize: 32,
     fontWeight: "bold",
-    color: "#FFF",
-    textAlign: "center",
+    marginBottom: 10,
   },
-  content: {
-    flex: 1,
-    padding: 20,
-  },
-  avatarContainer: {
+  profileContainer: {
     alignItems: "center",
     marginBottom: 30,
+    padding: 15,
   },
-  historyContainer: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  historyItem: {
+  userInfoContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#EEE',
+    alignItems: 'center', // centraliza verticalmente o ícone com os textos
   },
-  historyPlace: {
-    fontSize: 14,
-    color: '#333',
+  greeting: {
+    fontSize: 24,
+    fontWeight: "400",
+    marginBottom: 4, // espaço entre cumprimento e e-mail
   },
-  historyDate: {
+  emailContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  email: {
+    marginLeft: 4,
     fontSize: 14,
-    color: '#666',
+    color: "#444",
+  },
+  buttonsContainer: {
+    width: "80%",
+    alignItems: "center",
+    gap: 12,
+  },
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    paddingVertical: 12,
+    borderRadius: 6,
+    borderWidth: 1.5,
+  },
+  blueButton: {
+    borderColor: "#1E77A5",
+  },
+  blueText: {
+    color: "#1E77A5",
+    fontWeight: "bold",
+    marginLeft: 8,
+  },
+  redButton: {
+    borderColor: "#D32F2F",
+  },
+  redText: {
+    color: "#D32F2F",
+    fontWeight: "bold",
+    marginLeft: 8,
+  },
+  blackButton: {
+    borderColor: "#000",
+    marginTop: 3,
+  },
+  blackText: {
+    color: "#000",
+    fontWeight: "bold",
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F7F7F7',
-  },
-  name: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#1E4F6E",
-    marginTop: 10,
-  },
-  email: {
-    fontSize: 16,
-    color: "#666",
-    marginTop: 5,
-  },
-  infoContainer: {
-    backgroundColor: "#FFF",
-    borderRadius: 15,
-    padding: 20,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  infoItem: {
-    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#EEE",
-  },
-  infoText: {
-    fontSize: 16,
-    marginLeft: 15,
-    color: "#333",
-  },
-  logoutButton: {
-    borderBottomWidth: 0,
-    marginTop: 10,
-  },
-  logoutText: {
-    color: "#D32F2F",
+    backgroundColor: "#F5F5F5",
   },
 });

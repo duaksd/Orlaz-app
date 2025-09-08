@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"; 
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 
@@ -24,7 +24,7 @@ export default function Favorites() {
       {favorites.length === 0 ? (
         <View style={styles.emptyContainer}>
           <View>
-            <FontAwesome name="star-o" size={60} color="#2A77A2" />
+            <FontAwesome name="heart-o" size={60} color="#1E77A5" />
           </View>
           <Text style={styles.emptyText}>Nenhum destino favoritado ainda.</Text>
           <Text style={styles.emptySubText}>Adicione seus lugares preferidos!</Text>
@@ -46,9 +46,7 @@ export default function Favorites() {
                   setFavorites(favorites.filter((fav) => fav.id !== item.id))
                 }
               >
-                <View>
-                  <FontAwesome name="star" size={14} color="#1E4F6E" />
-                </View>
+                <FontAwesome name="heart" size={14} color="#E91E63" />
                 <Text style={styles.removeText}>Remover dos favoritos</Text>
               </TouchableOpacity>
             </View>
@@ -77,7 +75,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   highlight: {
-    color: "#2A77A2",
+    color: "#1E77A5", // destaque no mesmo tom do coração
   },
   subtitle: {
     fontSize: 14,
@@ -87,7 +85,7 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     flex: 1,
-    justifyContent: "flex-start", // começa do topo do espaço restante
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   emptyText: {
@@ -139,6 +137,7 @@ const styles = StyleSheet.create({
   },
   removeText: {
     fontSize: 12,
-    color: "#1E4F6E",
+    color: "#E91E63",
+    fontWeight: "600",
   },
 });

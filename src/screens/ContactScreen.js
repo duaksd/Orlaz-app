@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
+import { View,
   Text,
   TextInput,
   TouchableOpacity,
@@ -47,7 +46,7 @@ export default function ContatoScreen() {
         <View style={styles.headerRow}>
         <TouchableOpacity onPress={() => navigation.navigate("HomeMain")}>
           <View>
-            <FontAwesome name="arrow-left" size={22} color="#fff" />
+            <FontAwesome name="arrow-left" size={20} color="#fff" />
           </View>
         </TouchableOpacity>
 
@@ -144,7 +143,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: "#1E4F6E",
     alignItems: "center",
-    padding: 30,
+    padding: 20,
   },
   headerRow: {
     flexDirection: "row",

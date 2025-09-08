@@ -6,7 +6,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function BottomNav({ state, navigation }) {
   // Verifica se estamos na tela de contato usando o state atual da navegação
   const currentRoute = state.routes[state.index];
-  const isContactScreen = currentRoute.state?.routes?.[currentRoute.state?.index]?.name === "Contato";
+  const isContactScreen =
+    currentRoute.state?.routes?.[currentRoute.state?.index]?.name === "Contato";
 
   return (
     <SafeAreaView edges={["bottom"]} style={styles.safeArea}>
@@ -16,7 +17,6 @@ export default function BottomNav({ state, navigation }) {
 
           let icon;
           if (route.name === "Home") {
-            // Se estiver na tela de contato, força a cor preta
             const isActive = isFocused && !isContactScreen;
             icon = (
               <View style={styles.iconContainer}>
@@ -31,7 +31,7 @@ export default function BottomNav({ state, navigation }) {
             icon = (
               <View style={styles.iconContainer}>
                 <FontAwesome
-                  name="star"
+                  name="heart"
                   size={26}
                   color={isFocused ? "#2A77A2" : "#000000"}
                 />
@@ -54,10 +54,8 @@ export default function BottomNav({ state, navigation }) {
               key={route.key}
               onPress={() => {
                 if (route.name === "Home") {
-                  // Volta sempre para a tela principal do Stack
                   navigation.navigate("Home", { screen: "HomeMain" });
                 } else if (route.name === "Perfil") {
-                  // Quando clicar no Perfil, navega para o ProfileStack
                   navigation.navigate("Perfil", { screen: "ProfileMain" });
                 } else {
                   navigation.navigate(route.name);
