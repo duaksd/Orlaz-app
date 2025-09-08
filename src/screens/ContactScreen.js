@@ -41,29 +41,36 @@ export default function ContatoScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Header com seta e redes sociais */}
-      <View style={styles.headerRow}>
+    <ScrollView>
+      <View style={styles.container}>
+        {/* Header com seta e redes sociais */}
+        <View style={styles.headerRow}>
         <TouchableOpacity onPress={() => navigation.navigate("HomeMain")}>
-          <FontAwesome name="arrow-left" size={22} color="#fff" />
+          <View>
+            <FontAwesome name="arrow-left" size={22} color="#fff" />
+          </View>
         </TouchableOpacity>
 
         <View style={styles.socialRow}>
           <TouchableOpacity onPress={abrirInstagram}>
-            <FontAwesome
-              name="instagram"
-              size={22}
-              color="#fff"
-              style={styles.icon}
-            />
+            <View>
+              <FontAwesome
+                name="instagram"
+                size={22}
+                color="#fff"
+                style={styles.icon}
+              />
+            </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={abrirTwitter}>
-            <FontAwesome6
-              name="x-twitter"
-              size={22}
-              color="#fff"
-              style={styles.icon}
-            />
+            <View>
+              <FontAwesome6
+                name="x-twitter"
+                size={22}
+                color="#fff"
+                style={styles.icon}
+              />
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -119,11 +126,14 @@ export default function ContatoScreen() {
 
         {/* Horário */}
         <View style={styles.scheduleBox}>
-          <Text style={styles.scheduleTitle}>📅 Horário de Atendimento</Text>
-          <Text style={styles.scheduleText}>
-            Segunda a Sexta: 8h às 18h {"\n"}Sábado: 9h às 13h
-          </Text>
+          <View style={styles.scheduleTitleContainer}>
+            <FontAwesome name="calendar" size={16} color="#000" style={styles.calendarIcon} />
+            <Text style={styles.scheduleTitle}>Horário de Atendimento</Text>
+          </View>
+          <Text style={styles.scheduleText}>Segunda a Sexta: 8h às 18h</Text>
+          <Text style={styles.scheduleText}>Sábado: 9h às 13h</Text>
         </View>
+      </View>
       </View>
     </ScrollView>
   );
@@ -213,13 +223,21 @@ const styles = StyleSheet.create({
     marginTop: 15,
     alignItems: "center",
   },
+  scheduleTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  calendarIcon: {
+    marginRight: 8,
+  },
   scheduleTitle: {
     fontWeight: "bold",
     fontSize: 14,
-    marginBottom: 4,
   },
   scheduleText: {
     fontSize: 13,
     textAlign: "center",
+    lineHeight: 20,
   },
 });

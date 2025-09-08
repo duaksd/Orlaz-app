@@ -13,7 +13,9 @@ export default function Favorites() {
           Meus <Text style={styles.highlight}>Favoritos</Text>
         </Text>
         <Text style={styles.subtitle}>
-          Aqui estão os destinos que você mais gostou.{"\n"}
+          Aqui estão os destinos que você mais gostou.
+        </Text>
+        <Text style={styles.subtitle}>
           Relembre e planeje a sua próxima viagem.
         </Text>
       </View>
@@ -21,7 +23,9 @@ export default function Favorites() {
       {/* Conteúdo */}
       {favorites.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <FontAwesome name="star-o" size={60} color="#2A77A2" />
+          <View>
+            <FontAwesome name="star-o" size={60} color="#2A77A2" />
+          </View>
           <Text style={styles.emptyText}>Nenhum destino favoritado ainda.</Text>
           <Text style={styles.emptySubText}>Adicione seus lugares preferidos!</Text>
         </View>
@@ -42,7 +46,9 @@ export default function Favorites() {
                   setFavorites(favorites.filter((fav) => fav.id !== item.id))
                 }
               >
-                <FontAwesome name="star" size={14} color="#1E4F6E" />
+                <View>
+                  <FontAwesome name="star" size={14} color="#1E4F6E" />
+                </View>
                 <Text style={styles.removeText}>Remover dos favoritos</Text>
               </TouchableOpacity>
             </View>

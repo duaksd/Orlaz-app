@@ -6,11 +6,24 @@ import { FontAwesome } from "@expo/vector-icons";
 export default function Header({ navigation }) {
   const [searchText, setSearchText] = useState("");
 
+  const getMenuTitle = (menu) => {
+    switch (menu) {
+      case "Cidades":
+        return "Você clicou em Cidades";
+      case "Atrações":
+        return "Você clicou em Atrações";
+      case "Contato":
+        return "Você clicou em Contato";
+      default:
+        return "Você clicou em um menu";
+    }
+  };
+
   const handleMenuPress = (menu) => {
     if (menu === "Contato") {
-      navigation.navigate("Contato"); // ✅ navegação para ContactScreen
+      navigation.navigate("Contato");
     } else {
-      Alert.alert("Menu clicado", `Você clicou em ${menu}`);
+      Alert.alert("Menu clicado", getMenuTitle(menu));
     }
   };
 
@@ -24,12 +37,14 @@ export default function Header({ navigation }) {
       {/* Barra de pesquisa */}
       <View style={styles.searchContainer}>
         {searchText === "" && (
-          <FontAwesome
-            name="search"
-            size={20}
-            color="#666"
-            style={styles.searchIcon}
-          />
+          <View>
+            <FontAwesome
+              name="search"
+              size={20}
+              color="#666"
+              style={styles.searchIcon}
+            />
+          </View>
         )}
         <TextInput
           placeholder="Inicie sua busca"
@@ -42,31 +57,52 @@ export default function Header({ navigation }) {
 
       {/* Linha de ícones */}
       <View style={styles.iconRow}>
-        <TouchableOpacity style={styles.iconBox} onPress={() => handleMenuPress("Cidades")}>
-          <Image
-            source={require("../../assets/icons/cidades.png")}
-            style={styles.iconImage}
-            resizeMode="contain"
-          />
-          <Text style={styles.iconLabel}>Cidades</Text> {/* ✅ dentro de Text */}
+        <TouchableOpacity 
+          style={styles.iconBox} 
+          onPress={() => handleMenuPress("Cidades")}
+          accessible={true}
+          accessibilityLabel="Menu Cidades"
+        >
+          <View style={styles.iconContent}>
+            <Image
+              source={require("../../assets/icons/cidades.png")}
+              style={styles.iconImage}
+              resizeMode="contain"
+            />
+            <Text style={styles.iconLabel}>Cidades</Text>
+          </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.iconBox} onPress={() => handleMenuPress("Atrações")}>
-          <Image
-            source={require("../../assets/icons/atracoes.png")}
-            style={styles.iconImage}
-            resizeMode="contain"
-          />
-          <Text style={styles.iconLabel}>Atrações</Text> {/* ✅ dentro de Text */}
+        <TouchableOpacity 
+          style={styles.iconBox} 
+          onPress={() => handleMenuPress("Atrações")}
+          accessible={true}
+          accessibilityLabel="Menu Atrações"
+        >
+          <View style={styles.iconContent}>
+            <Image
+              source={require("../../assets/icons/atracoes.png")}
+              style={styles.iconImage}
+              resizeMode="contain"
+            />
+            <Text style={styles.iconLabel}>Atrações</Text>
+          </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.iconBox} onPress={() => handleMenuPress("Contato")}>
-          <Image
-            source={require("../../assets/icons/contato.png")}
-            style={styles.iconImage}
-            resizeMode="contain"
-          />
-          <Text style={styles.iconLabel}>Contato</Text> {/* ✅ dentro de Text */}
+        <TouchableOpacity 
+          style={styles.iconBox} 
+          onPress={() => handleMenuPress("Contato")}
+          accessible={true}
+          accessibilityLabel="Menu Contato"
+        >
+          <View style={styles.iconContent}>
+            <Image
+              source={require("../../assets/icons/contato.png")}
+              style={styles.iconImage}
+              resizeMode="contain"
+            />
+            <Text style={styles.iconLabel}>Contato</Text>
+          </View>
         </TouchableOpacity>
       </View>
     </LinearGradient>
@@ -108,6 +144,11 @@ const styles = StyleSheet.create({
   },
   iconBox: {
     alignItems: "center",
+    justifyContent: "center",
+  },
+  iconContent: {
+    alignItems: "center",
+    justifyContent: "center",
   },
   iconLabel: {
     color: "#fff",

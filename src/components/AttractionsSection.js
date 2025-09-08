@@ -12,28 +12,36 @@ export default function AttractionsSection() {
 
       <View style={styles.grid}>
         <TouchableOpacity style={styles.card}>
-          <FontAwesome5 name="mountain" size={22} color="#1E4F6E" />
+          <View>
+            <FontAwesome5 name="mountain" size={22} color="#1E4F6E" />
+          </View>
           <View style={styles.textContainer}>
             <Text style={styles.label}>Trilhas</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card}>
-          <MaterialIcons name="event" size={22} color="#D35400" />
+          <View>
+            <MaterialIcons name="event" size={22} color="#D35400" />
+          </View>
           <View style={styles.textContainer}>
             <Text style={styles.label}>Festivais e Eventos</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card}>
-          <FontAwesome5 name="water" size={22} color="#2980B9" />
+          <View>
+            <FontAwesome5 name="water" size={22} color="#2980B9" />
+          </View>
           <View style={styles.textContainer}>
             <Text style={styles.label}>Esportes Aquáticos</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card}>
-          <MaterialIcons name="restaurant" size={22} color="#E67E22" />
+          <View>
+            <MaterialIcons name="restaurant" size={22} color="#E67E22" />
+          </View>
           <View style={styles.textContainer}>
             <Text style={styles.label}>Gastronomia Local</Text>
           </View>

@@ -14,7 +14,8 @@ export default function ExploreSection() {
 
     const handlePress = (city) => {
         // placeholder enquanto não há páginas
-        Alert.alert('Card clicado', `Você clicou em ${city.name}`);
+        const message = 'Você clicou em ' + city.name;
+        Alert.alert('Card clicado', message);
     };
 
     const handleFavorite = (city) => {
@@ -45,16 +46,20 @@ export default function ExploreSection() {
                                 style={styles.favorite} 
                                 onPress={() => handleFavorite(item)}
                             >
-                                <FontAwesome 
-                                    name="star"  
-                                    size={20} 
-                                    color={favorites[item.id] ? "#2A77A2" : "rgba(6, 6, 6, 0.69)"} // transparente antes do clique
-                                />
+                                <View>
+                                    <FontAwesome 
+                                        name="star"  
+                                        size={20} 
+                                        color={favorites[item.id] ? "#2A77A2" : "rgba(6, 6, 6, 0.69)"} // transparente antes do clique
+                                    />
+                                </View>
                             </TouchableOpacity>
                         </View>
                         <Text style={styles.city}>{item.name}</Text>
                         <View style={styles.rating}>
-                            <FontAwesome name="star" size={14} color="#000" />
+                            <View>
+                                <FontAwesome name="star" size={14} color="#000" />
+                            </View>
                             <Text style={styles.ratingText}>{item.rating}</Text>
                         </View>
                     </TouchableOpacity>
