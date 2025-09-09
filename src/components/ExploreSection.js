@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const cities = [
     { id: '1', name: 'Caraguatatuba', rating: 4.0, image: require('../../assets/images/caraguatatuba.png') },
@@ -10,18 +11,23 @@ const cities = [
 ];
 
 export default function ExploreSection() {
-    const [favorites, setFavorites] = useState({}); // guarda estado das cidades favoritas
+    const [favorites, setFavorites] = useState({});
+    const navigation = useNavigation();
 
     const handlePress = (city) => {
-        // placeholder enquanto não há páginas
-        const message = 'Você clicou em ' + city.name;
-        Alert.alert('Card clicado', message);
+        // Navega para a tela com mesmo nome da cidade, se existir
+        const screenExists = ['Caraguatatuba'].includes(city.name); // aqui você adiciona outras telas futuras
+        if (screenExists) {
+            navigation.navigate(city.name);
+        } else {
+            Alert.alert('Página não disponível', `Ainda não existe página para ${city.name}`);
+        }
     };
 
     const handleFavorite = (city) => {
         setFavorites(prev => ({
             ...prev,
-            [city.id]: !prev[city.id] // alterna favorito
+            [city.id]: !prev[city.id]
         }));
     };
 
@@ -67,50 +73,13 @@ export default function ExploreSection() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        marginBottom: 20
-    },
-    title: {
-        fontSize: 19,
-        paddingLeft: 10,
-        paddingTop: 10,
-        fontWeight: '700',
-        marginBottom: 10
-    },
-    card: {
-        marginRight: 12,
-        width: 120,
-        paddingLeft: 10
-    },
-    imageWrapper: {
-        position: 'relative'
-    },
-    image: {
-        width: 120,
-        height: 100,
-        borderRadius: 8,
-        marginBottom: 6
-    },
-    favorite: {
-        position: 'absolute',
-        top: 6,
-        left: 95,
-        borderRadius: 12,
-        width: 24,
-        height: 24,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    city: {
-        fontSize: 14,
-        fontWeight: '600'
-    },
-    rating: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    ratingText: {
-        marginLeft: 4,
-        fontSize: 12
-    },
+    container: { marginBottom: 20 },
+    title: { fontSize: 19, paddingLeft: 10, paddingTop: 10, fontWeight: '700', marginBottom: 10 },
+    card: { marginRight: 12, width: 120, paddingLeft: 10 },
+    imageWrapper: { position: 'relative' },
+    image: { width: 120, height: 100, borderRadius: 8, marginBottom: 6 },
+    favorite: { position: 'absolute', top: 6, left: 95, borderRadius: 12, width: 24, height: 24, justifyContent: 'center', alignItems: 'center' },
+    city: { fontSize: 14, fontWeight: '600' },
+    rating: { flexDirection: 'row', alignItems: 'center' },
+    ratingText: { marginLeft: 4, fontSize: 12 },
 });
