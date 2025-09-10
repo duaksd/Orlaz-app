@@ -1,11 +1,16 @@
 import React from "react";
 import CityPage from "../components/CityPage";
 
+// importa só o que já tem
+import headerImage from "../../assets/images/sobrecaragua.png";
+import mapImg from "../../assets/images/map-caragua.png";
+
 export default function Caraguatatuba() {
   return (
     <CityPage
       name="Caraguatatuba"
-      headerImage=""
+      headerImage={headerImage}
+      mapImage={mapImg}
       description="Caraguatatuba, conhecida como 'Caraguá', é uma cidade litorânea no estado de São Paulo, que integra a Região Metropolitana do Vale do Paraíba e Litoral Norte."
       curiosities="Caraguatatuba significa 'lugar de muitas caraguatás', uma planta com folhas serrilhadas típica da Mata Atlântica, bastante comum na região entre Ubatuba e São Sebastião."
       population="134.873 habitantes"
