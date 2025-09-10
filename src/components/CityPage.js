@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -15,13 +15,14 @@ import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 const { width } = Dimensions.get("window");
 
 export default function CityPage({
-  name = "Caraguatatuba",
+  name,
+  navigation,
   headerImage,
-  description = "Descrição da cidade...",
-  curiosities = "Curiosidades sobre a cidade...",
-  population = "134.873 habitantes",
-  area = "484,947 km²",
-  bestSeason = "De 09/12 a 00/01",
+  description,
+  curiosities,
+  population,
+  area,
+  bestSeason,
   attractions = [],
   foods = [],
   events = [],
@@ -31,12 +32,13 @@ export default function CityPage({
   googleApiKey,
   onBack,
 }) {
+  const [curiosityOpen, setCuriosityOpen] = useState(false); // dropdown state
+
   const getImageSource = (img, placeholder) => {
     if (!img) return placeholder ? { uri: placeholder } : null;
     return typeof img === "number" ? img : { uri: img };
   };
 
-  // monta fonte do mapa (static map / imagem enviada)
   let mapSource;
   if (mapImage) {
     mapSource = getImageSource(
@@ -50,39 +52,70 @@ export default function CityPage({
     mapSource = { uri: "https://via.placeholder.com/300.png?text=Mapa" };
   }
 
+  const placeholderAttractions = () => [
+    { name: "Atração Exemplo", image: "https://via.placeholder.com/150" },
+    { name: "Outra Atração", image: "https://via.placeholder.com/150" },
+  ];
+  const placeholderFoods = () => [
+    { name: "Prato Típico", desc: "Descrição do prato", image: "https://via.placeholder.com/100" },
+  ];
+  const placeholderEvents = () => [
+    { date: "01/01", title: "Evento Padrão" },
+  ];
+
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* HEADER - imagem full width */}
-        <ImageBackground
-          source={getImageSource(
-            headerImage,
-            "https://via.placeholder.com/900x400.png?text=Header"
-          )}
-          style={styles.header}
-          imageStyle={styles.headerImageStyle}
-        >
-          {onBack && (
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={onBack}
-              accessibilityLabel="Voltar"
-            >
-              <Ionicons name="chevron-back" size={22} color="#fff" />
-            </TouchableOpacity>
-          )}
-          <Text numberOfLines={1} style={styles.headerTitle}>
-            {name}
-          </Text>
-        </ImageBackground>
+        {/* HEADER */}
+        <View style={{ position: "relative" }}>
+          <ImageBackground
+            source={getImageSource(
+              headerImage,
+              "https://via.placeholder.com/900x400.png?text=Header"
+            )}
+            style={styles.header}
+            imageStyle={styles.headerImageStyle}
+            pointerEvents="box-none" // ✅ permite que o botão receba toque
+          >
+            {name && (
+              <Text numberOfLines={1} style={styles.headerTitle}>
+                {name}
+              </Text>
+            )}
+          </ImageBackground>
 
-        {/* content container (sobrepõe o header) */}
+          <TouchableOpacity
+            style={{
+              position: "absolute",
+              top: 16,
+              left: 12,
+              width: 50,
+              height: 50,
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 100,
+            }}
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                navigation.navigate("HomeMain");
+              }
+            }}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="chevron-back" size={28} color="#fff" />
+          </TouchableOpacity>
+        </View>
+
+
+        {/* CONTEÚDO */}
         <View style={styles.contentWrap}>
-          {/* SOBRE A CIDADE */}
-          
+          {/* SOBRE */}
+          {description && (
             <View style={styles.rowTop}>
               <Image source={mapSource} style={styles.mapCircle} />
               <View style={{ flex: 1 }}>
@@ -90,40 +123,58 @@ export default function CityPage({
                 <Text style={styles.paragraph}>{description}</Text>
               </View>
             </View>
+          )}
 
           {/* CURIOSIDADES */}
+          {curiosities && (
+            <View style={[styles.card, styles.cardWithHandle]}>
+              {/* HANDLE + título em linha */}
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <TouchableOpacity
+                  style={styles.handleLeft}
+                  onPress={() => setCuriosityOpen(!curiosityOpen)}
+                >
+                  <MaterialIcons name="drag-indicator" size={18} color="#000000" />
+                </TouchableOpacity>
+                <Text style={[styles.cardHeading, { marginLeft: 8 }]}>
+                  Curiosidades
+                </Text>
+              </View>
 
-          <View style={styles.handleLeft}>
-              <MaterialIcons name="drag-indicator" size={18} color="#666" />
+              {/* Dropdown */}
+              {curiosityOpen && (
+                <Text style={[styles.paragraph, { marginTop: 8 }]}>
+                  {curiosities}
+                </Text>
+              )}
+
+              <View style={styles.infoRow}>
+                {population && (
+                  <View style={styles.infoBox}>
+                    <FontAwesome name="users" size={16} color="#000000" />
+                    <Text style={styles.infoValue}>{population}</Text>
+                    <Text style={styles.infoLabel}>População</Text>
+                  </View>
+                )}
+                {area && (
+                  <View style={styles.infoBox}>
+                    <Ionicons name="map" size={16} color="#000000" />
+                    <Text style={styles.infoValue}>{area}</Text>
+                    <Text style={styles.infoLabel}>Área</Text>
+                  </View>
+                )}
+                {bestSeason && (
+                  <View style={styles.infoBox}>
+                    <MaterialIcons name="calendar-today" size={16} color="#000000" />
+                    <Text style={styles.infoValue}>{bestSeason}</Text>
+                    <Text style={styles.infoLabel}>Melhor Época</Text>
+                  </View>
+                )}
+              </View>
             </View>
+          )}
 
-            <Text style={styles.cardHeading}>Curiosidades</Text>
-
-          <View style={[styles.card, styles.cardWithHandle]}>
-
-            <Text style={styles.cardHeading}>Curiosidades</Text>
-            <Text style={styles.paragraph}>{curiosities}</Text>
-
-            <View style={styles.infoRow}>
-              <View style={styles.infoBox}>
-                <FontAwesome name="users" size={16} color="#333" />
-                <Text style={styles.infoValue}>{population}</Text>
-                <Text style={styles.infoLabel}>População</Text>
-              </View>
-              <View style={styles.infoBox}>
-                <Ionicons name="map" size={16} color="#333" />
-                <Text style={styles.infoValue}>{area}</Text>
-                <Text style={styles.infoLabel}>Área</Text>
-              </View>
-              <View style={styles.infoBox}>
-                <MaterialIcons name="calendar-today" size={16} color="#333" />
-                <Text style={styles.infoValue}>{bestSeason}</Text>
-                <Text style={styles.infoLabel}>Melhor Época</Text>
-              </View>
-            </View>
-          </View>
-
-          {/* PRINCIPAIS ATRAÇÕES */}
+          {/* ATRAÇÕES */}
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Principais Atrações</Text>
             <Text style={styles.sectionSubtitle}>
@@ -147,7 +198,6 @@ export default function CityPage({
                   </View>
                 ))}
             </View>
-
             <TouchableOpacity style={styles.centerButton}>
               <Text style={styles.centerButtonText}>Mais Atrações</Text>
             </TouchableOpacity>
@@ -174,38 +224,36 @@ export default function CityPage({
                 </View>
               </View>
             ))}
-
             <TouchableOpacity style={styles.centerButton}>
               <Text style={styles.centerButtonText}>Mais...</Text>
             </TouchableOpacity>
           </View>
-        </View>
 
-        {/* EVENTOS (fora do contentWrap, tela cheia) */}
-        <View style={styles.eventsArea}>
-          <Text style={styles.eventsTitle}>Eventos e Festivais</Text>
-
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.eventsScroll}
-          >
-            {(events.length ? events : placeholderEvents()).map((ev, i) => (
-              <View key={i} style={styles.eventItem}>
-                <View style={styles.eventIconCircle}>
-                  {ev.icon ? (
-                    <FontAwesome name={ev.icon} size={14} color="#000000" />
-                  ) : (
-                    <FontAwesome name="calendar" size={14} color="#000000" />
-                  )}
+          {/* EVENTOS */}
+          <View style={styles.eventsArea}>
+            <Text style={styles.eventsTitle}>Eventos e Festivais</Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.eventsScroll}
+            >
+              {(events.length ? events : placeholderEvents()).map((ev, i) => (
+                <View key={i} style={styles.eventItem}>
+                  <View style={styles.eventIconCircle}>
+                    {ev.icon ? (
+                      <FontAwesome name={ev.icon} size={14} color="#000" />
+                    ) : (
+                      <FontAwesome name="calendar" size={14} color="#000" />
+                    )}
+                  </View>
+                  <Text style={styles.eventDate}>{ev.date}</Text>
+                  <Text style={styles.eventText} numberOfLines={2}>
+                    {ev.title}
+                  </Text>
                 </View>
-                <Text style={styles.eventDate}>{ev.date}</Text>
-                <Text style={styles.eventText} numberOfLines={2}>
-                  {ev.title}
-                </Text>
-              </View>
-            ))}
-          </ScrollView>
+              ))}
+            </ScrollView>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -214,10 +262,13 @@ export default function CityPage({
 
 /* ---- styles ---- */
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#eef1f6" },
-  scrollContent: { paddingBottom: 36 },
-
-  /* HEADER */
+  safe: {
+    flex: 1,
+    backgroundColor: "#eef1f6"
+  },
+  scrollContent: {
+    paddingBottom: 0
+  },
   header: {
     width: "100%",
     height: 220,
@@ -229,10 +280,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 16,
     left: 12,
-    width: 36,
-    height: 36,
+    width: 50,      // aumenta a área de toque
+    height: 50,
     justifyContent: "center",
     alignItems: "center",
+    zIndex: 10,     // garante que fique acima de tudo
   },
   headerTitle: {
     color: "#fff",
@@ -243,7 +295,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
 
-  /* CONTENT WRAP */
   contentWrap: {
     marginTop: -28,
     borderTopLeftRadius: 28,
@@ -259,7 +310,6 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
 
-  /* CARDS */
   card: {
     backgroundColor: "#fff",
     borderRadius: 18,
@@ -272,9 +322,13 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 2,
   },
-  cardTop: { marginTop: 6 },
-  cardWithHandle: { paddingTop: 18 },
-  rowTop: { flexDirection: "row", alignItems: "flex-start" },
+  cardWithHandle: {
+    paddingTop: 14
+  },
+  rowTop: {
+    flexDirection: "row",
+    alignItems: "flex-start"
+  },
   mapCircle: {
     width: 140,
     height: 140,
@@ -283,19 +337,25 @@ const styles = StyleSheet.create({
     backgroundColor: "#f2f2f4",
     overflow: "hidden",
   },
-  cardHeading: { fontSize: 18, fontWeight: "800", marginBottom: 8, color: "#111" },
-  paragraph: { fontSize: 14, color: "#444", lineHeight: 20, textAlign: "justify" },
-
-  /* HANDLE */
+  cardHeading: {
+    fontSize: 19,
+    fontWeight: "800",
+    textAlign: "center",
+    color: "#111"
+  },
+  paragraph: {
+    fontSize: 14,
+    color: "#000000",
+    lineHeight: 20,
+    textAlign: "justify"
+  },
   handleLeft: {
-    position: "absolute",
-    left: 10,
     width: 36,
     height: 36,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#dd1d1dff",
+    backgroundColor: "#C8C8C8",
     elevation: 1,
     shadowColor: "#000",
     shadowOpacity: 0.03,
@@ -303,115 +363,124 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
 
-  /* INFO BOXES */
-  infoRow: { 
-    flexDirection: "row", 
-    justifyContent: "space-between", 
+  infoRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: 12,
   },
   infoBox: {
     flex: 1,
     marginHorizontal: 6,
     alignItems: "center",
-    backgroundColor: "#ba291cff",
+    backgroundColor: "#C8C8C8",
     paddingVertical: 12,
     borderRadius: 12,
   },
-  infoValue: { 
-    fontSize: 13, 
-    fontWeight: "700", 
-    marginTop: 6, 
-    color: "#111"
-   },
-  infoLabel: { 
-    fontSize: 11, 
-    color: "#666", 
-    marginTop: 4 
+  infoValue: {
+    fontSize: 13,
+    fontWeight: "700",
+    marginTop: 6,
+    color: "#111",
+    textAlign: "center"
+  },
+  infoLabel: {
+    fontSize: 11,
+    color: "#000000",
+    marginTop: 4
+  },
+  sectionHeader: {
+    paddingHorizontal: 12,
+    marginTop: 6,
+    marginBottom: 6
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: "#111",
+    textAlign: "center"
+  },
+  sectionSubtitle: {
+    fontSize: 13,
+    color: "#666",
+    marginTop: 6,
+    textAlign: "center"
   },
 
-  /* SECTION TITLES */
-  sectionHeader: { paddingHorizontal: 12, marginTop: 6, marginBottom: 6 },
-  sectionTitle: { fontSize: 20, fontWeight: "800", color: "#111", textAlign: "center" },
-  sectionSubtitle: { fontSize: 13, color: "#666", marginTop: 6, textAlign: "center" },
-
-  /* ATRAÇÕES */
   attractionsRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    gap: 10,
+    gap: 10
   },
-  attractionCard: { 
-    width: (width - 64) / 2, 
-    marginRight: 6 
+  attractionCard: {
+    width: (width - 64) / 2,
+    marginRight: 6
   },
   attractionImage: {
     width: 140,
     height: 110,
     borderRadius: 12,
-    backgroundColor: "#e9eefb",
+    backgroundColor: "#e9eefb"
   },
   attractionName: {
     marginTop: 8,
     fontSize: 13,
     fontWeight: "700",
-    color: "#111",
+    color: "#111"
   },
-
   centerButton: {
     alignSelf: "center",
     marginTop: 12,
     backgroundColor: "#2A77A2",
     paddingVertical: 10,
     paddingHorizontal: 22,
-    borderRadius: 22,
+    borderRadius: 22
   },
-  centerButtonText: { 
-    color: "#fff", 
-    fontWeight: "700", 
-    fontSize: 14 
+  centerButtonText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 14
   },
 
-  /* GASTRONOMIA */
-  foodRow: { flexDirection: "row", alignItems: "center", marginBottom: 12 },
+  foodRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12
+  },
   foodImage: {
     width: 82,
     height: 82,
     borderRadius: 12,
     marginRight: 12,
-    backgroundColor: "#eee",
+    backgroundColor: "#eee"
   },
-  foodTitle: { 
-    fontSize: 15, 
-    fontWeight: "800", 
-    color: "#111" 
+  foodTitle: {
+    fontSize: 15,
+    fontWeight: "800",
+    color: "#111"
   },
-  foodDesc: { 
-    fontSize: 13, 
-    color: "#666", 
-    marginTop: 4 
+  foodDesc: {
+    fontSize: 13,
+    color: "#666",
+    marginTop: 4
   },
-
-  /* EVENTOS */
   eventsArea: {
     width: "100%",
     backgroundColor: "#306BC2",
     paddingVertical: 28,
     paddingHorizontal: 16,
-    marginTop: 0,
+    marginTop: 0
   },
   eventsTitle: {
     color: "#fff",
     textAlign: "center",
     fontSize: 20,
     fontWeight: "800",
-    marginBottom: 18,
-  },
-  eventsScroll: { 
+    marginBottom: 18
   },
   eventItem: {
     width: 120,
     marginRight: 2,
-    alignItems: "center",
+    alignItems: "center"
   },
   eventIconCircle: {
     width: 44,
@@ -420,8 +489,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 8,
+    marginBottom: 8
   },
-  eventDate: { color: "#fff", fontWeight: "700", fontSize: 13 },
-  eventText: { color: "#fff", fontSize: 12, textAlign: "center", marginTop: 4 },
+  eventDate: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 13
+  },
+  eventText: {
+    color: "#fff",
+    fontSize: 12,
+    textAlign: "center",
+    marginTop: 4
+  },
 });

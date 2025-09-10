@@ -4,10 +4,10 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 const cities = [
-    { id: '1', name: 'Caraguatatuba', rating: 4.0, image: require('../../assets/images/caraguatatuba.png') },
-    { id: '2', name: 'Ilhabela', rating: 4.7, image: require('../../assets/images/ilhabela.png') },
-    { id: '3', name: 'Ubatuba', rating: 3.5, image: require('../../assets/images/ubatuba.png') },
-    { id: '4', name: 'São Sebastião', rating: 4.0, image: require('../../assets/images/saoseba.png') },
+    { id: '1', name: 'Caraguatatuba', screen: 'Caraguatatuba', rating: 4.0, image: require('../../assets/images/caraguatatuba.png') },
+    { id: '2', name: 'Ilhabela', screen: 'Ilhabela', rating: 4.7, image: require('../../assets/images/ilhabela.png') },
+    { id: '3', name: 'Ubatuba', screen: 'Ubatuba', rating: 3.5, image: require('../../assets/images/ubatuba.png') },
+    { id: '4', name: 'São Sebastião', screen: 'SaoSebastiao', rating: 4.0, image: require('../../assets/images/saoseba.png') },
 ];
 
 export default function ExploreSection() {
@@ -15,10 +15,8 @@ export default function ExploreSection() {
     const navigation = useNavigation();
 
     const handlePress = (city) => {
-        // Navega para a tela com mesmo nome da cidade, se existir
-        const screenExists = ['Caraguatatuba'].includes(city.name); // aqui você adiciona outras telas futuras
-        if (screenExists) {
-            navigation.navigate(city.name);
+        if (city.screen) {
+            navigation.navigate(city.screen);
         } else {
             Alert.alert('Página não disponível', `Ainda não existe página para ${city.name}`);
         }

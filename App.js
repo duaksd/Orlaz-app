@@ -13,6 +13,9 @@ import ContactScreen from "./src/screens/ContactScreen";
 import LoginScreen from "./src/screens/LoginScreen";
 import RegisterScreen from "./src/screens/RegisterScreen";
 import Caraguatatuba from "./src/screens/Caraguatatuba";
+import Ilhabela from "./src/screens/Ilhabela";
+import Ubatuba from "./src/screens/Ubatuba";
+import SaoSeba from "./src/screens/SaoSeba";
 
 import BottomNav from "./src/components/BottomNav";
 
@@ -37,6 +40,9 @@ function HomeStack() {
       <Stack.Screen name="HomeMain" component={HomeScreen} />
       <Stack.Screen name="Contato" component={ContactScreen} />
       <Stack.Screen name="Caraguatatuba" component={Caraguatatuba} />
+      <Stack.Screen name="Ilhabela" component={Ilhabela} />
+      <Stack.Screen name="Ubatuba" component={Ubatuba} />
+      <Stack.Screen name="SaoSebastiao" component={SaoSeba} />
     </Stack.Navigator>
   );
 }

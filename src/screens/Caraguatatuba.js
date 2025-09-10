@@ -1,7 +1,6 @@
 import React from "react";
 import CityPage from "../components/CityPage";
 
-// importa só o que já tem
 import headerImage from "../../assets/images/sobrecaragua.png";
 import mapImg from "../../assets/images/map-caragua.png";
 
