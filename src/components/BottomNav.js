@@ -4,10 +4,16 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function BottomNav({ state, navigation }) {
-  // Verifica se estamos na tela de contato usando o state atual da navegação
+  // Lista de telas onde o ícone Home deve ficar sempre preto
+  const blackHomeScreens = ["Contato", "Caraguatatuba", "Ubatuba", "SaoSebastiao", "Ilhabela"];
+
+  // Tela atual
   const currentRoute = state.routes[state.index];
-  const isContactScreen =
-    currentRoute.state?.routes?.[currentRoute.state?.index]?.name === "Contato";
+  const activeRouteName =
+    currentRoute.state?.routes?.[currentRoute.state?.index]?.name || currentRoute.name;
+
+  // Verifica se estamos na tela de Contato
+  const isContactScreen = activeRouteName === "Contato";
 
   return (
     <SafeAreaView edges={["bottom"]} style={styles.safeArea}>
@@ -16,14 +22,17 @@ export default function BottomNav({ state, navigation }) {
           const isFocused = state.index === index;
 
           let icon;
+
           if (route.name === "Home") {
-            const isActive = isFocused && !isContactScreen;
+            // Verifica se a tela atual está na lista de telas que devem ter Home preto
+            const isBlackHome = blackHomeScreens.includes(activeRouteName);
+
             icon = (
               <View style={styles.iconContainer}>
                 <Ionicons
                   name="home-sharp"
                   size={26}
-                  color={isActive ? "#2A77A2" : "#000000"}
+                  color={isBlackHome ? "#000000" : isFocused ? "#2A77A2" : "#000000"}
                 />
               </View>
             );

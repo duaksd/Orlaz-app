@@ -1,16 +1,9 @@
 import React, { useState } from "react";
-import { View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Alert,
-  Linking,
-} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert, Linking } from "react-native";
 import { FontAwesome, Entypo, MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome6 } from "@expo/vector-icons"; 
+import { FontAwesome6 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function ContatoScreen() {
   const navigation = useNavigation();
@@ -28,7 +21,7 @@ export default function ContatoScreen() {
       return;
     }
     Alert.alert("Mensagem enviada!", "Obrigado pelo seu contato.");
-    // Aqui você pode adicionar lógica para enviar os dados ao backend/API
+    // Adicionar lógica para enviar os dados ao backend/API
   };
 
   const abrirInstagram = () => {
@@ -36,7 +29,7 @@ export default function ContatoScreen() {
   };
 
   const abrirTwitter = () => {
-    Linking.openURL("https://x.com/"); 
+    Linking.openURL("https://x.com/");
   };
 
   return (
@@ -44,85 +37,85 @@ export default function ContatoScreen() {
       <View style={styles.container}>
         {/* Header com seta e redes sociais */}
         <View style={styles.headerRow}>
-        <TouchableOpacity onPress={() => navigation.navigate("HomeMain")}>
-          <View>
-            <FontAwesome name="arrow-left" size={20} color="#fff" />
+          <TouchableOpacity onPress={() => navigation.navigate("HomeMain")}>
+            <View>
+              <Ionicons name="chevron-back" size={28} color="#fff" />
+            </View>
+          </TouchableOpacity>
+
+          <View style={styles.socialRow}>
+            <TouchableOpacity onPress={abrirInstagram}>
+              <View>
+                <FontAwesome
+                  name="instagram"
+                  size={22}
+                  color="#fff"
+                  style={styles.icon}
+                />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={abrirTwitter}>
+              <View>
+                <FontAwesome6
+                  name="x-twitter"
+                  size={22}
+                  color="#fff"
+                  style={styles.icon}
+                />
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-
-        <View style={styles.socialRow}>
-          <TouchableOpacity onPress={abrirInstagram}>
-            <View>
-              <FontAwesome
-                name="instagram"
-                size={22}
-                color="#fff"
-                style={styles.icon}
-              />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={abrirTwitter}>
-            <View>
-              <FontAwesome6
-                name="x-twitter"
-                size={22}
-                color="#fff"
-                style={styles.icon}
-              />
-            </View>
-          </TouchableOpacity>
         </View>
-      </View>
 
-      {/* Card principal */}
-      <View style={styles.card}>
-        <Text style={styles.title}>Fale Conosco</Text>
-        <Text style={styles.subtitle}>
-          Tire suas dúvidas ou solicite um roteiro personalizado
-        </Text>
-
-        {/* Inputs com labels */}
-        <Text style={styles.label}>Nome Completo</Text>
-        <TextInput style={styles.input} value={nome} onChangeText={setNome} />
-
-        <Text style={styles.label}>E-mail</Text>
-        <TextInput style={styles.input} value={email} onChangeText={setEmail} />
-
-        <Text style={styles.label}>Telefone</Text>
-        <TextInput style={styles.input} value={telefone} onChangeText={setTelefone} />
-
-        <Text style={styles.label}>Cidade de Interesse</Text>
-        <TextInput style={styles.input} value={cidade} onChangeText={setCidade} />
-
-        <Text style={styles.label}>Mensagem</Text>
-        <TextInput
-          style={[styles.input, styles.textArea]}
-          multiline
-          value={mensagem}
-          onChangeText={setMensagem}
-        />
-
-        {/* Botão */}
-        <TouchableOpacity style={styles.button} onPress={handleEnviar}>
-          <Text style={styles.buttonText}>Enviar</Text>
-        </TouchableOpacity>
-
-        {/* Contatos */}
-        <View style={styles.contactRow}>
-          <MaterialIcons name="email" size={20} color="#000" />
-          <Text style={styles.contactText}>Orlazcaragua@gmail.com</Text>
-        </View>
-        <View style={styles.contactRow}>
-          <Entypo name="phone" size={20} color="#000" />
-          <Text style={styles.contactText}>(12) 3456-7890</Text>
-        </View>
-        <View style={styles.contactRow}>
-          <Entypo name="location-pin" size={20} color="#000" />
-          <Text style={styles.contactText}>
-            Av. da Praia, 1234 - Caraguatatuba - SP
+        {/* Card principal */}
+        <View style={styles.card}>
+          <Text style={styles.title}>Fale Conosco</Text>
+          <Text style={styles.subtitle}>
+            Tire suas dúvidas ou solicite um roteiro personalizado
           </Text>
-        </View>
 
+          {/* Inputs com labels */}
+          <Text style={styles.label}>Nome Completo</Text>
+          <TextInput style={styles.input} value={nome} onChangeText={setNome} />
+
+          <Text style={styles.label}>E-mail</Text>
+          <TextInput style={styles.input} value={email} onChangeText={setEmail} />
+
+          <Text style={styles.label}>Telefone</Text>
+          <TextInput style={styles.input} value={telefone} onChangeText={setTelefone} />
+
+          <Text style={styles.label}>Cidade de Interesse</Text>
+          <TextInput style={styles.input} value={cidade} onChangeText={setCidade} />
+
+          <Text style={styles.label}>Mensagem</Text>
+          <TextInput
+            style={[styles.input, styles.textArea]}
+            multiline
+            value={mensagem}
+            onChangeText={setMensagem}
+          />
+
+          {/* Botão */}
+          <TouchableOpacity style={styles.button} onPress={handleEnviar}>
+            <Text style={styles.buttonText}>Enviar</Text>
+          </TouchableOpacity>
+
+          {/* Contatos */}
+          <View style={styles.contactRow}>
+            <MaterialIcons name="email" size={20} color="#000" />
+            <Text style={styles.contactText}>Orlazcaragua@gmail.com</Text>
+          </View>
+          <View style={styles.contactRow}>
+            <Entypo name="phone" size={20} color="#000" />
+            <Text style={styles.contactText}>(12) 3456-7890</Text>
+          </View>
+          <View style={styles.contactRow}>
+            <Entypo name="location-pin" size={20} color="#000" />
+            <Text style={styles.contactText}>
+              Av. da Praia, 1234 - Caraguatatuba - SP
+            </Text>
+          </View>
+        </View>
         {/* Horário */}
         <View style={styles.scheduleBox}>
           <View style={styles.scheduleTitleContainer}>
@@ -132,7 +125,6 @@ export default function ContatoScreen() {
           <Text style={styles.scheduleText}>Segunda a Sexta: 8h às 18h</Text>
           <Text style={styles.scheduleText}>Sábado: 9h às 13h</Text>
         </View>
-      </View>
       </View>
     </ScrollView>
   );
@@ -151,6 +143,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 10,
     alignItems: "center",
+    marginTop: 10
   },
   socialRow: {
     flexDirection: "row",
@@ -163,6 +156,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 20,
     width: "100%",
+    marginBottom: 60,
+    position: "relative"
   },
   title: {
     fontSize: 22,
@@ -215,13 +210,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   scheduleBox: {
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    marginTop: 15,
-    alignItems: "center",
-  },
+  backgroundColor: "#fff",
+  borderRadius: 8,
+  position: "absolute",
+  bottom: 25,
+  alignSelf: "center",
+  paddingVertical: 7,
+  paddingHorizontal: 40,
+  alignItems: "center",
+  shadowColor: "#000",
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
+  elevation: 3,
+},
   scheduleTitleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
