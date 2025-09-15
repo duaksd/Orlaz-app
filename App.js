@@ -10,6 +10,8 @@ import HomeScreen from "./src/screens/HomeScreen";
 import Favorites from "./src/screens/FavoritesScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
 import ContactScreen from "./src/screens/ContactScreen";
+import CidadesScreen from "./src/screens/CidadesScreen";
+import AtracoesScreen from "./src/screens/AtracoesScreen";
 import LoginScreen from "./src/screens/LoginScreen";
 import RegisterScreen from "./src/screens/RegisterScreen";
 import Caraguatatuba from "./src/screens/Caraguatatuba";
@@ -39,6 +41,8 @@ function HomeStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomeMain" component={HomeScreen} />
       <Stack.Screen name="Contato" component={ContactScreen} />
+      <Stack.Screen name="Cidades" component={CidadesScreen} />
+      <Stack.Screen name="Atracoes" component={AtracoesScreen} />
       <Stack.Screen name="Caraguatatuba" component={Caraguatatuba} />
       <Stack.Screen name="Ilhabela" component={Ilhabela} />
       <Stack.Screen name="Ubatuba" component={Ubatuba} />

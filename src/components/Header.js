@@ -1,29 +1,24 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, StyleSheet, TouchableOpacity, Image, Alert } from "react-native";
+import { View, TextInput, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome } from "@expo/vector-icons";
 
 export default function Header({ navigation }) {
   const [searchText, setSearchText] = useState("");
 
-  const getMenuTitle = (menu) => {
+  const handleMenuPress = (menu) => {
     switch (menu) {
       case "Cidades":
-        return "Você clicou em Cidades";
-      case "Atrações":
-        return "Você clicou em Atrações";
+        navigation.navigate("Cidades");       // Stack name correto
+        break;
+      case "Atracoes":
+        navigation.navigate("Atracoes");      // Stack name correto (sem ç)
+        break;
       case "Contato":
-        return "Você clicou em Contato";
+        navigation.navigate("Contato");
+        break;
       default:
-        return "Você clicou em um menu";
-    }
-  };
-
-  const handleMenuPress = (menu) => {
-    if (menu === "Contato") {
-      navigation.navigate("Contato");
-    } else {
-      Alert.alert("Menu clicado", getMenuTitle(menu));
+        break;
     }
   };
 
@@ -37,31 +32,27 @@ export default function Header({ navigation }) {
       {/* Barra de pesquisa */}
       <View style={styles.searchContainer}>
         {searchText === "" && (
-          <View>
-            <FontAwesome
-              name="search"
-              size={20}
-              color="#666"
-              style={styles.searchIcon}
-            />
-          </View>
+          <FontAwesome
+            name="search"
+            size={20}
+            color="#666"
+            style={styles.searchIcon}
+          />
         )}
         <TextInput
           placeholder="Inicie sua busca"
           placeholderTextColor="#666"
           style={styles.searchInput}
           value={searchText}
-          onChangeText={text => setSearchText(text)}
+          onChangeText={(text) => setSearchText(text)}
         />
       </View>
 
       {/* Linha de ícones */}
       <View style={styles.iconRow}>
-        <TouchableOpacity 
-          style={styles.iconBox} 
+        <TouchableOpacity
+          style={styles.iconBox}
           onPress={() => handleMenuPress("Cidades")}
-          accessible={true}
-          accessibilityLabel="Menu Cidades"
         >
           <View style={styles.iconContent}>
             <Image
@@ -73,11 +64,9 @@ export default function Header({ navigation }) {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={styles.iconBox} 
-          onPress={() => handleMenuPress("Atrações")}
-          accessible={true}
-          accessibilityLabel="Menu Atrações"
+        <TouchableOpacity
+          style={styles.iconBox}
+          onPress={() => handleMenuPress("Atracoes")}
         >
           <View style={styles.iconContent}>
             <Image
@@ -89,11 +78,9 @@ export default function Header({ navigation }) {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={styles.iconBox} 
+        <TouchableOpacity
+          style={styles.iconBox}
           onPress={() => handleMenuPress("Contato")}
-          accessible={true}
-          accessibilityLabel="Menu Contato"
         >
           <View style={styles.iconContent}>
             <Image
@@ -131,7 +118,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   searchInput: {
-    flex: 0,
+    flex: 1,
     fontSize: 16,
     color: "#24282D",
     textAlign: "center",

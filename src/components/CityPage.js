@@ -207,41 +207,244 @@ export default function CityPage({
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#eef1f6" },
-  scrollContent: { paddingBottom: 0 },
-  header: { width: "100%", height: 220, justifyContent: "flex-end", alignItems: "center" },
-  headerImageStyle: { resizeMode: "cover" },
-  backButton: { position: "absolute", top: 16, left: 12, width: 50, height: 50, justifyContent: "center", alignItems: "center", zIndex: 10 },
-  headerTitle: { color: "#fff", fontSize: 24, fontWeight: "800", marginBottom: 90, textAlign: "center", paddingHorizontal: 12 },
-  contentWrap: { marginTop: -28, borderTopLeftRadius: 28, borderTopRightRadius: 28, backgroundColor: "#fff", paddingTop: 18, paddingBottom: 36, paddingHorizontal: 12, shadowColor: "#000", shadowOpacity: 0.04, shadowOffset: { width: 0, height: -2 }, shadowRadius: 8, elevation: 2 },
-  card: { backgroundColor: "#fff", borderRadius: 18, padding: 14, marginHorizontal: 8, marginBottom: 14, shadowColor: "#000", shadowOpacity: 0.06, shadowOffset: { width: 0, height: 2 }, shadowRadius: 6, elevation: 2 },
-  cardWithHandle: { paddingTop: 14 },
-  rowTop: { flexDirection: "row", alignItems: "flex-start" },
-  mapCircle: { width: 140, height: 140, borderRadius: 70, marginRight: 12, backgroundColor: "#f2f2f4", overflow: "hidden" },
-  cardHeading: { fontSize: 19, fontWeight: "800", textAlign: "center", color: "#111" },
-  paragraph: { fontSize: 14, color: "#000000", lineHeight: 20, textAlign: "justify" },
-  handleLeft: { width: 36, height: 36, borderRadius: 10, justifyContent: "center", alignItems: "center", backgroundColor: "#C8C8C8", elevation: 1, shadowColor: "#000", shadowOpacity: 0.03, shadowOffset: { width: 0, height: 1 }, shadowRadius: 2 },
-  infoRow: { flexDirection: "row", justifyContent: "space-between", marginTop: 12 },
-  infoBox: { flex: 1, marginHorizontal: 6, alignItems: "center", backgroundColor: "#C8C8C8", paddingVertical: 12, borderRadius: 12 },
-  infoValue: { fontSize: 13, fontWeight: "700", marginTop: 6, color: "#111", textAlign: "center" },
-  infoLabel: { fontSize: 11, color: "#000000", marginTop: 4 },
-  sectionHeader: { paddingHorizontal: 12, marginTop: 6, marginBottom: 6 },
-  sectionTitle: { fontSize: 20, fontWeight: "800", color: "#111", textAlign: "center" },
-  sectionSubtitle: { fontSize: 13, color: "#666", marginTop: 6, textAlign: "center" },
-  attractionsRow: { flexDirection: "row", justifyContent: "space-between", gap: 10 },
-  attractionCard: { width: (width - 64) / 2, marginRight: 6 },
-  attractionImage: { width: 140, height: 110, borderRadius: 12, backgroundColor: "#e9eefb" },
-  attractionName: { marginTop: 8, fontSize: 13, fontWeight: "700", color: "#111" },
-  centerButton: { alignSelf: "center", marginTop: 12, backgroundColor: "#2A77A2", paddingVertical: 10, paddingHorizontal: 22, borderRadius: 22 },
-  centerButtonText: { color: "#fff", fontWeight: "700", fontSize: 14 },
-  foodRow: { flexDirection: "row", alignItems: "center", marginBottom: 12 },
-  foodImage: { width: 82, height: 82, borderRadius: 12, marginRight: 12, backgroundColor: "#eee" },
-  foodTitle: { fontSize: 15, fontWeight: "800", color: "#111" },
-  foodDesc: { fontSize: 13, color: "#666", marginTop: 4 },
-  eventsArea: { width: "100%", backgroundColor: "#306BC2", paddingVertical: 28, paddingHorizontal: 16, marginTop: 0 },
-  eventsTitle: { color: "#fff", textAlign: "center", fontSize: 20, fontWeight: "800", marginBottom: 18 },
-  eventItem: { width: 120, marginRight: 2, alignItems: "center" },
-  eventIconCircle: { width: 44, height: 44, borderRadius: 22, backgroundColor: "#fff", justifyContent: "center", alignItems: "center", marginBottom: 8 },
-  eventDate: { color: "#fff", fontWeight: "700", fontSize: 13 },
-  eventText: { color: "#fff", fontSize: 12, textAlign: "center", marginTop: 4 },
+  safe: { 
+    flex: 1, 
+    backgroundColor: "#eef1f6" 
+  },
+  scrollContent: { 
+    paddingBottom: 0 
+  },
+  header: { 
+    width: "100%", 
+    height: 220, 
+    justifyContent: "flex-end", 
+    alignItems: "center" 
+  },
+  headerImageStyle: { 
+    resizeMode: "cover" 
+  },
+  backButton: { 
+    position: "absolute", 
+    top: 16, 
+    left: 12, 
+    width: 50, 
+    height: 50, 
+    justifyContent: "center", 
+    alignItems: "center", 
+    zIndex: 10 
+  },
+  headerTitle: { 
+    color: "#fff", 
+    fontSize: 24, 
+    fontWeight: "800", 
+    marginBottom: 90, 
+    textAlign: "center", 
+    paddingHorizontal: 12 
+  },
+  contentWrap: { 
+    marginTop: -28, 
+    borderTopLeftRadius: 28, 
+    borderTopRightRadius: 28, 
+    backgroundColor: "#fff", 
+    paddingTop: 18, 
+    paddingBottom: 36, 
+    paddingHorizontal: 12, 
+    shadowColor: "#000", 
+    shadowOpacity: 0.04, 
+    shadowOffset: { width: 0, height: -2 }, 
+    shadowRadius: 8, 
+    elevation: 2 
+  },
+  card: { 
+    backgroundColor: "#fff", 
+    borderRadius: 18, 
+    padding: 14, 
+    marginHorizontal: 8, 
+    marginBottom: 14, 
+    shadowColor: "#000", 
+    shadowOpacity: 0.06, 
+    shadowOffset: { width: 0, height: 2 }, 
+    shadowRadius: 6, elevation: 2 
+  },
+  cardWithHandle: { 
+    paddingTop: 14 
+  },
+  rowTop: { 
+    flexDirection: "row", 
+    alignItems: "flex-start" 
+  },
+  mapCircle: { 
+    width: 140, 
+    height: 140, 
+    borderRadius: 70, 
+    marginRight: 12, 
+    backgroundColor: "#f2f2f4", 
+    overflow: "hidden" 
+  },
+  cardHeading: { 
+    fontSize: 19, 
+    fontWeight: "800", 
+    textAlign: "center", 
+    color: "#111" 
+  },
+  paragraph: { 
+    fontSize: 14, 
+    color: "#000000", 
+    lineHeight: 20, 
+    textAlign: "justify" 
+  },
+  handleLeft: { 
+    width: 36, 
+    height: 36, 
+    borderRadius: 10, 
+    justifyContent: "center", 
+    alignItems: "center", 
+    backgroundColor: "#C8C8C8", 
+    elevation: 1, 
+    shadowColor: "#000", 
+    shadowOpacity: 0.03, 
+    shadowOffset: { width: 0, height: 1 }, 
+    shadowRadius: 2 
+  },
+  infoRow: { 
+    flexDirection: "row", 
+    justifyContent: "space-between", 
+    marginTop: 12 
+  },
+  infoBox: { 
+    flex: 1, 
+    marginHorizontal: 6, 
+    alignItems: "center", 
+    backgroundColor: "#C8C8C8", 
+    paddingVertical: 12, 
+    borderRadius: 12 
+  },
+  infoValue: { 
+    fontSize: 13, 
+    fontWeight: "700", 
+    marginTop: 6, 
+    color: "#111", 
+    textAlign: "center" 
+  },
+  infoLabel: { 
+    fontSize: 11, 
+    color: "#000000", 
+    marginTop: 4 
+  },
+  sectionHeader: { 
+    paddingHorizontal: 12, 
+    marginTop: 6, 
+    marginBottom: 6 
+  },
+  sectionTitle: { 
+    fontSize: 20, 
+    fontWeight: "800", 
+    color: "#111", 
+    textAlign: "center" 
+  },
+  sectionSubtitle: { 
+    fontSize: 13, 
+    color: "#666", 
+    marginTop: 6, 
+    textAlign: "center"
+   },
+  attractionsRow: {
+  flexDirection: "row",      // deixa os cards lado a lado
+  justifyContent: "space-between", // espaço igual entre eles
+  alignItems: "center",      // centraliza verticalmente
+  marginTop: 10,
+},
+attractionCard: {
+  flex: 1,
+  marginHorizontal: 5,
+  backgroundColor: "#fff",
+  borderRadius: 10,
+  overflow: "hidden",
+  alignItems: "center",
+  padding: 10,
+  height: 180, // altura fixa para todos os cards
+},
+  attractionImage: { 
+    width: 140, 
+    height: 110, 
+    borderRadius: 12, 
+    backgroundColor: "#e9eefb" 
+  },
+  attractionName: { 
+    marginTop: 8, 
+    fontSize: 13, 
+    fontWeight: "700", 
+    color: "#111" 
+  },
+  centerButton: { 
+    alignSelf: "center", 
+    marginTop: 12, 
+    backgroundColor: "#2A77A2", 
+    paddingVertical: 10, 
+    paddingHorizontal: 22, 
+    borderRadius: 22 
+  },
+  centerButtonText: { 
+    color: "#fff", 
+    fontWeight: "700",
+    fontSize: 14 
+  },
+  foodRow: { 
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12 
+  },
+  foodImage: { 
+    width: 82, 
+    height: 82, 
+    borderRadius: 12, 
+    marginRight: 12, 
+    backgroundColor: "#eee" },
+  foodTitle: { 
+    fontSize: 15, 
+    fontWeight: "800", 
+    color: "#111" 
+  },
+  foodDesc: { 
+    fontSize: 13, 
+    color: "#666", 
+    marginTop: 4 
+  },
+  eventsArea: { 
+    width: "100%", 
+    backgroundColor: "#306BC2", 
+    paddingVertical: 28, 
+    paddingHorizontal: 16, 
+    marginTop: 0 
+  },
+  eventsTitle: { 
+    color: "#fff", 
+    textAlign: "center", 
+    fontSize: 20, 
+    fontWeight: "800", 
+    marginBottom: 18 
+  },
+  eventItem: { 
+    width: 120, 
+    marginRight: 2, 
+    alignItems: "center" 
+  },
+  eventIconCircle: { 
+    width: 44, 
+    height: 44, 
+    borderRadius: 22, 
+    backgroundColor: "#fff", 
+    justifyContent: "center", 
+    alignItems: "center", 
+    marginBottom: 8 
+  },
+  eventDate: { 
+    color: "#fff", 
+    fontWeight: "700", 
+    fontSize: 13 
+  },
+  eventText: { 
+    color: "#fff", 
+    fontSize: 12, 
+    textAlign: "center", marginTop: 4 },
 });
