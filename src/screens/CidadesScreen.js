@@ -10,8 +10,10 @@ import {
   Platform,
   Image,
   TextInput,
+  FlatList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function CidadesScreen({ navigation }) {
   const [depoimentos, setDepoimentos] = useState([
@@ -25,54 +27,23 @@ export default function CidadesScreen({ navigation }) {
   const [maisRecente, setMaisRecente] = useState(true);
 
   const cidades = [
-    {
-      nome: "Caraguatatuba",
-      descricao:
-        "Conhecida como a 'Capital do Litoral Norte', oferece praias paradisíacas, trilhas e cultura caiçara.",
-      imagem:
-        "https://images.unsplash.com/photo-1595072639998-8e1e6506da60?auto=format&fit=crop&w=800&q=60",
-    },
-    {
-      nome: "São Sebastião",
-      descricao:
-        "Combina praias deslumbrantes, ecoturismo e um centro histórico encantador.",
-      imagem:
-        "https://images.unsplash.com/photo-1610924233805-35a9f416ce8c?auto=format&fit=crop&w=800&q=60",
-    },
-    {
-      nome: "Ubatuba",
-      descricao:
-        "Praias paradisíacas, trilhas incríveis e vida marinha abundante.",
-      imagem:
-        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60",
-    },
-    {
-      nome: "Ilhabela",
-      descricao:
-        "Ilha deslumbrante com cachoeiras, praias e atividades de aventura.",
-      imagem:
-        "https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=800&q=60",
-    },
+    { nome: "Caraguatatuba", descricao: "Conhecida como a 'Capital do Litoral Norte', oferece praias paradisíacas, trilhas e cultura caiçara.", imagem: require("../../assets/images/sobrecaragua.png") },
+    { nome: "São Sebastião", descricao: "Combina praias deslumbrantes, ecoturismo e um centro histórico encantador.", imagem: require("../../assets/images/sobresaoseba.png") },
+    { nome: "Ubatuba", descricao: "Praias paradisíacas, trilhas incríveis e vida marinha abundante.", imagem: require("../../assets/images/sobreubatuba.png") },
+    { nome: "Ilhabela", descricao: "Ilha deslumbrante com cachoeiras, praias e atividades de aventura.", imagem: require("../../assets/images/sobreilhabela.png") },
   ];
 
   const adicionarDepoimento = () => {
-    if (novoDepoimento.trim() === "") return;
+    if (!novoDepoimento.trim()) return;
     setDepoimentos([{ nome: "Você", texto: novoDepoimento }, ...depoimentos]);
     setNovoDepoimento("");
   };
 
-  // Ordena os depoimentos dinamicamente
   const depoimentosOrdenados = useMemo(() => {
-    return [...depoimentos].sort((a, b) => {
-      if (maisRecente) return depoimentos.indexOf(b) - depoimentos.indexOf(a);
-      else return depoimentos.indexOf(a) - depoimentos.indexOf(b);
-    });
+    return [...depoimentos].sort((a, b) => (maisRecente ? depoimentos.indexOf(b) - depoimentos.indexOf(a) : depoimentos.indexOf(a) - depoimentos.indexOf(b)));
   }, [depoimentos, maisRecente]);
 
-  // Controla quantos depoimentos mostrar
-  const depoimentosExibidos = mostrarTodos
-    ? depoimentosOrdenados
-    : depoimentosOrdenados.slice(0, 3);
+  const depoimentosExibidos = mostrarTodos ? depoimentosOrdenados : depoimentosOrdenados.slice(0, 3);
 
   return (
     <SafeAreaView style={styles.safeContainer}>
@@ -85,74 +56,42 @@ export default function CidadesScreen({ navigation }) {
           <Text style={styles.title}>Cidades do Litoral Norte</Text>
         </View>
 
-        {/* Seção principal */}
+        {/* Introdução */}
         <View style={styles.introSection}>
           <Text style={styles.introText}>
-            O Litoral Norte de São Paulo é conhecido por suas cidades
-            históricas, praias paradisíacas e rica cultura caiçara. Cada destino
-            possui sua própria história, tradições e belezas naturais únicas.
+            Descubra o Litoral Norte de São Paulo: praias paradisíacas, cultura caiçara e cidades históricas com experiências únicas.
           </Text>
         </View>
 
-        {/* Seção de depoimentos */}
+        {/* Depoimentos */}
         <View style={styles.commentsSection}>
           <Text style={styles.sectionTitle}>Depoimentos</Text>
 
-          {/* Input para novo depoimento */}
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
               placeholder="Compartilhe seu depoimento..."
-              placeholderTextColor="#999"
+              placeholderTextColor="#ccc"
               value={novoDepoimento}
               onChangeText={setNovoDepoimento}
             />
-            <TouchableOpacity
-              onPress={adicionarDepoimento}
-              style={styles.sendButton}
-            >
-              <Ionicons name="send" size={24} color="#fff" />
+            <TouchableOpacity onPress={adicionarDepoimento} style={styles.sendButton}>
+              <LinearGradient colors={["#1E4F6E", "#2E6A8F"]} style={styles.gradientButton}>
+                <Ionicons name="send" size={24} color="#fff" />
+              </LinearGradient>
             </TouchableOpacity>
           </View>
 
-          {/* Filtro */}
           <View style={styles.filterContainer}>
             <Text style={styles.filterLabel}>Ordenar por:</Text>
-            <TouchableOpacity
-              onPress={() => setMaisRecente(true)}
-              style={[
-                styles.filterButton,
-                maisRecente && styles.filterButtonActive,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.filterText,
-                  maisRecente && styles.filterTextActive,
-                ]}
-              >
-                Mais recente
-              </Text>
+            <TouchableOpacity onPress={() => setMaisRecente(true)} style={[styles.filterButton, maisRecente && styles.filterButtonActive]}>
+              <Text style={[styles.filterText, maisRecente && styles.filterTextActive]}>Mais recente</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setMaisRecente(false)}
-              style={[
-                styles.filterButton,
-                !maisRecente && styles.filterButtonActive,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.filterText,
-                  !maisRecente && styles.filterTextActive,
-                ]}
-              >
-                Mais antigo
-              </Text>
+            <TouchableOpacity onPress={() => setMaisRecente(false)} style={[styles.filterButton, !maisRecente && styles.filterButtonActive]}>
+              <Text style={[styles.filterText, !maisRecente && styles.filterTextActive]}>Mais antigo</Text>
             </TouchableOpacity>
           </View>
 
-          {/* Lista de depoimentos */}
           {depoimentosExibidos.map((item, index) => (
             <View key={index} style={styles.commentCard}>
               <Text style={styles.commentName}>{item.nome}</Text>
@@ -160,134 +99,71 @@ export default function CidadesScreen({ navigation }) {
             </View>
           ))}
 
-          {/* Botão ver mais */}
           {depoimentos.length > 3 && !mostrarTodos && (
-            <TouchableOpacity
-              onPress={() => setMostrarTodos(true)}
-              style={styles.verMaisButton}
-            >
+            <TouchableOpacity onPress={() => setMostrarTodos(true)} style={styles.verMaisButton}>
               <Text style={styles.verMaisText}>Ver mais depoimentos</Text>
             </TouchableOpacity>
           )}
         </View>
 
-        {/* Seção de cidades */}
-        {cidades.map((cidade, index) => (
-          <View key={index} style={styles.card}>
-            <Image source={{ uri: cidade.imagem }} style={styles.cardImage} />
-            <Text style={styles.cardTitle}>{cidade.nome}</Text>
-            <Text style={styles.cardDescription}>{cidade.descricao}</Text>
-          </View>
-        ))}
+        {/* Cidades - scroll horizontal */}
+        <View style={{ marginBottom: 20 }}>
+          <Text style={[styles.sectionTitle, { marginBottom: 12 }]}>Cidades</Text>
+          <FlatList
+            data={cidades}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item.nome}
+            renderItem={({ item }) => (
+              <TouchableOpacity style={styles.cardHorizontal} onPress={() => navigation.navigate(item.nome.replace(/\s/g, ""))}>
+                <Image source={item.imagem} style={styles.cardImageHorizontal} />
+                <LinearGradient
+                  colors={["transparent", "rgba(0,0,0,0.6)"]}
+                  style={styles.overlay}
+                />
+                <View style={styles.cardContentHorizontal}>
+                  <Text style={styles.cardTitleHorizontal}>{item.nome}</Text>
+                  <Text style={styles.cardDescriptionHorizontal}>{item.descricao}</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeContainer: {
-    flex: 1,
-    backgroundColor: "#1E4F6E",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-  },
+  safeContainer: { flex: 1, backgroundColor: "#1E4F6E", paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0 },
   scrollContainer: { padding: 16, paddingBottom: 20 },
   header: { flexDirection: "row", alignItems: "center", marginBottom: 16 },
-  title: { fontSize: 24, fontWeight: "bold", color: "#fff", marginLeft: 10 },
-  introSection: {
-    marginBottom: 20,
-    backgroundColor: "#2E6A8F",
-    padding: 16,
-    borderRadius: 12,
-  },
-  introText: { fontSize: 16, color: "#fff", lineHeight: 22 },
+  title: { fontSize: 26, fontWeight: "bold", color: "#fff", marginLeft: 10 },
+  introSection: { marginBottom: 20, backgroundColor: "#2E6A8F", padding: 16, borderRadius: 20 },
+  introText: { fontSize: 16, color: "#fff", lineHeight: 24 },
   commentsSection: { marginBottom: 20 },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#fff",
-    marginBottom: 12,
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  input: {
-    flex: 1,
-    backgroundColor: "#fff",
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    fontSize: 14,
-    color: "#000",
-  },
-  sendButton: {
-    backgroundColor: "#2E6A8F",
-    padding: 10,
-    borderRadius: 20,
-    marginLeft: 8,
-  },
-  filterContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 12,
-  },
+  sectionTitle: { fontSize: 22, fontWeight: "700", color: "#fff" },
+  inputContainer: { flexDirection: "row", alignItems: "center", marginBottom: 12 },
+  input: { flex: 1, backgroundColor: "#fff", borderRadius: 25, paddingHorizontal: 18, paddingVertical: 10, fontSize: 14, color: "#333" },
+  sendButton: { marginLeft: 8 },
+  gradientButton: { padding: 12, borderRadius: 25, justifyContent: "center", alignItems: "center" },
+  filterContainer: { flexDirection: "row", alignItems: "center", marginBottom: 12 },
   filterLabel: { color: "#fff", marginRight: 10 },
-  filterButton: {
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 12,
-    backgroundColor: "#1E4F6E",
-    marginRight: 6,
-    borderWidth: 1,
-    borderColor: "#fff",
-  },
+  filterButton: { paddingVertical: 5, paddingHorizontal: 12, borderRadius: 15, backgroundColor: "#2E6A8F", marginRight: 6 },
   filterButtonActive: { backgroundColor: "#fff" },
   filterText: { color: "#fff", fontSize: 14 },
   filterTextActive: { color: "#1E4F6E", fontWeight: "bold" },
-  commentCard: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  commentName: {
-    fontWeight: "600",
-    fontSize: 16,
-    marginBottom: 4,
-    color: "#1a1a1a",
-  },
+  commentCard: { backgroundColor: "#fff", borderRadius: 20, padding: 14, marginBottom: 12 },
+  commentName: { fontWeight: "600", fontSize: 16, marginBottom: 4, color: "#1E4F6E" },
   commentText: { fontSize: 14, color: "#555", lineHeight: 20 },
   verMaisButton: { alignItems: "center", marginTop: 8 },
   verMaisText: { color: "#F7931E", fontWeight: "bold" },
-  card: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    marginBottom: 16,
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  cardImage: { width: "100%", height: 180 },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#1a1a1a",
-    margin: 12,
-  },
-  cardDescription: {
-    fontSize: 15,
-    color: "#555",
-    lineHeight: 22,
-    marginHorizontal: 12,
-    marginBottom: 12,
-  },
+
+  // Estilo horizontal
+  cardHorizontal: { width: 260, height: 180, marginRight: 16, borderRadius: 20, overflow: "hidden", position: "relative" },
+  cardImageHorizontal: { width: "100%", height: "100%", position: "absolute", top: 0, left: 0 },
+  overlay: { position: "absolute", bottom: 0, left: 0, right: 0, height: "50%" },
+  cardContentHorizontal: { position: "absolute", bottom: 12, left: 12, right: 12 },
+  cardTitleHorizontal: { fontSize: 18, fontWeight: "700", color: "#fff", marginBottom: 4 },
+  cardDescriptionHorizontal: { fontSize: 13, color: "#fff", lineHeight: 18 },
 });
