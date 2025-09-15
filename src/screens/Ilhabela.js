@@ -2,31 +2,29 @@ import React from "react";
 import CityPage from "../components/CityPage";
 
 export default function Ilhabela() {
-  const placeholderHeader = "https://via.placeholder.com/900x400.png?text=Ilhabela";
-  const placeholderMap = "https://via.placeholder.com/300.png?text=Mapa+Ilhabela";
-
   return (
     <CityPage
       name="Ilhabela"
-      headerImage={placeholderHeader}
-      mapImage={placeholderMap}
+      headerImage={require("../../assets/images/sobreilhabela.png")}
+      mapImage={require("../../assets/images/map-ilhabela.png")}
       description="Ilhabela é um arquipélago e município brasileiro no litoral norte do estado de São Paulo, conhecido por suas praias, trilhas e cachoeiras."
       curiosities="Ilhabela significa 'ilha bela'. A região é famosa por suas festas náuticas, mergulho e biodiversidade da Mata Atlântica."
       population="34.610 habitantes"
       area="347,52 km²"
       bestSeason="De 12/12 a 28/02"
       attractions={[
-        { name: "Praia do Curral", image: "https://via.placeholder.com/150.png?text=Praia+do+Curral" },
-        { name: "Cachoeira do Gato", image: "https://via.placeholder.com/150.png?text=Cachoeira+do+Gato" },
+        { name: "Praia do Curral", image: require("../../assets/images/praia-curral.jpeg") },
+        { name: "Cachoeira do Gato", image: require("../../assets/images/cachoeira-do-gato.jpg") },
       ]}
       foods={[
-        { name: "Peixe na telha", desc: "Prato típico feito com peixes frescos locais.", image: "https://via.placeholder.com/100.png?text=Peixe+na+Telha" },
-        { name: "Camarão na moranga", desc: "Especialidade de frutos do mar servida em moranga.", image: "https://via.placeholder.com/100.png?text=Camarao+na+Moranga" },
+        { name: "Peixe assado na folha de bananeira", desc: "Peixe temperado com limão, sal e coentro, embalado em folha de bananeira para assar de forma saborosa e artesanal.", image: require("../../assets/images/peixe-bananeira.jpeg") },
+        { name: "Caldeirada", desc: "Preparada com polvo, lula, mariscos, badejo etc., reflete uma herança caiçara forte na culinária local.", image: require("../../assets/images/caldeirada.jpg") },
       ]}
       events={[
-        { date: "10/08", title: "Festival de Vela de Ilhabela" },
-        { date: "25/12", title: "Natal na Ilha" },
-        { date: "01/01", title: "Réveillon Ilhabela" },
+        { date: "14/8 á 31/8", title: "Boteco do Camarão" },
+        { date: "1/8 á 31/8", title: "Temporada de Observação de Cetáceos" },
+        { date: "23/8", title: "Aniversário de Ilhabela" },
+        { date: "8/9 á 14/9", title: "Ilhabela Bird Week" },
       ]}
     />
   );

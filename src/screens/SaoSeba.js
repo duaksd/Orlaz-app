@@ -2,31 +2,29 @@ import React from "react";
 import CityPage from "../components/CityPage";
 
 export default function SaoSebastiao() {
-  const placeholderHeader = "https://via.placeholder.com/900x400.png?text=Sao+Sebastiao";
-  const placeholderMap = "https://via.placeholder.com/300.png?text=Mapa+Sao+Sebastiao";
-
   return (
     <CityPage
       name="São Sebastião"
-      headerImage={placeholderHeader}
-      mapImage={placeholderMap}
-      description="São Sebastião é uma cidade litorânea do estado de São Paulo, conhecida por suas praias, ilhas e pela gastronomia de frutos do mar."
+      headerImage={require("../../assets/images/sobresaoseba.png")}
+      mapImage={require("../../assets/images/map-saoseba.png")}
+      description="São Sebastião é um dos municípios mais antigos e ricos em história do Litoral Norte de São Paulo. Fundado em 1636, tornou-se uma estância balneária, destacando-se por sua diversidade turística, paisagens naturais, patrimônio histórico e cultura caiçara"
       curiosities="O município possui mais de 36 praias e é porta de entrada para a famosa Ilha de Toque-Toque Grande, muito procurada por turistas."
       population="90.989 habitantes"
       area="402,9 km²"
       bestSeason="De 12/12 a 28/02"
       attractions={[
-        { name: "Praia de Maresias", image: "https://via.placeholder.com/150.png?text=Maresias" },
-        { name: "Ilha de Toque-Toque", image: "https://via.placeholder.com/150.png?text=Toque-Toque" },
+        { name: "Praia de Juquehy", image: require("../../assets/images/juquehy.jpg") },
+        { name: "Praia de Toque-Toque Grande", image: require("../../assets/images/toque-toque.jpg") },
       ]}
       foods={[
-        { name: "Peixe assado na brasa", desc: "Preparado com peixes frescos locais, temperos da região.", image: "https://via.placeholder.com/100.png?text=Peixe+Assado" },
-        { name: "Camarão ao alho e óleo", desc: "Prato típico muito consumido nas praias de São Sebastião.", image: "https://via.placeholder.com/100.png?text=Camarao" },
+        { name: "Peixe salgado e seco no varal", desc: "Preservação artesanal do pescado através da salga e secagem ao sol, sem conservantes, ainda praticada pelas famílias locais", image: require("../../assets/images/peixe-salgado.jpg") },
+        { name: "Camarão na Moranga", desc: "Abóbora recheada com creme de camarão e queijo.", image: require("../../assets/images/camarao-moranga.jpg") },
       ]}
       events={[
-        { date: "15/01", title: "Festival de Surf de Maresias" },
-        { date: "20/02", title: "Carnaval de Rua" },
-        { date: "12/10", title: "Festa de Nossa Senhora do Rosário" },
+        { date: "1/8 á 17/8", title: "Festival Colorides" },
+        { date: "14/8 á 16/8", title: "Etapa do Circuito Colegial de Surf" },
+        { date: "23/8", title: "Intercâmbio de Capoeira Brasil e Chile" },
+        { date: "6/9 á 7/9", title: "13º Campeonato Lisfuts" }
       ]}
     />
   );

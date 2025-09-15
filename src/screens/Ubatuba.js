@@ -2,31 +2,29 @@ import React from "react";
 import CityPage from "../components/CityPage";
 
 export default function Ubatuba() {
-  const placeholderHeader = "https://via.placeholder.com/900x400.png?text=Ubatuba";
-  const placeholderMap = "https://via.placeholder.com/300.png?text=Mapa+Ubatuba";
-
   return (
     <CityPage
       name="Ubatuba"
-      headerImage={placeholderHeader}
-      mapImage={placeholderMap}
-      description="Ubatuba é uma cidade litorânea de São Paulo, conhecida por suas mais de 100 praias e rica biodiversidade da Mata Atlântica."
+      headerImage={require("../../assets/images/sobreubatuba.png")}
+      mapImage={require("../../assets/images/map-ubatuba.png")}
+      description="Ubatuba, oficialmente Estância Balneária de Ubatuba, é um vibrante município do litoral norte de São Paulo, marcado por beleza natural, cultura caiçara e história rica. A cidade foi elevada de vila a cidade em 1855 e se consolidou como um importante destino turístico após a abertura das rodovias que a conectaram à capital."
       curiosities="O nome 'Ubatuba' significa 'lugar de muitas canoas', em Tupi-Guarani, refletindo a tradição pesqueira local."
       population="91.908 habitantes"
       area="723,8 km²"
       bestSeason="De 12/12 a 28/02"
       attractions={[
-        { name: "Praia Grande", image: "https://via.placeholder.com/150.png?text=Praia+Grande" },
-        { name: "Projeto Tamar", image: "https://via.placeholder.com/150.png?text=Projeto+Tamar" },
+        { name: "Ruínas da Lagoinha", image: require("../../assets/images/ruinas.png") },
+        { name: "Ilha das Couves", image: require("../../assets/images/ilha.png") },
       ]}
       foods={[
-        { name: "Camarão na moranga", desc: "Prato típico com camarões frescos servidos dentro de abóbora.", image: "https://via.placeholder.com/100.png?text=Camarao+Moranga" },
-        { name: "Peixe frito com pirão", desc: "Peixe fresco frito servido com pirão de peixe.", image: "https://via.placeholder.com/100.png?text=Peixe+Frito" },
+        { name: "Moqueca Caiçara", desc: "Versão local da moqueca, usando peixe fresco, dendê, leite de coco e ervas regionais.", image: require("../../assets/images/moqueca.png") },
+        { name: "Lambe-lambe", desc: "Arroz preparado com mexilhões, tradição local ligada à maricultura.", image: require("../../assets/images/lambe.png") },
       ]}
       events={[
-        { date: "10/01", title: "Festival de Surf de Ubatuba" },
-        { date: "15/02", title: "Carnaval de Rua" },
-        { date: "20/07", title: "Festival de Frutos do Mar" },
+        { date: "1/8 á 27/9", title: "16º Festival Gastronômico de Ubatuba" },
+        { date: "17/8", title: "Festival Weesp Studio – 2ª edição" },
+        { date: "2/9 á 4/9", title: "Festival Caiçarada" },
+        { date: "12/9 á 14/9", title: "Feira Gastronômica" }
       ]}
     />
   );
