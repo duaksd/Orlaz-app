@@ -31,22 +31,23 @@ export default function Header({ navigation }) {
     >
       {/* Barra de pesquisa */}
       <View style={styles.searchContainer}>
-        {searchText === "" && (
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
           <FontAwesome
             name="search"
             size={20}
             color="#666"
-            style={styles.searchIcon}
+            style={{ marginRight: 2 }} // quase colada
           />
-        )}
-        <TextInput
-          placeholder="Inicie sua busca"
-          placeholderTextColor="#666"
-          style={styles.searchInput}
-          value={searchText}
-          onChangeText={(text) => setSearchText(text)}
-        />
+          <TextInput
+            placeholder="Inicie sua busca"
+            placeholderTextColor="#666"
+            style={[styles.searchInput, { textAlign: "center" }]} // centraliza o texto e placeholder
+            value={searchText}
+            onChangeText={(text) => setSearchText(text)}
+          />
+        </View>
       </View>
+
 
       {/* Linha de ícones */}
       <View style={styles.iconRow}>
@@ -113,9 +114,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: "90%",
     paddingHorizontal: 10,
-  },
-  searchIcon: {
-    marginRight: 8,
   },
   searchInput: {
     flex: 1,
