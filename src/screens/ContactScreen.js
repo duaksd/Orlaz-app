@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert, Linking } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Alert,
+  Linking,
+} from "react-native";
 import { FontAwesome, Entypo, MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -17,7 +26,10 @@ export default function ContatoScreen() {
 
   const handleEnviar = () => {
     if (!nome || !email || !telefone || !cidade || !mensagem) {
-      Alert.alert("Atenção", "Por favor, preencha todos os campos antes de enviar.");
+      Alert.alert(
+        "Atenção",
+        "Por favor, preencha todos os campos antes de enviar."
+      );
       return;
     }
     Alert.alert("Mensagem enviada!", "Obrigado pelo seu contato.");
@@ -33,36 +45,33 @@ export default function ContatoScreen() {
   };
 
   return (
-    <ScrollView>
+    <ScrollView
+      contentContainerStyle={{ paddingBottom: 20 }}
+      style={styles.scrollView} // 🔹 fundo azul aplicado aqui
+    >
       <View style={styles.container}>
         {/* Header com seta e redes sociais */}
         <View style={styles.headerRow}>
           <TouchableOpacity onPress={() => navigation.navigate("HomeMain")}>
-            <View>
-              <Ionicons name="chevron-back" size={28} color="#fff" />
-            </View>
+            <Ionicons name="chevron-back" size={28} color="#fff" />
           </TouchableOpacity>
 
           <View style={styles.socialRow}>
             <TouchableOpacity onPress={abrirInstagram}>
-              <View>
-                <FontAwesome
-                  name="instagram"
-                  size={22}
-                  color="#fff"
-                  style={styles.icon}
-                />
-              </View>
+              <FontAwesome
+                name="instagram"
+                size={22}
+                color="#fff"
+                style={styles.icon}
+              />
             </TouchableOpacity>
             <TouchableOpacity onPress={abrirTwitter}>
-              <View>
-                <FontAwesome6
-                  name="x-twitter"
-                  size={22}
-                  color="#fff"
-                  style={styles.icon}
-                />
-              </View>
+              <FontAwesome6
+                name="x-twitter"
+                size={22}
+                color="#fff"
+                style={styles.icon}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -74,15 +83,25 @@ export default function ContatoScreen() {
             Tire suas dúvidas ou solicite um roteiro personalizado
           </Text>
 
-          {/* Inputs com labels */}
+          {/* Inputs */}
           <Text style={styles.label}>Nome Completo</Text>
           <TextInput style={styles.input} value={nome} onChangeText={setNome} />
 
           <Text style={styles.label}>E-mail</Text>
-          <TextInput style={styles.input} value={email} onChangeText={setEmail} />
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+          />
 
           <Text style={styles.label}>Telefone</Text>
-          <TextInput style={styles.input} value={telefone} onChangeText={setTelefone} />
+          <TextInput
+            style={styles.input}
+            value={telefone}
+            onChangeText={setTelefone}
+            keyboardType="phone-pad"
+          />
 
           <Text style={styles.label}>Cidade de Interesse</Text>
           <TextInput style={styles.input} value={cidade} onChangeText={setCidade} />
@@ -101,25 +120,61 @@ export default function ContatoScreen() {
           </TouchableOpacity>
 
           {/* Contatos */}
-          <View style={styles.contactRow}>
-            <MaterialIcons name="email" size={20} color="#000" />
-            <Text style={styles.contactText}>Orlazcaragua@gmail.com</Text>
-          </View>
-          <View style={styles.contactRow}>
-            <Entypo name="phone" size={20} color="#000" />
-            <Text style={styles.contactText}>(12) 3456-7890</Text>
-          </View>
-          <View style={styles.contactRow}>
-            <Entypo name="location-pin" size={20} color="#000" />
-            <Text style={styles.contactText}>
-              Av. da Praia, 1234 - Caraguatatuba - SP
-            </Text>
+          <View style={styles.contactContainer}>
+            {/* Email e Telefone lado a lado */}
+            <View style={styles.contactRowInline}>
+              <TouchableOpacity
+                style={styles.contactItemColumn}
+                onPress={() => Linking.openURL("mailto:Orlazcaragua@gmail.com")}
+              >
+                <View style={styles.contactLabelRow}>
+                  <MaterialIcons name="email" size={18} color="#000" />
+                  <Text style={styles.contactLabel}> E-mail</Text>
+                </View>
+                <Text style={styles.contactLink}>Orlazcaragua@gmail.com</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.contactItemColumn}
+                onPress={() => Linking.openURL("tel:+551234567890")}
+              >
+                <View style={styles.contactLabelRow}>
+                  <Entypo name="phone" size={18} color="#000" />
+                  <Text style={styles.contactLabel}> Telefone</Text>
+                </View>
+                <Text style={styles.contactText}>(12) 3456-7890</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Endereço */}
+            <TouchableOpacity
+              style={styles.contactItemColumn}
+              onPress={() =>
+                Linking.openURL(
+                  "https://www.google.com/maps?q=Av.+da+Praia,+1234+-+Caraguatatuba+-+SP"
+                )
+              }
+            >
+              <View style={styles.contactLabelRow}>
+                <Entypo name="location-pin" size={18} color="#000" />
+                <Text style={styles.contactLabel}> Endereço</Text>
+              </View>
+              <Text style={styles.contactText}>
+                Av. da Praia, 1234 – Caraguatatuba – SP
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
+
         {/* Horário */}
         <View style={styles.scheduleBox}>
           <View style={styles.scheduleTitleContainer}>
-            <FontAwesome name="calendar" size={16} color="#000" style={styles.calendarIcon} />
+            <FontAwesome
+              name="calendar"
+              size={16}
+              color="#000"
+              style={styles.calendarIcon}
+            />
             <Text style={styles.scheduleTitle}>Horário de Atendimento</Text>
           </View>
           <Text style={styles.scheduleText}>Segunda a Sexta: 8h às 18h</Text>
@@ -131,6 +186,10 @@ export default function ContatoScreen() {
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+    backgroundColor: "#1E4F6E", // 🔹 garante o fundo azul em toda a tela
+  },
   container: {
     flexGrow: 1,
     backgroundColor: "#1E4F6E",
@@ -143,7 +202,6 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 10,
     alignItems: "center",
-    marginTop: 10
   },
   socialRow: {
     flexDirection: "row",
@@ -156,8 +214,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 20,
     width: "100%",
-    marginBottom: 60,
-    position: "relative"
+    marginBottom: 65,
+    position: "relative",
   },
   title: {
     fontSize: 22,
@@ -189,7 +247,9 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#2A77A2",
-    paddingVertical: 12,
+    paddingVertical: 7,
+    width: 160,
+    alignSelf: "center",
     borderRadius: 30,
     marginTop: 10,
     marginBottom: 20,
@@ -197,33 +257,60 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
-    fontWeight: "bold",
+    fontWeight: "600",
     fontSize: 16,
   },
-  contactRow: {
+  contactContainer: {
+    width: "100%",
+    marginTop: 2,
+  },
+  contactRowInline: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 70,
+    marginBottom: 12,
+  },
+  contactItemColumn: {
+    flex: 1,
+    marginRight: 10,
+  },
+  contactLabelRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 6,
+    marginBottom: 2,
+  },
+  contactLabel: {
+    fontWeight: "bold",
+    fontSize: 14,
+    marginLeft: 4,
   },
   contactText: {
-    marginLeft: 8,
     fontSize: 14,
+    color: "#000",
+  },
+  contactLink: {
+    fontSize: 14,
+    textDecorationLine: "underline",
+    color: "#000",
   },
   scheduleBox: {
-  backgroundColor: "#fff",
-  borderRadius: 8,
-  position: "absolute",
-  bottom: 25,
-  alignSelf: "center",
-  paddingVertical: 7,
-  paddingHorizontal: 40,
-  alignItems: "center",
- boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
-  elevation: 3,
-},
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    position: "absolute",
+    bottom: 25,
+    alignSelf: "center",
+    paddingVertical: 7,
+    paddingHorizontal: 40,
+    alignItems: "center",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
   scheduleTitleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 4,
   },
   calendarIcon: {
