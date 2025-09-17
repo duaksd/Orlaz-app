@@ -33,6 +33,8 @@ export default function CityPage({
   };
 
   const eventsAreaColor = eventsColors[name] || "#306BC2"; // cor padrão
+  const [showAllAttractions, setShowAllAttractions] = useState(false);
+const [showAllFoods, setShowAllFoods] = useState(false);
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -120,62 +122,87 @@ export default function CityPage({
             </View>
           )}
 
-          {/* ATRAÇÕES */}
-          {attractions.length > 0 && (
-            <>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>Principais Atrações</Text>
-                <Text style={styles.sectionSubtitle}>
-                  Locais mais bem avaliados por nossos usuários
-                </Text>
-              </View>
+         {/* ATRAÇÕES */}
+{attractions.length > 0 && (
+  <>
+    <View style={styles.sectionHeader}>
+      <Text style={styles.sectionTitle}>Principais Atrações</Text>
+      <Text style={styles.sectionSubtitle}>
+        Locais mais bem avaliados por nossos usuários
+      </Text>
+    </View>
 
-              <View style={[styles.card, { paddingBottom: 18 }]}>
-                <View style={styles.attractionsRow}>
-                  {attractions.slice(0, 2).map((item, i) => (
-                    <View key={i} style={styles.attractionCard}>
-                      <Image
-                        source={getImageSource(item.image)}
-                        style={styles.attractionImage}
-                      />
-                      <Text style={styles.attractionName} numberOfLines={2}>
-                        {item.name}
-                      </Text>
-                    </View>
-                  ))}
-                </View>
-                {attractions.length > 2 && (
-                  <TouchableOpacity style={styles.centerButton}>
-                    <Text style={styles.centerButtonText}>Mais Atrações</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            </>
-          )}
+    <View style={[styles.card, { paddingBottom: 18 }]}>
+      <View style={styles.attractionsRow}>
+        {(showAllAttractions ? attractions : attractions.slice(0, 2)).map((item, i) => (
+          <TouchableOpacity
+            key={i}
+            style={styles.attractionCard}
+            onPress={item.onPress ? item.onPress : null}
+          >
+            <Image
+              source={getImageSource(item.image)}
+              style={styles.attractionImage}
+            />
+            <Text style={styles.attractionName} numberOfLines={2}>
+              {item.name}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
 
-          {/* GASTRONOMIA */}
-          {foods.length > 0 && (
-            <>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>Gastronomia</Text>
-                <Text style={styles.sectionSubtitle}>Comidas típicas da região</Text>
-              </View>
+      {attractions.length > 2 && (
+        <TouchableOpacity
+          style={styles.centerButton}
+          onPress={() => setShowAllAttractions(!showAllAttractions)}
+        >
+          <Text style={styles.centerButtonText}>
+            {showAllAttractions ? "Ver Menos" : "Ver Mais"}
+          </Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  </>
+)}
 
-              <View style={[styles.card, { paddingBottom: 18 }]}>
-                {foods.map((food, i) => (
-                  <View key={i} style={styles.foodRow}>
-                    <Image source={getImageSource(food.image)} style={styles.foodImage} />
-                    <View style={{ flex: 1 }}>
-                      <Text style={styles.foodTitle}>{food.name}</Text>
-                      <Text style={styles.foodDesc} numberOfLines={2}>
-                        {food.desc}
-                      </Text>
-                    </View>
-                  </View>
-                ))}
-              </View>
-            </>
-          )}
+{/* GASTRONOMIA */}
+{foods.length > 0 && (
+  <>
+    <View style={styles.sectionHeader}>
+      <Text style={styles.sectionTitle}>Gastronomia</Text>
+      <Text style={styles.sectionSubtitle}>Comidas típicas da região</Text>
+    </View>
+
+    <View style={[styles.card, { paddingBottom: 18 }]}>
+      {(showAllFoods ? foods : foods.slice(0, 2)).map((food, i) => (
+        <TouchableOpacity
+          key={i}
+          style={styles.foodRow}
+          onPress={food.onPress ? food.onPress : null}
+        >
+          <Image source={getImageSource(food.image)} style={styles.foodImage} />
+          <View style={{ flex: 1 }}>
+            <Text style={styles.foodTitle}>{food.name}</Text>
+            <Text style={styles.foodDesc} numberOfLines={2}>
+              {food.desc}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      ))}
+
+      {foods.length > 2 && (
+        <TouchableOpacity
+          style={styles.centerButton}
+          onPress={() => setShowAllFoods(!showAllFoods)}
+        >
+          <Text style={styles.centerButtonText}>
+            {showAllFoods ? "Ver Menos" : "Ver Mais"}
+          </Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  </>
+)}
 
           {/* EVENTOS */}
           {events.length > 0 && (

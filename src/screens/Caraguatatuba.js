@@ -1,7 +1,10 @@
 import React from "react";
 import CityPage from "../components/CityPage";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Caraguatatuba() {
+  const navigation = useNavigation();
+
   return (
     <CityPage
       name="Caraguatatuba"
@@ -13,7 +16,13 @@ export default function Caraguatatuba() {
       area="484,947 km²"
       bestSeason="De 02/01 a 01/03"
       attractions={[
-        { name: "Parque Estadual da Serra do Mar", image: require("../../assets/images/parque.jpg") },
+        {
+          name: "Parque Estadual da Serra do Mar",
+          image: require("../../assets/images/parque.jpg"),
+          onPress: () => navigation.navigate("ParqueEstadual") // navega para a tela do parque
+        },
+        { name: "Praia Martim de Sá", image: require("../../assets/images/martimdesa.jpg") },
+        { name: "Praia Martim de Sá", image: require("../../assets/images/martimdesa.jpg") },
         { name: "Praia Martim de Sá", image: require("../../assets/images/martimdesa.jpg") },
       ]}
       foods={[

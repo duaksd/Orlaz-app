@@ -23,24 +23,28 @@ export default function AtracoesScreen({ navigation }) {
       descricao:
         "Explore trilhas exuberantes na Mata Atlântica, apreciando fauna e flora únicas.",
       imagem: require("../../assets/images/trilhas.jpg"),
+      rota: "Trilhas",
     },
     {
       nome: "Esportes Aquáticos",
       descricao:
         "Aventure-se em surf, stand-up paddle e mergulho em praias paradisíacas.",
       imagem: require("../../assets/images/esportes.jpg"),
+      rota: "Esportes",
     },
     {
       nome: "Festivais e Eventos",
       descricao:
         "Vivencie a cultura local através de festas, shows e eventos tradicionais.",
       imagem: require("../../assets/images/festivais.jpg"),
+      rota: "Festivais",
     },
     {
       nome: "Gastronomia Local",
       descricao:
         "Deguste pratos típicos da culinária caiçara, feitos com ingredientes frescos.",
       imagem: require("../../assets/images/mexilhao.jpg"),
+      rota: "Gastronomia",
     },
   ];
 
@@ -86,9 +90,7 @@ Cada atração é um convite para sentir a energia da região, conectar-se com s
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.cardHorizontal}
-                onPress={() =>
-                  navigation.navigate("DetalhesAtracao", { atracao: item })
-                }
+                onPress={() => navigation.navigate(item.rota)}
               >
                 <Image source={item.imagem} style={styles.cardImageHorizontal} />
                 <LinearGradient
