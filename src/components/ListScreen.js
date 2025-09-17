@@ -112,6 +112,8 @@ export const styles = StyleSheet.create({
   },
   cardContent: {
     padding: 10,
+    flex: 1,
+    justifyContent: "space-between",
   },
   location: {
     fontSize: 12,

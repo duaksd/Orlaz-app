@@ -15,9 +15,11 @@ export default function Ubatuba() {
       attractions={[
         { name: "Ruínas da Lagoinha", image: require("../../assets/images/ruinas.png") },
         { name: "Ilha das Couves", image: require("../../assets/images/ilha.png") },
+        { name: "Ilha das Couves", image: require("../../assets/images/ilha.png") },
       ]}
       foods={[
         { name: "Moqueca Caiçara", desc: "Versão local da moqueca, usando peixe fresco, dendê, leite de coco e ervas regionais.", image: require("../../assets/images/moqueca.png") },
+        { name: "Lambe-lambe", desc: "Arroz preparado com mexilhões, tradição local ligada à maricultura.", image: require("../../assets/images/lambe.png") },
         { name: "Lambe-lambe", desc: "Arroz preparado com mexilhões, tradição local ligada à maricultura.", image: require("../../assets/images/lambe.png") },
       ]}
       events={[

@@ -15,9 +15,11 @@ export default function SaoSebastiao() {
       attractions={[
         { name: "Praia de Juquehy", image: require("../../assets/images/juquehy.jpg") },
         { name: "Praia de Toque-Toque Grande", image: require("../../assets/images/toque-toque.jpg") },
+        { name: "Praia de Toque-Toque Grande", image: require("../../assets/images/toque-toque.jpg") },
       ]}
       foods={[
         { name: "Peixe salgado e seco no varal", desc: "Preservação artesanal do pescado através da salga e secagem ao sol, sem conservantes, ainda praticada pelas famílias locais", image: require("../../assets/images/peixe-salgado.jpg") },
+        { name: "Camarão na Moranga", desc: "Abóbora recheada com creme de camarão e queijo.", image: require("../../assets/images/camarao-moranga.jpg") },
         { name: "Camarão na Moranga", desc: "Abóbora recheada com creme de camarão e queijo.", image: require("../../assets/images/camarao-moranga.jpg") },
       ]}
       events={[

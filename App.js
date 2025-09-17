@@ -30,6 +30,7 @@ import SaoSeba from "./src/screens/SaoSeba";
 // Lugares
 
 import ParqueEstadual from "./src/screens/ParqueEstadual";
+import Martim from "./src/screens/Martim";
 
 // Atrações (telas detalhadas)
 import TrilhasScreen from "./src/screens/TrilhasScreen";
@@ -71,6 +72,7 @@ function HomeStack() {
 
       {/* Lugares */}
       <Stack.Screen name="ParqueEstadual" component={ParqueEstadual} />
+      <Stack.Screen name="Martim" component={Martim} />
 
       {/* Atrações detalhadas */}
       <Stack.Screen name="Trilhas" component={TrilhasScreen} />

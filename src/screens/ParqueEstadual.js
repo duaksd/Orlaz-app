@@ -1,4 +1,3 @@
-// ParqueEstadual.js
 import React from "react";
 import DetailScreen from "../components/DetailScreen";
 
@@ -9,10 +8,11 @@ const parqueData = {
     { uri: "https://via.placeholder.com/400x200.png?text=Imagem+Principal" },
     { uri: "https://via.placeholder.com/100x100.png?text=Thumb+1" },
     { uri: "https://via.placeholder.com/100x100.png?text=Thumb+2" },
+    { uri: "https://via.placeholder.com/100x100.png?text=Thumb+3" },
   ],
   description:
     "O Parque Estadual da Serra do Mar preserva a Mata Atlântica e oferece trilhas, cachoeiras e mirantes para os visitantes.",
-  location: "São Paulo, SP",
+  location: "Caraguatatuba",
   actions: [
     { text: "Curtir", color: "#4CAF50" },
     { text: "Compartilhar", color: "#2196F3" },

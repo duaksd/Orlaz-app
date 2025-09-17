@@ -21,7 +21,9 @@ export default function Caraguatatuba() {
           image: require("../../assets/images/parque.jpg"),
           onPress: () => navigation.navigate("ParqueEstadual") // navega para a tela do parque
         },
-        { name: "Praia Martim de Sá", image: require("../../assets/images/martimdesa.jpg") },
+        { name: "Praia Martim de Sá", image: require("../../assets/images/martimdesa.jpg"),
+          onPress: () => navigation.navigate("Martim")
+        },
         { name: "Praia Martim de Sá", image: require("../../assets/images/martimdesa.jpg") },
         { name: "Praia Martim de Sá", image: require("../../assets/images/martimdesa.jpg") },
       ]}

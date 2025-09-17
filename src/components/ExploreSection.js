@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -39,21 +39,21 @@ export default function ExploreSection() {
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
-                    <TouchableOpacity 
-                        style={styles.card} 
+                    <TouchableOpacity
+                        style={styles.card}
                         onPress={() => handlePress(item)}
                         activeOpacity={0.8}
                     >
                         <View style={styles.imageWrapper}>
                             <Image source={item.image} style={styles.image} />
-                            <TouchableOpacity 
-                                style={styles.favorite} 
+                            <TouchableOpacity
+                                style={styles.favorite}
                                 onPress={() => handleFavorite(item)}
                             >
-                                <FontAwesome 
-                                    name={favorites[item.id] ? "heart" : "heart-o"}  
-                                    size={20} 
-                                    color={favorites[item.id] ? "#1E77A5" : "rgba(6, 6, 6, 0.5)"} 
+                                <FontAwesome
+                                    name={favorites[item.id] ? "heart" : "heart-o"}
+                                    size={20}
+                                    color={favorites[item.id] ? "#1E77A5" : "rgba(6, 6, 6, 0.5)"}
                                 />
                             </TouchableOpacity>
                         </View>

@@ -15,9 +15,11 @@ export default function Ilhabela() {
       attractions={[
         { name: "Praia do Curral", image: require("../../assets/images/praia-curral.jpeg") },
         { name: "Cachoeira do Gato", image: require("../../assets/images/cachoeira-do-gato.jpg") },
+        { name: "Cachoeira do Gato", image: require("../../assets/images/cachoeira-do-gato.jpg") },
       ]}
       foods={[
         { name: "Peixe assado na folha de bananeira", desc: "Peixe temperado com limão, sal e coentro, embalado em folha de bananeira para assar de forma saborosa e artesanal.", image: require("../../assets/images/peixe-bananeira.jpeg") },
+        { name: "Caldeirada", desc: "Preparada com polvo, lula, mariscos, badejo etc., reflete uma herança caiçara forte na culinária local.", image: require("../../assets/images/caldeirada.jpg") },
         { name: "Caldeirada", desc: "Preparada com polvo, lula, mariscos, badejo etc., reflete uma herança caiçara forte na culinária local.", image: require("../../assets/images/caldeirada.jpg") },
       ]}
       events={[

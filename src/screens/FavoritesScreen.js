@@ -1,13 +1,29 @@
-import React, { useState } from "react"; 
+import React, { useState, useEffect } from "react"; 
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Favorites() {
+  const { user, updateUser } = useAuth();
   const [favorites, setFavorites] = useState([]);
+
+  // Carrega favoritos do usuário ao iniciar
+  useEffect(() => {
+    if (user?.favorites) {
+      setFavorites(user.favorites);
+    } else {
+      setFavorites([]);
+    }
+  }, [user]);
+
+  const toggleFavorite = (item) => {
+    const updatedFavorites = favorites.filter((fav) => fav.id !== item.id);
+    setFavorites(updatedFavorites);
+    updateUser({ favorites: updatedFavorites }); // salva no contexto do usuário
+  };
 
   return (
     <View style={styles.container}>
-      {/* Cabeçalho */}
       <View style={styles.header}>
         <Text style={styles.title}>
           Meus <Text style={styles.highlight}>Favoritos</Text>
@@ -20,12 +36,9 @@ export default function Favorites() {
         </Text>
       </View>
 
-      {/* Conteúdo */}
       {favorites.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <View>
-            <FontAwesome name="heart-o" size={60} color="#1E77A5" />
-          </View>
+          <FontAwesome name="heart-o" size={60} color="#1E77A5" />
           <Text style={styles.emptyText}>Nenhum destino favoritado ainda.</Text>
           <Text style={styles.emptySubText}>Adicione seus lugares preferidos!</Text>
         </View>
@@ -42,9 +55,7 @@ export default function Favorites() {
               <Text style={styles.place}>{item.place}</Text>
               <TouchableOpacity
                 style={styles.removeButton}
-                onPress={() =>
-                  setFavorites(favorites.filter((fav) => fav.id !== item.id))
-                }
+                onPress={() => toggleFavorite(item)}
               >
                 <FontAwesome name="heart" size={14} color="#E91E63" />
                 <Text style={styles.removeText}>Remover dos favoritos</Text>
