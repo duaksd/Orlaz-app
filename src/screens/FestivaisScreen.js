@@ -19,13 +19,13 @@ export default function FestivaisScreen({ navigation }) {
       name: "Festival de Verão",
       location: "Ilhabela",
       description: "Shows e apresentações culturais à beira-mar.",
-      image: { uri: "https://via.placeholder.com/300x200.png?text=Festival+1" },
+      image: require("../../assets/images/fesilha.jpg"),
     },
     {
       name: "Festa de São Sebastião",
       location: "São Sebastião",
       description: "Tradição religiosa e cultural da região.",
-      image: { uri: "https://via.placeholder.com/300x200.png?text=Festival+2" },
+      image: require("../../assets/images/religioso.jpg"),
     },
   ];
 

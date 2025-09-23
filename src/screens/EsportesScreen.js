@@ -20,13 +20,13 @@ export default function EsportesScreen({ navigation }) {
       name: "Surf",
       location: "Ubatuba",
       description: "Praias com ondas perfeitas para surfistas de todos os níveis.",
-      image: { uri: "https://via.placeholder.com/300x200.png?text=Surf" },
+      image: require("../../assets/images/surf.jpg"),
     },
     {
       name: "Stand-up Paddle",
       location: "Caraguatatuba",
       description: "Atividade relaxante para explorar o mar tranquilo.",
-      image: { uri: "https://via.placeholder.com/300x200.png?text=Paddle" },
+      image: require("../../assets/images/standup.jpg"),
     },
   ];
 

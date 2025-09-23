@@ -19,13 +19,13 @@ export default function TrilhasScreen({ navigation }) {
       name: "Trilha das Sete Praias",
       location: "Ubatuba",
       description: "Caminhada que conecta praias paradisíacas e desertas.",
-      image: { uri: "https://via.placeholder.com/300x200.png?text=Trilha+1" },
+      image: require("../../assets/images/7praias.jpg"),
     },
     {
       name: "Trilha da Água Branca",
       location: "Ilhabela",
       description: "Contato direto com a Mata Atlântica preservada.",
-      image: { uri: "https://via.placeholder.com/300x200.png?text=Trilha+2" },
+      image: require("../../assets/images/trilhaagua.jpg"),
     },
   ];
 
