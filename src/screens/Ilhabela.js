@@ -13,9 +13,10 @@ export default function Ilhabela() {
       area="347,52 km²"
       bestSeason="De 12/12 a 28/02"
       attractions={[
-        { name: "Praia do Curral", image: require("../../assets/images/praia-curral.jpeg") },
-        { name: "Cachoeira do Gato", image: require("../../assets/images/cachoeira-do-gato.jpg") },
-        { name: "Cachoeira do Gato", image: require("../../assets/images/cachoeira-do-gato.jpg") },
+        { name: "Praia  do Bonete", image: require("../../assets/images/boneilha.png") },
+        { name: "Praia  de Jabaquara", image: require("../../assets/images/jabailha.png") },
+        { name: "Praia do Julião", image: require("../../assets/images/juilha.png") },
+        { name: "Baía de Castelhados", image: require("../../assets/images/casteilha.png") },
       ]}
       foods={[
         { name: "Peixe assado na folha de bananeira", desc: "Peixe temperado com limão, sal e coentro, embalado em folha de bananeira para assar de forma saborosa e artesanal.", image: require("../../assets/images/peixe-bananeira.jpeg") },

@@ -21,11 +21,11 @@ export default function Caraguatatuba() {
           image: require("../../assets/images/parque.jpg"),
           onPress: () => navigation.navigate("ParqueEstadual") // navega para a tela do parque
         },
-        { name: "Praia Martim de Sá", image: require("../../assets/images/martimdesa.jpg"),
+        { name: "Praia Martim de Sá", image: require("../../assets/images/martim.jpg"),
           onPress: () => navigation.navigate("Martim")
         },
-        { name: "Praia Martim de Sá", image: require("../../assets/images/martimdesa.jpg") },
-        { name: "Praia Martim de Sá", image: require("../../assets/images/martimdesa.jpg") },
+        { name: "Praia da Cocanha", image: require("../../assets/images/cocanha.jpg") },
+        { name: "Morro Santo Antônio", image: require("../../assets/images/santo.jpg") },
       ]}
       foods={[
         { name: "Bolinho de Taioba", desc: "Tradicional prato feito com a planta típica da Mata Atlântica.", image: require("../../assets/images/bolinho.jpg") },
