@@ -5,7 +5,7 @@ import DetailScreen from "../components/DetailScreen";
 const parqueData = {
   title: "Parque Estadual da Serra do Mar",
   images: [
-    "https://www.caraguatatuba.sp.gov.br/pmc/wp-content/uploads/2021/10/IMG_1772.jpg",
+    "https://th.bing.com/th/id/R.ae7038db8183c7c799b1e0ae30f6e62c?rik=qHHp8NevEtFU%2bA&pid=ImgRaw&r=0",
     "https://smastr16.blob.core.windows.net/guiadeapshomolog/2019/08/ucatrativo_i26b90958-090d-4b95-9e06-d13438ee469e.jpg",
     "https://th.bing.com/th/id/OLC.zX9cnvRSPxC9aw480x360?w=323&h=200&c=8&rs=1&qlt=90&o=6&cdv=1&pid=Local",
     "https://www.caraguatatuba.sp.gov.br/pmc/wp-content/uploads/2022/05/1-59.jpg",
