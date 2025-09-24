@@ -13,9 +13,10 @@ export default function Ubatuba() {
       area="723,8 km²"
       bestSeason="De 12/12 a 28/02"
       attractions={[
-        { name: "Ruínas da Lagoinha", image: require("../../assets/images/ruinas.png") },
-        { name: "Ilha das Couves", image: require("../../assets/images/ilha.png") },
-        { name: "Ilha das Couves", image: require("../../assets/images/ilha.png") },
+        { name: "Ruínas da Lagoinha", image: require("../../assets/images/ruinauba.png") },
+        { name: "Praia do Português", image: require("../../assets/images/portuuba.png") },
+        { name: "Ilha das Couves", image: require("../../assets/images/couveuba.png") },
+        { name: "Cachoeira do Prumirim", image: require("../../assets/images/cachouba.png") },
       ]}
       foods={[
         { name: "Moqueca Caiçara", desc: "Versão local da moqueca, usando peixe fresco, dendê, leite de coco e ervas regionais.", image: require("../../assets/images/moqueca.png") },
