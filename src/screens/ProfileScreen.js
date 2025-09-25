@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -14,27 +14,15 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useAuth } from "../contexts/AuthContext";
+import { clearStorage } from "../services/auth";
 
-export default function Profile({ navigation }) {
+export default function ProfileScreen({ navigation }) {
   const { user, signOut, loading } = useAuth();
-  const [displayName, setDisplayName] = useState(""); 
-  const [profileImage, setProfileImage] = useState(null); 
+  const [displayName, setDisplayName] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(null); // "email" | "senha" | "deletar" | null
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
-
-  const handleLogout = () => {
-    Alert.alert("Sair", "Deseja realmente sair?", [
-      { text: "Cancelar", style: "cancel" },
-      {
-        text: "Sim",
-        onPress: async () => {
-          await signOut();
-          navigation.replace("Login");
-        },
-      },
-    ]);
-  };
 
   useEffect(() => {
     if (!loading && !user) {
@@ -60,6 +48,17 @@ export default function Profile({ navigation }) {
     if (!result.canceled) {
       setProfileImage(result.assets[0].uri);
     }
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    navigation.replace("Login");
+  };
+
+  const handleDeleteAccount = async () => {
+    // Aqui você pode chamar uma API para deletar o usuário do backend, se necessário
+    await clearStorage();
+    navigation.replace("Login");
   };
 
   if (loading) {
@@ -119,6 +118,13 @@ export default function Profile({ navigation }) {
         </TouchableOpacity>
 
         <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Restaurantes")}
+        >
+          <Text style={styles.buttonText}>🍽️ Restaurantes Parceiros</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
           style={[styles.button, styles.redButton]}
           onPress={() => setModalVisible("deletar")}
         >
@@ -133,7 +139,6 @@ export default function Profile({ navigation }) {
       </View>
 
       {/* Modais */}
-      {/* Email, Senha, Deletar (mesmo código anterior) */}
       <Modal visible={modalVisible === "email"} transparent animationType="fade">
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
@@ -193,6 +198,8 @@ export default function Profile({ navigation }) {
         </View>
       </Modal>
 
+      
+
       <Modal visible={modalVisible === "deletar"} transparent animationType="fade">
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
@@ -203,10 +210,7 @@ export default function Profile({ navigation }) {
                 <Text>Cancelar</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => {
-                  Alert.alert("Conta deletada!");
-                  setModalVisible(null);
-                }}
+                onPress={handleDeleteAccount}
                 style={styles.modalConfirm}
               >
                 <Text style={{ color: "#fff" }}>Deletar</Text>
@@ -215,7 +219,6 @@ export default function Profile({ navigation }) {
           </View>
         </View>
       </Modal>
-
     </SafeAreaView>
   );
 }
@@ -237,6 +240,7 @@ const styles = StyleSheet.create({
   redText: { color: "#D32F2F", fontWeight: "bold", marginLeft: 8 },
   blackButton: { borderColor: "#000", marginTop: 3 },
   blackText: { color: "#000", fontWeight: "bold" },
+  buttonText: { color: "#1E77A5", fontWeight: "bold", marginLeft: 8 },
   loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#F5F5F5" },
   modalBackground: { flex: 1, backgroundColor: "rgba(0,0,0,0.4)", justifyContent: "center", alignItems: "center" },
   modalContainer: { backgroundColor: "#fff", width: "80%", borderRadius: 12, padding: 20 },

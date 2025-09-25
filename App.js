@@ -20,6 +20,7 @@ import CidadesScreen from "./src/screens/CidadesScreen";
 import AtracoesScreen from "./src/screens/AtracoesScreen";
 import LoginScreen from "./src/screens/LoginScreen";
 import RegisterScreen from "./src/screens/RegisterScreen";
+import RestaurantesScreen from "./src/screens/RestaurantesScreen";
 
 // Cidades
 import Caraguatatuba from "./src/screens/Caraguatatuba";
@@ -28,11 +29,10 @@ import Ubatuba from "./src/screens/Ubatuba";
 import SaoSeba from "./src/screens/SaoSeba";
 
 // Lugares
-
 import ParqueEstadual from "./src/screens/ParqueEstadual";
 import Martim from "./src/screens/Martim";
 
-// Atrações (telas detalhadas)
+// Atrações detalhadas
 import TrilhasScreen from "./src/screens/TrilhasScreen";
 import EsportesScreen from "./src/screens/EsportesScreen";
 import FestivaisScreen from "./src/screens/FestivaisScreen";
@@ -79,6 +79,9 @@ function HomeStack() {
       <Stack.Screen name="Esportes" component={EsportesScreen} />
       <Stack.Screen name="Festivais" component={FestivaisScreen} />
       <Stack.Screen name="Gastronomia" component={GastronomiaScreen} />
+
+      {/* Restaurantes */}
+      <Stack.Screen name="Restaurantes" component={RestaurantesScreen} />
     </Stack.Navigator>
   );
 }
@@ -115,6 +118,7 @@ export default function App() {
           <Tab.Screen name="Home" component={HomeStack} />
           <Tab.Screen name="Favoritos" component={Favorites} />
           <Tab.Screen name="Perfil" component={ProfileStack} />
+          <Stack.Screen name="Restaurantes" component={RestaurantesScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     </AuthProvider>
