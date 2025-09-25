@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   paragraph: { fontSize: 14, color: "#000000", lineHeight: 20, textAlign: "justify" },
   handleLeft: { width: 36, height: 36, borderRadius: 10, justifyContent: "center", alignItems: "center", backgroundColor: "#C8C8C8", elevation: 1, shadowColor: "#000", shadowOpacity: 0.03, shadowOffset: { width: 0, height: 1 }, shadowRadius: 2 },
   infoRow: { flexDirection: "row", justifyContent: "space-between", marginTop: 12 },
-  infoBox: { flex: 1, marginHorizontal: 6, alignItems: "center", backgroundColor: "#C8C8C8", paddingVertical: 12, borderRadius: 12 },
+  infoBox: { flex: 1, marginHorizontal: 6, alignItems: "center", backgroundColor: "#E0E0E0", paddingVertical: 12, borderRadius: 12 },
   infoValue: { fontSize: 13, fontWeight: "700", marginTop: 6, color: "#111", textAlign: "center" },
   infoLabel: { fontSize: 11, color: "#000000", marginTop: 4 },
   sectionHeader: { paddingHorizontal: 12, marginTop: 6, marginBottom: 6 },
