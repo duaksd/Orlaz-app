@@ -84,20 +84,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFEFEF",
   },
   navContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    height: 70,
-    backgroundColor: "#EFEFEF",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-  },
+  flexDirection: "row",
+  justifyContent: "space-evenly", // melhor que "space-around"
+  alignItems: "center",
+  height: 70,
+  backgroundColor: "#EFEFEF",
+  shadowColor: "#000",
+  shadowOpacity: 0.1,
+  shadowRadius: 6,
+},
   tabButton: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  alignItems: "center",
+  justifyContent: "center",
+  paddingHorizontal: 55, // controla o espaçamento
+},
   iconContainer: {
     alignItems: "center",
     justifyContent: "center",
