@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   navContainer: {
   flexDirection: "row",
-  justifyContent: "space-evenly", // melhor que "space-around"
+  justifyContent: "space-evenly",
   alignItems: "center",
   height: 70,
   backgroundColor: "#EFEFEF",
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   tabButton: {
   alignItems: "center",
   justifyContent: "center",
-  paddingHorizontal: 55, // controla o espaçamento
+  paddingHorizontal: 47,
 },
   iconContainer: {
     alignItems: "center",
