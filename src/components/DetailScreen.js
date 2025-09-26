@@ -19,22 +19,19 @@ export default function DetailScreen({
   description,
   location,
   actionType = "favorite", // "favorite" ou "rate"
+  initialComments = [], // comentários específicos da página
 }) {
   const navigation = useNavigation();
 
   const [isFavorite, setIsFavorite] = useState(false);
-  const [rating, setRating] = useState(0); // 0 = não avaliado
+  const [rating, setRating] = useState(0);
   const [selectedImage, setSelectedImage] = useState(images[0] || null);
-  const [comments, setComments] = useState([
-    { author: "João", text: "Ótimo lugar! Muito bonito e tranquilo." },
-    { author: "Maria", text: "Adorei a visita, recomendo para todos." },
-    { author: "Lucas", text: "Lugar incrível para tirar fotos!" },
-  ]);
+  const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState("");
 
   // Modal de avaliação
   const [modalVisible, setModalVisible] = useState(false);
-  const [tempRating, setTempRating] = useState(0); // avaliação temporária no modal
+  const [tempRating, setTempRating] = useState(0);
 
   const handleSendComment = () => {
     if (newComment.trim()) {
@@ -74,7 +71,10 @@ export default function DetailScreen({
   return (
     <ScrollView style={styles.container}>
       {/* Botão de Voltar */}
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={styles.backButton}
+      >
         <Ionicons name="chevron-back" size={28} color="#000" />
       </TouchableOpacity>
 
@@ -151,8 +151,8 @@ export default function DetailScreen({
         ))}
       </ScrollView>
 
-      {/* Descrição com Ver mais / Ver menos */}
-      <ExpandableText text={description} />
+      {/* Descrição com "Ver mais" */}
+      <ExpandableText text={description} maxLength={150} />
 
       {/* Comentários */}
       <Text style={styles.section}>Comentários</Text>
@@ -180,7 +180,14 @@ export default function DetailScreen({
         renderItem={({ item }) => (
           <View style={styles.comment}>
             <View style={styles.avatarBlock}>
-              <Ionicons name="person" size={16} color="#fff" />
+              {item.avatar ? (
+                <Image
+                  source={{ uri: item.avatar }}
+                  style={{ width: 32, height: 32, borderRadius: 16 }}
+                />
+              ) : (
+                <Ionicons name="person" size={16} color="#fff" />
+              )}
             </View>
             <View style={styles.commentTextContainer}>
               <Text style={styles.commentAuthor}>{item.author}</Text>

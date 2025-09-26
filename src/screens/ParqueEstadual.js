@@ -11,27 +11,21 @@ const parqueData = {
     "https://photo620x400.mnstatic.com/738bfdc64316422e9b2fbb510c6c72c7/parque-estadual-serra-do-mar-_-nucleo-caraguatatuba.jpg",
   ],
   description:
-    "O Parque Estadual da Serra do Mar preserva a Mata Atlântica e oferece trilhas, cachoeiras e mirantes para os visitantes.",
+    "O Parque Estadual da Serra do Mar preserva a Mata Atlântica e oferece trilhas, cachoeiras e mirantes para os visitantes. Aproveite para explorar os mirantes e as trilhas ecológicas do núcleo de Caraguatatuba, que proporcionam contato direto com a natureza e vistas incríveis da Mata Atlântica.",
   location: "Caraguatatuba",
-  actions: [
-    { text: "Curtir", color: "#4CAF50" },
-    { text: "Compartilhar", color: "#2196F3" },
-    { text: "Favoritar", color: "#FF9800" },
-  ],
-  comments: [
+  actionType: "favorite", 
+  initialComments: [
     {
       author: "João",
       text: "Lugar incrível para fazer trilhas!",
-      avatar: "https://via.placeholder.com/30.png?text=J",
     },
     {
       author: "Maria",
       text: "As cachoeiras são maravilhosas.",
-      avatar: "https://via.placeholder.com/30.png?text=M",
+      avatar: "https://tse3.mm.bing.net/th/id/OIP.lXXgnDNCvTqSAzOg1qiw2AHaE8?rs=1&pid=ImgDetMain&o=7&rm=3"
     },
   ],
 };
-
 
 export default function ParqueEstadual() {
   return <DetailScreen {...parqueData} />;

@@ -11,26 +11,13 @@ const praiaData = {
     "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/04/34/78/dc/praia-martin-de-sa.jpg?w=1200&h=-1&s=1",
   ],
   description:
-    "A Praia Martim de Sá é perfeita para banho de mar, esportes na areia e para passar momentos relaxantes em família ou com amigos. Possui quiosques e fácil acesso para visitantes.",
+    "A Praia Martim de Sá é perfeita para banho de mar, esportes na areia e para passar momentos relaxantes em família ou com amigos. Possui quiosques, fácil acesso e é um ponto tradicional de Caraguatatuba para quem busca diversão e contato com a natureza.",
   location: "Caraguatatuba",
-  actions: [
-    { text: "Curtir", color: "#4CAF50" },
-    { text: "Compartilhar", color: "#2196F3" },
-    { text: "Favoritar", color: "#FF9800" },
-  ],
+  actionType: "favorite", // botão será 'Favoritar'
   initialComments: [
-    {
-      author: "Ana",
-      text: "Adoro essa praia, muito limpa e bonita!",
-    },
-    {
-      author: "Pedro",
-      text: "Perfeito para levar as crianças, excelente infraestrutura.",
-    },
-    {
-      author: "Clara",
-      text: "O pôr do sol aqui é incrível!",
-    },
+    { author: "Ana", text: "Adoro essa praia, muito limpa e bonita!", avatar: "https://tse2.mm.bing.net/th/id/OIP.5LZIBEVlZ9LZ1UyG-qNA1QHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" },
+    { author: "Pedro", text: "Perfeito para levar as crianças, excelente infraestrutura.", avatar: "https://img.freepik.com/fotos-premium/turista-feliz-tirando-foto-de-selfie-em-amsterda_941600-12347.jpg" },
+    { author: "Clara", text: "O pôr do sol aqui é incrível!", avatar: "https://tse2.mm.bing.net/th/id/OIP.fjHauIM0xuX8tcJCMoM6ZgHaE8?w=1500&h=1000&rs=1&pid=ImgDetMain&o=7&rm=3" },
   ],
 };
 
