@@ -1,7 +1,6 @@
 import React from "react";
 import DetailScreen from "../components/DetailScreen";
 
-// Dados do Parque Estadual com placeholders
 const parqueData = {
   title: "Parque Estadual da Serra do Mar",
   images: [

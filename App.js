@@ -38,6 +38,9 @@ import EsportesScreen from "./src/screens/EsportesScreen";
 import FestivaisScreen from "./src/screens/FestivaisScreen";
 import GastronomiaScreen from "./src/screens/GastronomiaScreen";
 
+// Gastronomia
+import Taioba from "./src/screens/Taioba";
+
 // Componentes
 import BottomNav from "./src/components/BottomNav";
 
@@ -73,6 +76,10 @@ function HomeStack() {
       {/* Lugares */}
       <Stack.Screen name="ParqueEstadual" component={ParqueEstadual} />
       <Stack.Screen name="Martim" component={Martim} />
+
+      {/* Gastronomia */}
+      <Stack.Screen name="Taioba" component={Taioba} />
+
 
       {/* Atrações detalhadas */}
       <Stack.Screen name="Trilhas" component={TrilhasScreen} />

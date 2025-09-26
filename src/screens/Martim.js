@@ -1,7 +1,6 @@
 import React from "react";
 import DetailScreen from "../components/DetailScreen";
 
-// Dados da Praia com placeholders
 const praiaData = {
   title: "Praia Martim de Sá",
   images: [

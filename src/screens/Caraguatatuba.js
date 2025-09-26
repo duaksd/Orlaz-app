@@ -28,7 +28,7 @@ export default function Caraguatatuba() {
         { name: "Morro Santo Antônio", image: require("../../assets/images/santo.jpg") },
       ]}
       foods={[
-        { name: "Bolinho de Taioba", desc: "Tradicional prato feito com a planta típica da Mata Atlântica.", image: require("../../assets/images/bolinho.jpg") },
+        { name: "Bolinho de Taioba", desc: "Tradicional prato feito com a planta típica da Mata Atlântica.", image: require("../../assets/images/bolinho.jpg"), onPress: () => navigation.navigate("Taioba") },
         { name: "Mexilhões", desc: "Muito consumidos na região, preparados de diversas formas.", image: require("../../assets/images/mexilhao.jpg") },
         { name: "Frutos do mar em geral", desc: "Grande variedade de pratos com pescados frescos.", image: require("../../assets/images/frutos.jpeg") },
       ]}
