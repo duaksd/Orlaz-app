@@ -31,6 +31,8 @@ import SaoSeba from "./src/screens/SaoSeba";
 // Lugares
 import ParqueEstadual from "./src/screens/ParqueEstadual";
 import Martim from "./src/screens/Martim";
+import PraiaCocanha from "./src/screens/PraiaCocanha";
+import SantoAntonio from "./src/screens/SantoAntonio";
 
 // Atrações detalhadas
 import TrilhasScreen from "./src/screens/TrilhasScreen";
@@ -40,6 +42,8 @@ import GastronomiaScreen from "./src/screens/GastronomiaScreen";
 
 // Gastronomia
 import Taioba from "./src/screens/Taioba";
+import Mexilhoes from "./src/screens/Mexilhoes";
+import Frutos from "./src/screens/Frutos";
 
 // Componentes
 import BottomNav from "./src/components/BottomNav";
@@ -76,9 +80,13 @@ function HomeStack() {
       {/* Lugares */}
       <Stack.Screen name="ParqueEstadual" component={ParqueEstadual} />
       <Stack.Screen name="Martim" component={Martim} />
+      <Stack.Screen name="PraiaCocanha" component={PraiaCocanha} />
+      <Stack.Screen name="SantoAntonio" component={SantoAntonio} />
 
       {/* Gastronomia */}
       <Stack.Screen name="Taioba" component={Taioba} />
+      <Stack.Screen name="Mexilhoes" component={Mexilhoes} />
+      <Stack.Screen name="Frutos" component={Frutos} />
 
 
       {/* Atrações detalhadas */}
