@@ -8,18 +8,17 @@ import {
   FlatList,
   TouchableOpacity,
   Image,
-  Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
 export default function DetailScreen({
   title,
   images,
   description,
   location,
-  actionType = "favorite", // "favorite" ou "rate"
-  initialComments = [], // comentários específicos da página
+  actionType = "favorite",
+  initialComments = [],
 }) {
   const navigation = useNavigation();
 
@@ -29,7 +28,6 @@ export default function DetailScreen({
   const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState("");
 
-  // Modal de avaliação
   const [modalVisible, setModalVisible] = useState(false);
   const [tempRating, setTempRating] = useState(0);
 
@@ -45,14 +43,10 @@ export default function DetailScreen({
     setModalVisible(false);
   };
 
-  // Componente interno para descrição com "Ver mais / Ver menos"
   const ExpandableText = ({ text, maxLength = 150 }) => {
     const [expanded, setExpanded] = useState(false);
     const toggleExpanded = () => setExpanded(!expanded);
-    const displayText =
-      expanded || text.length <= maxLength
-        ? text
-        : text.slice(0, maxLength) + "...";
+    const displayText = expanded || text.length <= maxLength ? text : text.slice(0, maxLength) + "...";
 
     return (
       <View style={{ marginBottom: 16 }}>
@@ -69,137 +63,124 @@ export default function DetailScreen({
   };
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Botão de Voltar */}
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={styles.backButton}
-      >
-        <Ionicons name="chevron-back" size={28} color="#000" />
-      </TouchableOpacity>
+    <>
+      <ScrollView style={styles.container}>
+        {/* Botão de Voltar */}
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Ionicons name="chevron-back" size={28} color="#000" />
+        </TouchableOpacity>
 
-      {/* Título */}
-      <Text style={styles.title}>{title}</Text>
+        {/* Título */}
+        <Text style={styles.title}>{title}</Text>
 
-      {/* Linha principal: imagem + botões */}
-      <View style={styles.imageRow}>
-        {/* Imagem principal */}
-        <Image
-          source={{ uri: selectedImage }}
-          style={styles.mainBlock}
-          resizeMode="cover"
-        />
+        {/* Linha principal: imagem + botões */}
+        <View style={styles.imageRow}>
+          <Image source={{ uri: selectedImage }} style={styles.mainBlock} resizeMode="cover" />
 
-        {/* Coluna de botões */}
-        <View style={styles.actionsColumn}>
-          <TouchableOpacity style={styles.locationButton}>
-            <Ionicons name="location-sharp" size={16} color="#E60000" />
-            <Text style={styles.locationText}>{location}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.shareButton}>
-            <Ionicons name="share-social" size={16} color="#006400" />
-            <Text style={styles.shareText}>Compartilhar</Text>
-          </TouchableOpacity>
-
-          {/* Botão Dinâmico: Favoritar ou Avaliar */}
-          {actionType === "favorite" ? (
-            <TouchableOpacity
-              style={isFavorite ? styles.favoriteButton : styles.unfavoriteButton}
-              onPress={() => setIsFavorite(!isFavorite)}
-            >
-              <Ionicons
-                name={isFavorite ? "heart" : "heart-outline"}
-                size={16}
-                color={isFavorite ? "#fff" : "#FF4081"}
-              />
-              <Text style={isFavorite ? styles.favoriteText : styles.unfavoriteText}>
-                {isFavorite ? "Favorito" : "Favoritar"}
-              </Text>
+          <View style={styles.actionsColumn}>
+            <TouchableOpacity style={styles.locationButton}>
+              <Ionicons name="location-sharp" size={16} color="#E60000" />
+              <Text style={styles.locationText}>{location}</Text>
             </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={rating > 0 ? styles.ratedButton : styles.unratedButton}
-              onPress={() => setModalVisible(true)}
-            >
-              <Ionicons
-                name={rating > 0 ? "star" : "star-outline"}
-                size={16}
-                color={rating > 0 ? "#fff" : "#FFD700"}
-              />
-              <Text style={rating > 0 ? styles.ratedText : styles.unratedText}>
-                {rating > 0 ? `Avaliado (${rating}/5)` : "Avaliar"}
-              </Text>
+
+            <TouchableOpacity style={styles.shareButton}>
+              <Ionicons name="share-social" size={16} color="#006400" />
+              <Text style={styles.shareText}>Compartilhar</Text>
             </TouchableOpacity>
-          )}
+
+            {actionType === "favorite" ? (
+              <TouchableOpacity
+                style={isFavorite ? styles.favoriteButton : styles.unfavoriteButton}
+                onPress={() => setIsFavorite(!isFavorite)}
+              >
+                <Ionicons
+                  name={isFavorite ? "heart" : "heart-outline"}
+                  size={16}
+                  color={isFavorite ? "#fff" : "#FF4081"}
+                />
+                <Text style={isFavorite ? styles.favoriteText : styles.unfavoriteText}>
+                  {isFavorite ? "Favorito" : "Favoritar"}
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={rating > 0 ? styles.ratedButton : styles.unratedButton}
+                onPress={() => setModalVisible(true)}
+              >
+                <Ionicons
+                  name={rating > 0 ? "star" : "star-outline"}
+                  size={16}
+                  color={rating > 0 ? "#fff" : "#FFD700"}
+                />
+                <Text style={rating > 0 ? styles.ratedText : styles.unratedText}>
+                  {rating > 0 ? `Avaliado (${rating}/5)` : "Avaliar"}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
-      </View>
 
-      {/* Galeria de miniaturas */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.gallery}>
-        {images.map((img, index) => (
-          <TouchableOpacity key={index} onPress={() => setSelectedImage(img)}>
-            <Image
-              source={{ uri: img }}
-              style={[
-                styles.thumbBlock,
-                img === selectedImage && styles.selectedThumb,
-              ]}
-              resizeMode="cover"
-            />
+        {/* Galeria de miniaturas */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.gallery}>
+          {images.map((img, index) => (
+            <TouchableOpacity key={index} onPress={() => setSelectedImage(img)}>
+              <Image
+                source={{ uri: img }}
+                style={[styles.thumbBlock, img === selectedImage && styles.selectedThumb]}
+                resizeMode="cover"
+              />
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+
+        {/* Descrição */}
+        <ExpandableText text={description} maxLength={150} />
+
+        {/* Comentários */}
+        <Text style={styles.section}>Comentários</Text>
+
+        <View style={styles.commentInputRow}>
+          <View style={styles.inputBackground}>
+            <View style={styles.inputWrapper}>
+              <TextInput
+                style={styles.input}
+                placeholder="Adicione um comentário..."
+                placeholderTextColor="#999"
+                value={newComment}
+                onChangeText={setNewComment}
+              />
+            </View>
+          </View>
+          <TouchableOpacity style={styles.sendButton} onPress={handleSendComment}>
+            <Ionicons name="send" size={20} color="#fff" />
           </TouchableOpacity>
-        ))}
+        </View>
+
+        <FlatList
+          data={comments}
+          keyExtractor={(_, i) => i.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.comment}>
+              <View style={styles.avatarBlock}>
+                {item.avatar ? (
+                  <Image source={{ uri: item.avatar }} style={{ width: 32, height: 32, borderRadius: 16 }} />
+                ) : (
+                  <Ionicons name="person" size={16} color="#fff" />
+                )}
+              </View>
+              <View style={styles.commentTextContainer}>
+                <Text style={styles.commentAuthor}>{item.author}</Text>
+                <Text style={styles.commentText}>{item.text}</Text>
+              </View>
+            </View>
+          )}
+        />
       </ScrollView>
 
-      {/* Descrição com "Ver mais" */}
-      <ExpandableText text={description} maxLength={150} />
-
-      {/* Comentários */}
-      <Text style={styles.section}>Comentários</Text>
-
-      <View style={styles.commentInputRow}>
-        <View style={styles.inputBackground}>
-          <View style={styles.inputWrapper}>
-            <TextInput
-              style={styles.input}
-              placeholder="Adicione um comentário..."
-              placeholderTextColor="#999"
-              value={newComment}
-              onChangeText={setNewComment}
-            />
-          </View>
-        </View>
-        <TouchableOpacity style={styles.sendButton} onPress={handleSendComment}>
-          <Ionicons name="send" size={20} color="#fff" />
-        </TouchableOpacity>
-      </View>
-
-      <FlatList
-        data={comments}
-        keyExtractor={(_, i) => i.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.comment}>
-            <View style={styles.avatarBlock}>
-              {item.avatar ? (
-                <Image
-                  source={{ uri: item.avatar }}
-                  style={{ width: 32, height: 32, borderRadius: 16 }}
-                />
-              ) : (
-                <Ionicons name="person" size={16} color="#fff" />
-              )}
-            </View>
-            <View style={styles.commentTextContainer}>
-              <Text style={styles.commentAuthor}>{item.author}</Text>
-              <Text style={styles.commentText}>{item.text}</Text>
-            </View>
-          </View>
-        )}
-      />
-
-      {/* Modal de Avaliação */}
-      <Modal visible={modalVisible} transparent animationType="fade">
-        <View style={styles.modalBackground}>
+      {/* Modal absoluto */}
+      {modalVisible && (
+        <View style={styles.modalWrapper}>
+          <View style={styles.modalBackground} />
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Avalie de 0 a 5 estrelas</Text>
             <View style={styles.starRow}>
@@ -222,8 +203,8 @@ export default function DetailScreen({
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
-    </ScrollView>
+      )}
+    </>
   );
 }
 
@@ -235,38 +216,58 @@ const styles = StyleSheet.create({
   mainBlock: { flex: 1, height: 200, borderRadius: 12, backgroundColor: "#ffc" },
   actionsColumn: { width: 140, marginLeft: 12, justifyContent: "flex-start" },
   locationButton: {
-    flexDirection: "row", alignItems: "center", justifyContent: "center",
-    borderWidth: 2, borderColor: "#E60000", borderRadius: 8,
-    paddingVertical: 10, backgroundColor: "#fff", marginBottom: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: "#E60000",
+    borderRadius: 8,
+    paddingVertical: 10,
+    backgroundColor: "#fff",
+    marginBottom: 10,
   },
   locationText: { marginLeft: 6, fontSize: 13, color: "#E60000", fontWeight: "bold" },
   shareButton: {
-    flexDirection: "row", alignItems: "center", justifyContent: "center",
-    borderWidth: 2, borderColor: "#006400", borderRadius: 8,
-    paddingVertical: 10, backgroundColor: "#fff", marginBottom: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: "#006400",
+    borderRadius: 8,
+    paddingVertical: 10,
+    backgroundColor: "#fff",
+    marginBottom: 10,
   },
   shareText: { marginLeft: 6, fontSize: 13, color: "#006400", fontWeight: "bold" },
   favoriteButton: {
-    flexDirection: "row", alignItems: "center", justifyContent: "center",
-    borderRadius: 8, paddingVertical: 12, backgroundColor: "#FF4081",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 8,
+    paddingVertical: 12,
+    backgroundColor: "#FF4081",
   },
   favoriteText: { marginLeft: 6, fontSize: 13, color: "#fff", fontWeight: "bold" },
-  unfavoriteButton: {
-    flexDirection: "row", alignItems: "center", justifyContent: "center",
-    borderWidth: 2, borderColor: "#FF4081", borderRadius: 8,
-    paddingVertical: 12, backgroundColor: "#fff",
+  unratedButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: "#FFD700",
+    borderRadius: 8,
+    paddingVertical: 12,
+    backgroundColor: "#fff",
   },
-  unfavoriteText: { marginLeft: 6, fontSize: 13, color: "#FF4081", fontWeight: "bold" },
+  unratedText: { marginLeft: 6, fontSize: 13, color: "#FFD700", fontWeight: "bold" },
   ratedButton: {
-    flexDirection: "row", alignItems: "center", justifyContent: "center",
-    borderRadius: 8, paddingVertical: 12, backgroundColor: "#FFD700",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 8,
+    paddingVertical: 12,
+    backgroundColor: "#FFD700",
   },
   ratedText: { marginLeft: 6, fontSize: 13, color: "#fff", fontWeight: "bold" },
-  unratedButton: {
-    flexDirection: "row", alignItems: "center", justifyContent: "center",
-    borderWidth: 2, borderColor: "#FFD700", borderRadius: 8,
-    paddingVertical: 12, backgroundColor: "#fff", },
-    unratedText: { marginLeft: 6, fontSize: 13, color: "#FFD700", fontWeight: "bold" },
   gallery: { marginBottom: 16 },
   thumbBlock: { width: 80, height: 80, borderRadius: 8, marginRight: 8 },
   selectedThumb: { borderWidth: 3, borderColor: "#2F58FF", borderRadius: 8 },
@@ -283,12 +284,24 @@ const styles = StyleSheet.create({
   commentAuthor: { fontWeight: "bold", fontSize: 14, marginBottom: 2 },
   commentText: { fontSize: 14, color: "#333" },
 
-  // Modal de avaliação
-  modalBackground: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
+  // Modal absoluto
+  modalWrapper: {
+    position: "absolute", // funciona no mobile e web
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     justifyContent: "center",
     alignItems: "center",
+    zIndex: 1000,
+  },
+  modalBackground: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContainer: {
     width: "80%",
@@ -296,35 +309,12 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 20,
     alignItems: "center",
+    zIndex: 1001,
   },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 12,
-  },
-  starRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginVertical: 10,
-  },
-  confirmButton: {
-    backgroundColor: "#1E4F6E",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    marginTop: 10,
-  },
-  confirmText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  cancelButton: {
-    marginTop: 10,
-  },
-  cancelText: {
-    color: "#FF4081",
-    fontSize: 16,
-  },
+  modalTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 12 },
+  starRow: { flexDirection: "row", justifyContent: "center", marginVertical: 10 },
+  confirmButton: { backgroundColor: "#1E4F6E", paddingVertical: 10, paddingHorizontal: 20, borderRadius: 8, marginTop: 10 },
+  confirmText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
+  cancelButton: { marginTop: 10 },
+  cancelText: { color: "#FF4081", fontSize: 16 },
 });
-
