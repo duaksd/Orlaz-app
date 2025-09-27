@@ -46,7 +46,8 @@ export default function DetailScreen({
   const ExpandableText = ({ text, maxLength = 150 }) => {
     const [expanded, setExpanded] = useState(false);
     const toggleExpanded = () => setExpanded(!expanded);
-    const displayText = expanded || text.length <= maxLength ? text : text.slice(0, maxLength) + "...";
+    const displayText =
+      expanded || text.length <= maxLength ? text : text.slice(0, maxLength) + "...";
 
     return (
       <View style={{ marginBottom: 16 }}>
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
   title: { fontSize: 22, fontWeight: "bold", color: "#333", marginBottom: 12 },
   imageRow: { flexDirection: "row", marginBottom: 12, alignItems: "flex-start" },
   mainBlock: { flex: 1, height: 200, borderRadius: 12, backgroundColor: "#ffc" },
-  actionsColumn: { width: 140, marginLeft: 12, justifyContent: "flex-start" },
+  actionsColumn: { width: 140, marginLeft: 12, justifyContent: "flex-start", zIndex: 0 },
   locationButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -239,34 +240,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   shareText: { marginLeft: 6, fontSize: 13, color: "#006400", fontWeight: "bold" },
-  favoriteButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 8,
-    paddingVertical: 12,
-    backgroundColor: "#FF4081",
-  },
+  favoriteButton: { flexDirection: "row", alignItems: "center", justifyContent: "center", borderRadius: 8, paddingVertical: 12, backgroundColor: "#FF4081" },
   favoriteText: { marginLeft: 6, fontSize: 13, color: "#fff", fontWeight: "bold" },
-  unratedButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 2,
-    borderColor: "#FFD700",
-    borderRadius: 8,
-    paddingVertical: 12,
-    backgroundColor: "#fff",
-  },
+  unfavoriteButton: { flexDirection: "row", alignItems: "center", justifyContent: "center", borderWidth: 2, borderColor: "#FF4081", borderRadius: 8, paddingVertical: 12, backgroundColor: "#fff" },
+  unfavoriteText: { marginLeft: 6, fontSize: 13, color: "#FF4081", fontWeight: "bold" },
+  unratedButton: { flexDirection: "row", alignItems: "center", justifyContent: "center", borderWidth: 2, borderColor: "#FFD700", borderRadius: 8, paddingVertical: 12, backgroundColor: "#fff" },
   unratedText: { marginLeft: 6, fontSize: 13, color: "#FFD700", fontWeight: "bold" },
-  ratedButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 8,
-    paddingVertical: 12,
-    backgroundColor: "#FFD700",
-  },
+  ratedButton: { flexDirection: "row", alignItems: "center", justifyContent: "center", borderRadius: 8, paddingVertical: 12, backgroundColor: "#FFD700" },
   ratedText: { marginLeft: 6, fontSize: 13, color: "#fff", fontWeight: "bold" },
   gallery: { marginBottom: 16 },
   thumbBlock: { width: 80, height: 80, borderRadius: 8, marginRight: 8 },
@@ -285,32 +265,9 @@ const styles = StyleSheet.create({
   commentText: { fontSize: 14, color: "#333" },
 
   // Modal absoluto
-  modalWrapper: {
-    position: "absolute", // funciona no mobile e web
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1000,
-  },
-  modalBackground: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.5)",
-  },
-  modalContainer: {
-    width: "80%",
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 20,
-    alignItems: "center",
-    zIndex: 1001,
-  },
+  modalWrapper: { position: "absolute", top: 0, left: 0, right: 0, bottom: 0, justifyContent: "center", alignItems: "center", zIndex: 1001 },
+  modalBackground: { position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)" },
+  modalContainer: { width: "80%", backgroundColor: "#fff", borderRadius: 12, padding: 20, alignItems: "center", zIndex: 1002 },
   modalTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 12 },
   starRow: { flexDirection: "row", justifyContent: "center", marginVertical: 10 },
   confirmButton: { backgroundColor: "#1E4F6E", paddingVertical: 10, paddingHorizontal: 20, borderRadius: 8, marginTop: 10 },
