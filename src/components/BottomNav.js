@@ -84,22 +84,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFEFEF",
   },
   navContainer: {
-  flexDirection: "row",
-  justifyContent: "space-evenly",
-  alignItems: "center",
-  height: 70,
-  backgroundColor: "#EFEFEF",
-  shadowColor: "#000",
-  shadowOpacity: 0.1,
-  shadowRadius: 6,
-},
+    flexDirection: "row",
+    width: "100%",       // garante ocupar toda a tela
+    height: 70,
+    backgroundColor: "#EFEFEF",
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+  },
   tabButton: {
-  alignItems: "center",
-  justifyContent: "center",
-  paddingHorizontal: 47,
-},
-  iconContainer: {
+    width: "33.33%",     // cada botão ocupa 1/3 da tela
     alignItems: "center",
     justifyContent: "center",
   },
 });
+
+
+
