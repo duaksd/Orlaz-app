@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, ImageBackground, Dimensions } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
@@ -37,7 +36,6 @@ export default function CityPage({
 const [showAllFoods, setShowAllFoods] = useState(false);
 
   return (
-    <SafeAreaView style={styles.safe}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -233,7 +231,6 @@ const [showAllFoods, setShowAllFoods] = useState(false);
           )}
         </View>
       </ScrollView>
-    </SafeAreaView>
   );
 }
 
@@ -260,7 +257,7 @@ const styles = StyleSheet.create({
   sectionTitle: { fontSize: 20, fontWeight: "800", color: "#111", textAlign: "center" },
   sectionSubtitle: { fontSize: 13, color: "#666", marginTop: 6, textAlign: "center" },
   attractionsRow: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", },
-  attractionCard: { width: "48%", backgroundColor: "#fff", borderRadius: 10, overflow: "hidden", elevation: 2, height: 180 },
+  attractionCard: { width: "45%", backgroundColor: "#fff", borderRadius: 10, overflow: "hidden", height: 180 },
   attractionImage: { width: 140, height: 110, borderRadius: 12, backgroundColor: "#e9eefb" },
   attractionName: { marginTop: 8, fontSize: 13, fontWeight: "700", color: "#111" },
   centerButton: { alignSelf: "center", backgroundColor: "#2A77A2", paddingVertical: 10, paddingHorizontal: 22, borderRadius: 22 },
