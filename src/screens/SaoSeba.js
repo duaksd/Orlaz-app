@@ -1,7 +1,9 @@
 import React from "react";
 import CityPage from "../components/CityPage";
+import { useNavigation } from "@react-navigation/native";
 
 export default function SaoSebastiao() {
+  const navigation = useNavigation();
   return (
     <CityPage
       name="São Sebastião"
@@ -13,10 +15,10 @@ export default function SaoSebastiao() {
       area="402,9 km²"
       bestSeason="De 12/12 a 28/02"
       attractions={[
-        { name: "Centro Histórico", image: require("../../assets/images/histoseba.png") },
-        { name: "Praia de Juquehy", image: require("../../assets/images/juquehyseba.png") },
-        { name: "Praia de Maresias", image: require("../../assets/images/mareseba.png") },
-        { name: "Praia de Toque-Toque Grande", image: require("../../assets/images/toqueseba.png") },
+        { name: "Centro Histórico", image: require("../../assets/images/histoseba.png"), onPress: () => navigation.navigate("CentroHistorico") },
+        { name: "Praia de Juquehy", image: require("../../assets/images/juquehyseba.png"), onPress: () => navigation.navigate("Juquehy") },
+        { name: "Praia de Maresias", image: require("../../assets/images/mareseba.png"), onPress: () => navigation.navigate("Maresias") },
+        { name: "Praia de Toque-Toque Grande", image: require("../../assets/images/toqueseba.png"), onPress: () => navigation.navigate("ToqueToque") },
       ]}
       foods={[
         { name: "Peixe salgado e seco no varal", desc: "Preservação artesanal do pescado através da salga e secagem ao sol, sem conservantes, ainda praticada pelas famílias locais", image: require("../../assets/images/peixe-salgado.jpg") },

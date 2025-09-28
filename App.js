@@ -33,6 +33,18 @@ import ParqueEstadual from "./src/screens/ParqueEstadual";
 import Martim from "./src/screens/Martim";
 import PraiaCocanha from "./src/screens/PraiaCocanha";
 import SantoAntonio from "./src/screens/SantoAntonio";
+import CentroHistorico from "./src/screens/CentroHistorico";
+import Juquehy from "./src/screens/Juquehy";
+import Maresias from "./src/screens/Maresias";
+import ToqueToque from "./src/screens/ToqueToque";
+import PraiaBonete from "./src/screens/PraiaBonete";
+import PraiaJabaquara from "./src/screens/PraiaJabaquara";
+import PraiaJuliao from "./src/screens/PraiaJuliao";
+import Castelhanos from "./src/screens/Castelhanos";
+import RuinasLagoinha from "./src/screens/RuinasLagoinha";
+import PraiaPortugues from "./src/screens/PraiaPortugues";
+import IlhaDasCouves from "./src/screens/IlhaDasCouves";
+import CachoeiraPrumirim from "./src/screens/CachoeiraPrumirim";
 
 // Atrações detalhadas
 import TrilhasScreen from "./src/screens/TrilhasScreen";
@@ -82,6 +94,18 @@ function HomeStack() {
       <Stack.Screen name="Martim" component={Martim} />
       <Stack.Screen name="PraiaCocanha" component={PraiaCocanha} />
       <Stack.Screen name="SantoAntonio" component={SantoAntonio} />
+      <Stack.Screen name="CentroHistorico" component={CentroHistorico} />
+      <Stack.Screen name="Juquehy" component={Juquehy} />
+      <Stack.Screen name="Maresias" component={Maresias} />
+      <Stack.Screen name="ToqueToque" component={ToqueToque} />
+      <Stack.Screen name="PraiaBonete" component={PraiaBonete} />
+      <Stack.Screen name="PraiaJabaquara" component={PraiaJabaquara} />
+      <Stack.Screen name="PraiaJuliao" component={PraiaJuliao} />
+      <Stack.Screen name="Castelhanos" component={Castelhanos} />
+      <Stack.Screen name="RuinasLagoinha" component={RuinasLagoinha} />
+      <Stack.Screen name="PraiaPortugues" component={PraiaPortugues} />
+      <Stack.Screen name="IlhaDasCouves" component={IlhaDasCouves} />
+      <Stack.Screen name="CachoeiraPrumirim" component={CachoeiraPrumirim} />
 
       {/* Gastronomia */}
       <Stack.Screen name="Taioba" component={Taioba} />

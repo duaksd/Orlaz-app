@@ -1,7 +1,9 @@
 import React from "react";
 import CityPage from "../components/CityPage";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Ubatuba() {
+  const navigation = useNavigation();
   return (
     <CityPage
       name="Ubatuba"
@@ -13,10 +15,10 @@ export default function Ubatuba() {
       area="723,8 km²"
       bestSeason="De 12/12 a 28/02"
       attractions={[
-        { name: "Ruínas da Lagoinha", image: require("../../assets/images/ruinauba.png") },
-        { name: "Praia do Português", image: require("../../assets/images/portuuba.png") },
-        { name: "Ilha das Couves", image: require("../../assets/images/couveuba.png") },
-        { name: "Cachoeira do Prumirim", image: require("../../assets/images/cachouba.png") },
+        { name: "Ruínas da Lagoinha", image: require("../../assets/images/ruinauba.png"), onPress: () => navigation.navigate("RuinasLagoinha") },
+        { name: "Praia do Português", image: require("../../assets/images/portuuba.png"), onPress: () => navigation.navigate("PraiaPortugues") },
+        { name: "Ilha das Couves", image: require("../../assets/images/couveuba.png"), onPress: () => navigation.navigate("IlhaDasCouves") },
+        { name: "Cachoeira do Prumirim", image: require("../../assets/images/cachouba.png"), onPress: () => navigation.navigate("CachoeiraPrumirim") },
       ]}
       foods={[
         { name: "Moqueca Caiçara", desc: "Versão local da moqueca, usando peixe fresco, dendê, leite de coco e ervas regionais.", image: require("../../assets/images/moqueca.png") },
