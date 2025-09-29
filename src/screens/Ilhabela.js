@@ -15,15 +15,14 @@ export default function Ilhabela() {
       area="347,52 km²"
       bestSeason="De 12/12 a 28/02"
       attractions={[
-        { name: "Praia  do Bonete", image: require("../../assets/images/boneilha.png"), onPress: () => navigation.navigate("PraiaBonete") },
-        { name: "Praia  de Jabaquara", image: require("../../assets/images/jabailha.png"), onPress: () => navigation.navigate("PraiaJabaquara") },
+        { name: "Praia do Bonete", image: require("../../assets/images/boneilha.png"), onPress: () => navigation.navigate("PraiaBonete") },
+        { name: "Praia de Jabaquara", image: require("../../assets/images/jabailha.png"), onPress: () => navigation.navigate("PraiaJabaquara") },
         { name: "Praia do Julião", image: require("../../assets/images/juilha.png"), onPress: () => navigation.navigate("PraiaJuliao") },
         { name: "Baía de Castelhanos", image: require("../../assets/images/casteilha.png"), onPress: () => navigation.navigate("Castelhanos") },
       ]}
       foods={[
-        { name: "Peixe assado na folha de bananeira", desc: "Peixe temperado com limão, sal e coentro, embalado em folha de bananeira para assar de forma saborosa e artesanal.", image: require("../../assets/images/peixe-bananeira.jpeg") },
-        { name: "Caldeirada", desc: "Preparada com polvo, lula, mariscos, badejo etc., reflete uma herança caiçara forte na culinária local.", image: require("../../assets/images/caldeirada.jpg") },
-        { name: "Caldeirada", desc: "Preparada com polvo, lula, mariscos, badejo etc., reflete uma herança caiçara forte na culinária local.", image: require("../../assets/images/caldeirada.jpg") },
+        { name: "Peixe assado na Folha de Bananeira", desc: "Peixe temperado com limão, sal e coentro, embalado em folha de bananeira para assar de forma saborosa e artesanal.", image: require("../../assets/images/peixe-bananeira.jpeg"), onPress: () => navigation.navigate("PeixeAssado") },
+        { name: "Caldeirada", desc: "Preparada com polvo, lula, mariscos, badejo etc., reflete uma herança caiçara forte na culinária local.", image: require("../../assets/images/caldeirada.jpg"), onPress: () => navigation.navigate("Caldeirada") },
       ]}
       events={[
         { date: "14/8 á 31/8", title: "Boteco do Camarão" },

@@ -21,9 +21,8 @@ export default function SaoSebastiao() {
         { name: "Praia de Toque-Toque Grande", image: require("../../assets/images/toqueseba.png"), onPress: () => navigation.navigate("ToqueToque") },
       ]}
       foods={[
-        { name: "Peixe salgado e seco no varal", desc: "Preservação artesanal do pescado através da salga e secagem ao sol, sem conservantes, ainda praticada pelas famílias locais", image: require("../../assets/images/peixe-salgado.jpg") },
-        { name: "Camarão na Moranga", desc: "Abóbora recheada com creme de camarão e queijo.", image: require("../../assets/images/camarao-moranga.jpg") },
-        { name: "Camarão na Moranga", desc: "Abóbora recheada com creme de camarão e queijo.", image: require("../../assets/images/camarao-moranga.jpg") },
+        { name: "Peixe Salgado e Seco no Varal", desc: "Preservação artesanal do pescado através da salga e secagem ao sol, sem conservantes, ainda praticada pelas famílias locais", image: require("../../assets/images/peixe-salgado.jpg"), onPress: () => navigation.navigate("PeixeSalgado") },
+        { name: "Camarão na Moranga", desc: "Abóbora recheada com creme de camarão e queijo.", image: require("../../assets/images/camarao-moranga.jpg"), onPress: () => navigation.navigate("CamaraoMoranga") },
       ]}
       events={[
         { date: "1/8 á 17/8", title: "Festival Colorides" },

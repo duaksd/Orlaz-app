@@ -21,9 +21,8 @@ export default function Ubatuba() {
         { name: "Cachoeira do Prumirim", image: require("../../assets/images/cachouba.png"), onPress: () => navigation.navigate("CachoeiraPrumirim") },
       ]}
       foods={[
-        { name: "Moqueca Caiçara", desc: "Versão local da moqueca, usando peixe fresco, dendê, leite de coco e ervas regionais.", image: require("../../assets/images/moqueca.png") },
-        { name: "Lambe-lambe", desc: "Arroz preparado com mexilhões, tradição local ligada à maricultura.", image: require("../../assets/images/lambe.png") },
-        { name: "Lambe-lambe", desc: "Arroz preparado com mexilhões, tradição local ligada à maricultura.", image: require("../../assets/images/lambe.png") },
+        { name: "Moqueca Caiçara", desc: "Versão local da moqueca, usando peixe fresco, dendê, leite de coco e ervas regionais.", image: require("../../assets/images/moqueca.png"), onPress: () => navigation.navigate("Moqueca") },
+        { name: "Lambe-Lambe", desc: "Arroz preparado com mexilhões, tradição local ligada à maricultura.", image: require("../../assets/images/lambe.png"), onPress: () => navigation.navigate("LambeLambe") },
       ]}
       events={[
         { date: "1/8 á 27/9", title: "16º Festival Gastronômico de Ubatuba" },

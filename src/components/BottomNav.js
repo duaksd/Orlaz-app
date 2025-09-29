@@ -5,7 +5,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function BottomNav({ state, navigation }) {
   // Lista de telas onde o ícone Home deve ficar sempre preto
-  const blackHomeScreens = ["ParqueEstadual", "Contato", "Martim", "Taioba", "Mexilhoes", "Frutos", "SantoAntonio", "PraiaCocanha", "Atracoes", "Cidades", "Caraguatatuba", "Trilhas", "Esportes", "Gastronomia", "Festivais", "Ubatuba", "SaoSebastiao", "Ilhabela"];
+  const blackHomeScreens = 
+  ["ParqueEstadual", "Contato", "Martim", "Taioba", "Mexilhoes", "Frutos", 
+    "SantoAntonio", "PraiaCocanha", "Atracoes", "Cidades", "PraiaJuliao", "Castelhanos",
+    "Caraguatatuba", "Trilhas", "Esportes", "Gastronomia", "PraiaBonete",
+    "Festivais", "Ubatuba", "SaoSebastiao", "Ilhabela", "PraiaJabaquara", "Caldeirada",
+  "PeixeAssado", "RuinasLagoinha", "PraiaPortugues", "IlhaDasCouves", "CachoeiraPrumirim",
+"Moqueca", "LambeLambe", "CentroHistorico", "Juquehy", "Maresias", "ToqueToque", "PeixeSalgado", "CamaraoMoranga"];
 
   // Tela atual
   const currentRoute = state.routes[state.index];

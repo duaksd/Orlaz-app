@@ -56,6 +56,12 @@ import GastronomiaScreen from "./src/screens/GastronomiaScreen";
 import Taioba from "./src/screens/Taioba";
 import Mexilhoes from "./src/screens/Mexilhoes";
 import Frutos from "./src/screens/Frutos";
+import PeixeAssado from "./src/screens/PeixeAssado";
+import Caldeirada from "./src/screens/Caldeirada";
+import Moqueca from "./src/screens/Moqueca";
+import LambeLambe from "./src/screens/LambeLambe";
+import PeixeSalgado from "./src/screens/PeixeSalgado";
+import CamaraoMoranga from "./src/screens/CamaraoMoranga";
 
 // Componentes
 import BottomNav from "./src/components/BottomNav";
@@ -111,6 +117,12 @@ function HomeStack() {
       <Stack.Screen name="Taioba" component={Taioba} />
       <Stack.Screen name="Mexilhoes" component={Mexilhoes} />
       <Stack.Screen name="Frutos" component={Frutos} />
+      <Stack.Screen name="Caldeirada" component={Caldeirada} />
+      <Stack.Screen name="PeixeAssado" component={PeixeAssado} />
+      <Stack.Screen name="Moqueca" component={Moqueca} />
+      <Stack.Screen name="LambeLambe" component={LambeLambe} />
+      <Stack.Screen name="PeixeSalgado" component={PeixeSalgado} />
+      <Stack.Screen name="CamaraoMoranga" component={CamaraoMoranga} />
 
 
       {/* Atrações detalhadas */}
