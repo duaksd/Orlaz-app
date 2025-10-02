@@ -55,7 +55,16 @@ export default function EsportesScreen({ navigation }) {
                 </Text>
                 <Text style={styles.cardTitle}>{item.name}</Text>
                 <Text style={styles.cardDescription}>{item.description}</Text>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity 
+                  style={styles.button}
+                  onPress={() => {
+                    if (item.name === "Surf") {
+                      navigation.navigate("Surf");
+                    } else if (item.name === "Stand-up Paddle") {
+                      navigation.navigate("Standup");
+                    }
+                  }}
+                >
                   <Text style={styles.buttonText}>Ver Mais</Text>
                 </TouchableOpacity>
               </View>
