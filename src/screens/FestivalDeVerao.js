@@ -4,8 +4,8 @@ import DetailScreen from "../components/DetailScreen";
 const festivalVeraoData = {
   title: "Festival de Verão",
   images: [
-    "https://www.ilhabela.com.br/imagens/festival-verao-1.jpg",
-    "https://www.ilhabela.com.br/imagens/festival-verao-2.jpg",
+    "https://www.ilhabela.com.br/wp-content/uploads/2020/09/dados-gerais-de-ilhabela.jpg",
+    "https://www.ilhabela.com.br/wp-content/uploads/2025/04/festival-rock-na-ilha-shows-na-praia-em-ilhabela-fim-de-semana-dia-das-maes.jpg",
     "https://www.ilhabela.com.br/imagens/festival-verao-3.jpg",
     "https://www.ilhabela.com.br/imagens/festival-verao-4.jpg"
   ],
