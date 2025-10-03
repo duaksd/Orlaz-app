@@ -37,7 +37,7 @@ export default function EsportesScreen({ navigation }) {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="chevron-back" size={28} color="#000" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Esportes</Text>
+          <Text style={styles.headerTitle}>Esportes Aquáticos</Text>
         </View>
 
         <Text style={styles.subtitle}>
