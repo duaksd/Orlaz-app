@@ -4,10 +4,10 @@ import DetailScreen from "../components/DetailScreen";
 const surfData = {
   title: "Surf",
   images: [
-    "https://th.bing.com/th/id/OIP.vR4YH01PFvPiQqw1nZJsJQHaE8?rs=1&pid=ImgDetMain",
-    "https://th.bing.com/th/id/OIP.d4AQwPFORYVSN3GOPZwaTwHaE8?rs=1&pid=ImgDetMain",
-    "https://th.bing.com/th/id/OIP.qRCW8P7-XpxM9BLOwd9sTwHaE8?rs=1&pid=ImgDetMain",
-    "https://th.bing.com/th/id/OIP.X8fXjHF6Yd8nN5nEmwJ76QHaE7?rs=1&pid=ImgDetMain",
+    "https://cdn.atletis.com.br/atletis-website/base/6e0/e24/295/surf-regras.jpg",
+    "https://images.unsplash.com/photo-1502680390469-be75c86b636f?ixlib=rb-4.0.3",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6ijUJjUrn_GEsoQIjMD4GeJXDQ8nWf5KcYw&s",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb-oy9tonpg7TrhYCMUX04U-nDRLkRJHCBUw&s",
   ],
   description: 
     "Ubatuba é conhecida como a capital do surf, com praias perfeitas para surfistas de todos os níveis. As praias como Itamambuca, Vermelha do Norte e Félix oferecem excelentes condições para a prática do esporte durante todo o ano.",
