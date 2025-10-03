@@ -4,14 +4,11 @@ import {
   ScrollView,
   View,
   Text,
-  StyleSheet,
-  TouchableOpacity,
   Image,
-  StatusBar,
-  Platform,
+  TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import {styles} from "../components/ListScreen";
+import { styles } from "../components/ListScreen";
 
 export default function FestivaisScreen({ navigation }) {
   const items = [
@@ -37,7 +34,7 @@ export default function FestivaisScreen({ navigation }) {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="chevron-back" size={28} color="#000" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Festivais</Text>
+          <Text style={styles.headerTitle}>Festivais e Eventos</Text>
         </View>
 
         <Text style={styles.subtitle}>
@@ -55,7 +52,18 @@ export default function FestivaisScreen({ navigation }) {
                 </Text>
                 <Text style={styles.cardTitle}>{item.name}</Text>
                 <Text style={styles.cardDescription}>{item.description}</Text>
-                <TouchableOpacity style={styles.button}>
+
+                {/* Botão Ver Mais */}
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => {
+                    if (item.name === "Festival de Verão") {
+                      navigation.navigate("FestivalDeVerao");
+                    } else if (item.name === "Festa de São Sebastião") {
+                      navigation.navigate("FestaSaoSeba");
+                    }
+                  }}
+                >
                   <Text style={styles.buttonText}>Ver Mais</Text>
                 </TouchableOpacity>
               </View>

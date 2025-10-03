@@ -47,13 +47,25 @@ import CachoeiraPrumirim from "./src/screens/CachoeiraPrumirim";
 
 // Atrações detalhadas
 import TrilhasScreen from "./src/screens/TrilhasScreen";
-import EsportesScreen from "./src/screens/EsportesScreen"; 
+import EsportesScreen from "./src/screens/EsportesScreen";
 import FestivaisScreen from "./src/screens/FestivaisScreen";
 import GastronomiaScreen from "./src/screens/GastronomiaScreen";
 
-//esportes detalhados
+// Esportes
 import Surf from "./src/screens/surf";
 import Standup from "./src/screens/standup";
+
+// Trilhas
+import TrilhaSetePraias from "./src/screens/TrilhaSetePraias";
+import TrilhaAguaBranca from "./src/screens/TrilhaAguaBranca";
+
+//Festivais
+import FestivalDeVerao from "./src/screens/FestivalDeVerao";
+import FestaSaoSeba from "./src/screens/FestaSaoSeba";
+
+// Restaurantes
+import RestauranteCaicara from "./src/screens/RestauranteCaicara";
+import SaboresDoMar from "./src/screens/SaboresDoMar";
 
 // Gastronomia
 import Taioba from "./src/screens/Taioba";
@@ -134,12 +146,22 @@ function HomeStack() {
       <Stack.Screen name="Festivais" component={FestivaisScreen} />
       <Stack.Screen name="Gastronomia" component={GastronomiaScreen} />
 
-    {/* Esportes específicos */}
+      {/* Esportes */}
       <Stack.Screen name="Surf" component={Surf} />
       <Stack.Screen name="Standup" component={Standup} />
 
+      {/* Trilhas */}
+      <Stack.Screen name="TrilhaSetePraias" component={TrilhaSetePraias} />
+      <Stack.Screen name="TrilhaAguaBranca" component={TrilhaAguaBranca} />
+
+      {/* Festivais */}
+      <Stack.Screen name="FestivalDeVerao" component={FestivalDeVerao} />
+      <Stack.Screen name="FestaSaoSeba" component={FestaSaoSeba} />
+
       {/* Restaurantes */}
       <Stack.Screen name="Restaurantes" component={RestaurantesScreen} />
+      <Stack.Screen name="RestauranteCaicara" component={RestauranteCaicara} />
+      <Stack.Screen name="SaboresDoMar" component={SaboresDoMar} />
     </Stack.Navigator>
   );
 }
@@ -176,6 +198,7 @@ export default function App() {
           <Tab.Screen name="Home" component={HomeStack} />
           <Tab.Screen name="Favoritos" component={Favorites} />
           <Tab.Screen name="Perfil" component={ProfileStack} />
+          <Stack.Screen name="Restaurantes" component={RestaurantesScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     </AuthProvider>

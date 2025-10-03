@@ -4,26 +4,23 @@ import {
   ScrollView,
   View,
   Text,
-  StyleSheet,
-  TouchableOpacity,
   Image,
-  StatusBar,
-  Platform,
+  TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import {styles} from "../components/ListScreen";
+import { styles } from "../components/ListScreen";
 
 export default function GastronomiaScreen({ navigation }) {
   const items = [
     {
-      name: "Restaurante Caiçara",
-      location: "São Sebastião",
+      name: "Restaurante Caiçara's",
+      location: "Caraguatatuba",
       description: "Pratos típicos com frutos do mar frescos.",
-      image: { uri: "https://via.placeholder.com/300x200.png?text=Gastronomia+1" },
+      image: { uri: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/28/21/7f/93/visual-da-nossa-varanda.jpg?w=1200&h=-1&s=1" },
     },
     {
       name: "Sabores do Mar",
-      location: "Caraguatatuba",
+      location: "Ubatuba",
       description: "Variedade de frutos do mar preparados com tradição.",
       image: { uri: "https://via.placeholder.com/300x200.png?text=Gastronomia+2" },
     },
@@ -54,7 +51,18 @@ export default function GastronomiaScreen({ navigation }) {
                 </Text>
                 <Text style={styles.cardTitle}>{item.name}</Text>
                 <Text style={styles.cardDescription}>{item.description}</Text>
-                <TouchableOpacity style={styles.button}>
+
+                {/* Botão Ver Mais */}
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => {
+                    if (item.name === "Restaurante Caiçara's") {
+                      navigation.navigate("RestauranteCaicara");
+                    } else if (item.name === "Sabores do Mar") {
+                      navigation.navigate("SaboresDoMar");
+                    }
+                  }}
+                >
                   <Text style={styles.buttonText}>Ver Mais</Text>
                 </TouchableOpacity>
               </View>
