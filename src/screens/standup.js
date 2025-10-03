@@ -2,7 +2,7 @@ import React from "react";
 import DetailScreen from "../components/DetailScreen";
 
 const standupData = {
-  title: "Stand-up Paddle em Caraguatatuba",
+  title: "Stand-up Paddle",
   images: [
     "https://www.guiadecaraguatatuba.com.br/wp-content/uploads/2015/11/standup-paddle-em-caraguatatuba-1024x683.jpg",
     "",
