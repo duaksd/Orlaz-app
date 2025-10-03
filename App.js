@@ -176,6 +176,7 @@ export default function App() {
           <Tab.Screen name="Home" component={HomeStack} />
           <Tab.Screen name="Favoritos" component={Favorites} />
           <Tab.Screen name="Perfil" component={ProfileStack} />
+          <Stack.Screen name="Restaurantes" component={RestaurantesScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     </AuthProvider>
