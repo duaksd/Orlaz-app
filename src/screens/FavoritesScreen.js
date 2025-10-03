@@ -29,7 +29,7 @@ export default function Favorites() {
           Meus <Text style={styles.highlight}>Favoritos</Text>
         </Text>
         <Text style={styles.subtitle}>
-          Aqui estão os destinos e atividades que você mais gostou.
+          Aqui estão seus destinos e atividades em favorito!
         </Text>
         <Text style={styles.subtitle}>
           Relembre e planeje a sua próxima viagem.
