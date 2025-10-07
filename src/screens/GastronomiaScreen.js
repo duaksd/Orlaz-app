@@ -19,10 +19,10 @@ export default function GastronomiaScreen({ navigation }) {
       image: { uri: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/28/21/7f/93/visual-da-nossa-varanda.jpg?w=1200&h=-1&s=1" },
     },
     {
-      name: "Sabores do Mar",
+      name: "Sabor do Mar",
       location: "Ubatuba",
       description: "Variedade de frutos do mar preparados com tradição.",
-      image: { uri: "https://via.placeholder.com/300x200.png?text=Gastronomia+2" },
+      image: { uri: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0c/ba/25/38/photo0jpg.jpg?w=1000&h=-1&s=1" },
     },
   ];
 
@@ -58,7 +58,7 @@ export default function GastronomiaScreen({ navigation }) {
                   onPress={() => {
                     if (item.name === "Restaurante Caiçara's") {
                       navigation.navigate("RestauranteCaicara");
-                    } else if (item.name === "Sabores do Mar") {
+                    } else if (item.name === "Sabor do Mar") {
                       navigation.navigate("SaboresDoMar");
                     }
                   }}
