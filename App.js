@@ -185,7 +185,7 @@ function RestaurantesStack() {
         name="RaizesRestaurantePizzaria"
         component={RaizesRestaurantePizzaria}
       />
-      <Stack.Screen name="RestauranteCaicara" component={RestauranteCaicara} />
+        <Stack.Screen name="RestauranteCaicara" component={RestauranteCaicara} />
     </Stack.Navigator>
   );
 }
