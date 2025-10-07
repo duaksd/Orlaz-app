@@ -7,7 +7,7 @@ const festaSaoSebastiaoData = {
     "https://www.gaz.com.br/uploads/2023/01/Festa-do-Bastiao-Venancio-Aires-03-150114.jpg",
     "https://www.odemocrata.com.br/wp-content/uploads/2024/05/441460382_866790398598175_854361288962408282_n.jpg",
     "https://visitrio.com.br/wp-content/uploads/2024/01/Saiba-mais-sobre-a-historia-de-Sao-Sebastiao-o-padroeiro-do-Rio-de-Janeiro-1.webp",
-    "https://odia.ig.com.br/_midias/jpg/2019/01/20/1200x670/1_dias0144aa-9378068.jpg"
+    "https://odia.ig.com.br/_midias/jpg/2019/01/20/1200x670/1_dias0144aa-9378068.jpg",
     "https://img.band.uol.com.br/image/2023/01/19/festa-sao-sebastiao-121236.jpg",
     "https://novaimprensa.com/wp-content/uploads/2020/01/Festa-do-padroeiro-de-S%C3%A3o-Sebasti%C3%A3o-re%C3%BAne-milhares-de-fi%C3%A9is-no-Centro-Hist%C3%B3rico-da-cidade-1-1536x1023.jpg",
   ],
