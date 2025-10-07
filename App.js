@@ -66,6 +66,10 @@ import FestaSaoSeba from "./src/screens/FestaSaoSeba";
 // Restaurantes
 import RestauranteCaicara from "./src/screens/RestauranteCaicara";
 import SaboresDoMar from "./src/screens/SaboresDoMar";
+import BensBarComidariaScreen from "./src/screens/BensBarComidaria";
+import RestauranteRavenala from "./src/screens/RestauranteRavenala";
+import GarageBarSteakhouse from "./src/screens/GarageBarSteakhouse";
+import RaizesRestaurantePizzaria from "./src/screens/RaizesRestaurantePizzaria";
 
 // Gastronomia
 import Taioba from "./src/screens/Taioba";
@@ -80,7 +84,6 @@ import CamaraoMoranga from "./src/screens/CamaraoMoranga";
 
 // Componentes
 import BottomNav from "./src/components/BottomNav";
-
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -157,11 +160,32 @@ function HomeStack() {
       {/* Festivais */}
       <Stack.Screen name="FestivalDeVerao" component={FestivalDeVerao} />
       <Stack.Screen name="FestaSaoSeba" component={FestaSaoSeba} />
+    </Stack.Navigator>
+  );
+}
 
-      {/* Restaurantes */}
-      <Stack.Screen name="Restaurantes" component={RestaurantesScreen} />
+// Stack do Restaurantes
+function RestaurantesStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="RestaurantesMain" component={RestaurantesScreen} />
+      <Stack.Screen
+        name="BensBarComidaria"
+        component={BensBarComidariaScreen}
+      />
+      <Stack.Screen
+        name="RestauranteRavenala"
+        component={RestauranteRavenala}
+      />
+      <Stack.Screen
+        name="GarageBarSteakhouse"
+        component={GarageBarSteakhouse}
+      />
+      <Stack.Screen
+        name="RaizesRestaurantePizzaria"
+        component={RaizesRestaurantePizzaria}
+      />
       <Stack.Screen name="RestauranteCaicara" component={RestauranteCaicara} />
-      <Stack.Screen name="SaboresDoMar" component={SaboresDoMar} />
     </Stack.Navigator>
   );
 }
@@ -198,7 +222,7 @@ export default function App() {
           <Tab.Screen name="Home" component={HomeStack} />
           <Tab.Screen name="Favoritos" component={Favorites} />
           <Tab.Screen name="Perfil" component={ProfileStack} />
-          <Stack.Screen name="Restaurantes" component={RestaurantesScreen} />
+          <Tab.Screen name="Restaurantes" component={RestaurantesStack} />
         </Tab.Navigator>
       </NavigationContainer>
     </AuthProvider>
