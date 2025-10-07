@@ -17,12 +17,14 @@ export default function GastronomiaScreen({ navigation }) {
       location: "Caraguatatuba",
       description: "Pratos típicos com frutos do mar frescos.",
       image: { uri: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/28/21/7f/93/visual-da-nossa-varanda.jpg?w=1200&h=-1&s=1" },
+      route: "RestauranteCaicara"
     },
     {
-      name: "Sabor do Mar",
+      name: "Sabores do Mar",
       location: "Ubatuba",
       description: "Variedade de frutos do mar preparados com tradição.",
       image: { uri: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0c/ba/25/38/photo0jpg.jpg?w=1000&h=-1&s=1" },
+      route: "SaboresDoMar"
     },
   ];
 
@@ -55,13 +57,7 @@ export default function GastronomiaScreen({ navigation }) {
                 {/* Botão Ver Mais */}
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={() => {
-                    if (item.name === "Restaurante Caiçara's") {
-                      navigation.navigate("RestauranteCaicara");
-                    } else if (item.name === "Sabor do Mar") {
-                      navigation.navigate("SaboresDoMar");
-                    }
-                  }}
+                  onPress={() => navigation.navigate(item.route)}
                 >
                   <Text style={styles.buttonText}>Ver Mais</Text>
                 </TouchableOpacity>

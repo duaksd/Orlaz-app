@@ -143,6 +143,10 @@ function HomeStack() {
       <Stack.Screen name="PeixeSalgado" component={PeixeSalgado} />
       <Stack.Screen name="CamaraoMoranga" component={CamaraoMoranga} />
 
+      {/* Restaurantes na Gastronomia */}
+      <Stack.Screen name="RestauranteCaicara" component={RestauranteCaicara} />
+      <Stack.Screen name="SaboresDoMar" component={SaboresDoMar} />
+
       {/* Atrações detalhadas */}
       <Stack.Screen name="Trilhas" component={TrilhasScreen} />
       <Stack.Screen name="Esportes" component={EsportesScreen} />
