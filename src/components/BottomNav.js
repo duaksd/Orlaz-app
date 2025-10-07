@@ -11,7 +11,9 @@ export default function BottomNav({ state, navigation }) {
     "Caraguatatuba", "Trilhas", "Esportes", "Gastronomia", "PraiaBonete",
     "Festivais", "Ubatuba", "SaoSebastiao", "Ilhabela", "PraiaJabaquara", "Caldeirada",
   "PeixeAssado", "RuinasLagoinha", "PraiaPortugues", "IlhaDasCouves", "CachoeiraPrumirim",
-"Moqueca", "LambeLambe", "CentroHistorico", "Juquehy", "Maresias", "ToqueToque", "PeixeSalgado", "CamaraoMoranga"];
+"Moqueca", "LambeLambe", "CentroHistorico", "Juquehy", "Maresias", "ToqueToque", "PeixeSalgado", "CamaraoMoranga",
+"SaboresDoMar", "RestauranteCaicara", "FestivalDeVerao", "FestaSaoSeba", "Surf", "Standup",
+"TrilhaSetePraias", "TrilhaAguaBranca"];
 
   // Tela atual
   const currentRoute = state.routes[state.index];
