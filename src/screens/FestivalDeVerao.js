@@ -6,8 +6,8 @@ const festivalVeraoData = {
   images: [
     "https://www.ilhabela.com.br/wp-content/uploads/2020/09/dados-gerais-de-ilhabela.jpg",
     "https://www.ilhabela.com.br/wp-content/uploads/2025/04/festival-rock-na-ilha-shows-na-praia-em-ilhabela-fim-de-semana-dia-das-maes.jpg",
-    "https://www.ilhabela.com.br/imagens/festival-verao-3.jpg",
-    "https://www.ilhabela.com.br/imagens/festival-verao-4.jpg"
+    "https://www.ilhabela.com.br/wp-content/uploads/2023/04/ilhabela-festival-forro-na-ilha-2022-matheus-costato-capa.jpg",
+    "https://www.ilhabela.com.br/wp-content/uploads/2023/12/festival-forro-na-ilha-2023.jpg"
   ],
   description:
     "O Festival de Verão de Ilhabela é um evento anual que reúne música, gastronomia e cultura local em um cenário paradisíaco. Com shows ao ar livre, atividades recreativas e barraquinhas de comidas típicas, é ideal para famílias, jovens e turistas que querem aproveitar a energia da ilha durante a estação mais quente do ano.",
