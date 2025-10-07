@@ -23,7 +23,7 @@ export default function GastronomiaScreen({ navigation }) {
       name: "Sabores do Mar",
       location: "Ubatuba",
       description: "Variedade de frutos do mar preparados com tradição.",
-      image: { uri: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0c/ba/25/38/photo0jpg.jpg?w=1000&h=-1&s=1" },
+      image: { uri: "https://scontent.fpoa10-1.fna.fbcdn.net/v/t39.30808-6/482053788_3490971341047763_5679505573610082876_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=XoUksaxVtVcQ7kNvwEAnG_F&_nc_oc=Admxpg1ztG8jAoOeD9xdWNajfkqlq3eFOmQ6mQ6oXxscyPyolRBsU__x9R5CRewpxaA&_nc_zt=23&_nc_ht=scontent.fpoa10-1.fna&_nc_gid=ENXmD7K3lbmGYkYRxD41zg&oh=00_AffT4DRA38qAoVnAhRkhVkevDddFuCPi5N36JK6fCN2Yzg&oe=68EB4EE5" },
       route: "SaboresDoMar"
     },
   ];
