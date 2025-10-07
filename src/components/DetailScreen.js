@@ -257,7 +257,7 @@ export default function DetailScreen({
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#EFEFEF", position: "relative" },
   scrollContent: { paddingHorizontal: 18 },
-  backButton: { marginBottom: 8 },
+  backButton: { marginBottom: 8, marginTop: 12 },
   title: { fontSize: 22, fontWeight: "bold", color: "#333", marginBottom: 12 },
   imageRow: { flexDirection: "row", marginBottom: 12, alignItems: "flex-start" },
   mainBlock: { flex: 1, height: 200, borderRadius: 12, backgroundColor: "#fff" },
