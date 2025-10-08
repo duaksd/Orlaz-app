@@ -55,7 +55,7 @@ const suggestionsData = [
   { label: "Praia de Toque-Toque Grande", screen: "ToqueToque" },
   { label: "Peixe Salgado e Seco no Varal", screen: "PeixeSalgado" },
   { label: "Camarão na Moranga", screen: "CamaraoMoranga" },
-  { label: "Trilha da Água Branca", screen: "AguaBranca" },
+  { label: "Trilha da Água Branca", screen: "TrilhaAguaBranca" },
   { label: "Surf", screen: "Surf" },
   { label: "Stand-up Paddle", screen: "Standup" },
   { label: "Festival de Verão", screen: "FestivalDeVerao" },
