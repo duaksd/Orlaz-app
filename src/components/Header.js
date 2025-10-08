@@ -1,27 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, TextInput, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome } from "@expo/vector-icons";
 
-export default function Header({ navigation }) {
-  const [searchText, setSearchText] = useState("");
-
-  const handleMenuPress = (menu) => {
-    switch (menu) {
-      case "Cidades":
-        navigation.navigate("Cidades");       // Stack name correto
-        break;
-      case "Atracoes":
-        navigation.navigate("Atracoes");      // Stack name correto (sem ç)
-        break;
-      case "Contato":
-        navigation.navigate("Contato");
-        break;
-      default:
-        break;
-    }
-  };
-
+export default function Header({ searchText, setSearchText, handleSearch, handleMenuPress }) {
   return (
     <LinearGradient
       colors={["#1E4F6E", "#2A77A2"]}
@@ -32,29 +14,20 @@ export default function Header({ navigation }) {
       {/* Barra de pesquisa */}
       <View style={styles.searchContainer}>
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-          <FontAwesome
-            name="search"
-            size={20}
-            color="#666"
-            style={{ marginRight: 2 }} // quase colada
-          />
+          <FontAwesome name="search" size={20} color="#666" style={{ marginRight: 2 }} />
           <TextInput
             placeholder="Inicie sua busca"
             placeholderTextColor="#666"
-            style={[styles.searchInput, { textAlign: "center" }]} // centraliza o texto e placeholder
+            style={[styles.searchInput, { textAlign: "center" }]}
             value={searchText}
-            onChangeText={(text) => setSearchText(text)}
+            onChangeText={handleSearch}
           />
         </View>
       </View>
 
-
       {/* Linha de ícones */}
       <View style={styles.iconRow}>
-        <TouchableOpacity
-          style={styles.iconBox}
-          onPress={() => handleMenuPress("Cidades")}
-        >
+        <TouchableOpacity style={styles.iconBox} onPress={() => handleMenuPress("Cidades")}>
           <View style={styles.iconContent}>
             <Image
               source={require("../../assets/icons/cidades.png")}
@@ -65,10 +38,7 @@ export default function Header({ navigation }) {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.iconBox}
-          onPress={() => handleMenuPress("Atracoes")}
-        >
+        <TouchableOpacity style={styles.iconBox} onPress={() => handleMenuPress("Atracoes")}>
           <View style={styles.iconContent}>
             <Image
               source={require("../../assets/icons/atracoes.png")}
@@ -79,10 +49,7 @@ export default function Header({ navigation }) {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.iconBox}
-          onPress={() => handleMenuPress("Contato")}
-        >
+        <TouchableOpacity style={styles.iconBox} onPress={() => handleMenuPress("Contato")}>
           <View style={styles.iconContent}>
             <Image
               source={require("../../assets/icons/contato.png")}
