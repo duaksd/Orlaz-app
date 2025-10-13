@@ -18,6 +18,7 @@ import { clearStorage } from "../services/auth";
 
 export default function ProfileScreen({ navigation }) {
   const { user, signOut, loading } = useAuth();
+  const [profile, setProfile] = useState(null);
   const [displayName, setDisplayName] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(null); // "email" | "senha" | "deletar" | null
@@ -27,6 +28,19 @@ export default function ProfileScreen({ navigation }) {
   useEffect(() => {
     if (!loading && !user) {
       navigation.replace("Login");
+    } else if (user && user.id) {
+      // Busca perfil do backend usando fetch
+      fetch(`http://localhost:3000/profile/${user.id}`)
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data) {
+            setProfile(data);
+            setDisplayName(data.name || "usuário");
+          } else {
+            setDisplayName(user.name || "usuário");
+          }
+        })
+        .catch(() => setDisplayName(user.name || "usuário"));
     } else if (user) {
       setDisplayName(user.name || "usuário");
     }
@@ -82,7 +96,10 @@ export default function ProfileScreen({ navigation }) {
         <View style={styles.userBlock}>
           <TouchableOpacity onPress={pickImage}>
             {profileImage ? (
-              <Image source={{ uri: profileImage }} style={styles.profileImage} />
+              <Image
+                source={{ uri: profileImage }}
+                style={styles.profileImage}
+              />
             ) : (
               <FontAwesome name="user-circle" size={70} color="#2A77A2" />
             )}
@@ -92,7 +109,7 @@ export default function ProfileScreen({ navigation }) {
             <Text style={styles.greeting}>Olá, {displayName}! ☀️🏖️</Text>
             <View style={styles.emailContainer}>
               <FontAwesome name="envelope" size={14} color="#000" />
-              <Text style={styles.email}>{user.email}</Text>
+              <Text style={styles.email}>{profile?.email || user.email}</Text>
             </View>
             <TouchableOpacity onPress={pickImage}>
               <Text style={styles.changePhotoText}>Alterar foto</Text>
@@ -165,10 +182,39 @@ export default function ProfileScreen({ navigation }) {
                     <Text>Cancelar</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => {
-                      Alert.alert("Email atualizado!", `Novo email: ${newEmail}`);
-                      setModalVisible(null);
-                      setNewEmail("");
+                    onPress={async () => {
+                      if (!newEmail) return;
+                      try {
+                        const response = await fetch(
+                          `http://localhost:3000/profile/${user.id}`,
+                          {
+                            method: "PATCH",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ email: newEmail }),
+                          }
+                        );
+                        // O backend retorna { message, profile }
+                        if (response.ok) {
+                          const updated = await response.json();
+                          setProfile && setProfile(updated.profile || updated);
+                          Alert.alert("Email atualizado!");
+                          setModalVisible(null);
+                          setNewEmail("");
+                        } else {
+                          Alert.alert("Erro ao atualizar email");
+                        }
+                        if (response.ok) {
+                          const updated = await response.json();
+                          setProfile && setProfile(updated);
+                          Alert.alert("Email atualizado!");
+                          setModalVisible(null);
+                          setNewEmail("");
+                        } else {
+                          Alert.alert("Erro ao atualizar email");
+                        }
+                      } catch {
+                        Alert.alert("Erro ao atualizar email");
+                      }
                     }}
                     style={styles.modalConfirm}
                   >
@@ -213,7 +259,8 @@ export default function ProfileScreen({ navigation }) {
               <>
                 <Text style={styles.modalTitle}>Deletar Conta</Text>
                 <Text style={{ marginBottom: 12 }}>
-                  Tem certeza que deseja deletar sua conta? Esta ação não pode ser desfeita.
+                  Tem certeza que deseja deletar sua conta? Esta ação não pode
+                  ser desfeita.
                 </Text>
                 <View style={styles.modalButtons}>
                   <TouchableOpacity
