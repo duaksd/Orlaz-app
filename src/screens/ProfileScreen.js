@@ -33,16 +33,14 @@ export default function ProfileScreen({ navigation }) {
       fetch(`http://localhost:3000/profile/${user.id}`)
         .then((res) => (res.ok ? res.json() : null))
         .then((data) => {
-          if (data) {
-            setProfile(data);
-            setDisplayName(data.name || "usuário");
+          if (data && data.profile) {
+            setProfile(data.profile);
+            setDisplayName(data.profile.name || "usuário");
           } else {
-            setDisplayName(user.name || "usuário");
+            setDisplayName("usuário");
           }
         })
-        .catch(() => setDisplayName(user.name || "usuário"));
-    } else if (user) {
-      setDisplayName(user.name || "usuário");
+        .catch(() => setDisplayName("usuário"));
     }
   }, [loading, user, navigation]);
 
@@ -55,25 +53,10 @@ export default function ProfileScreen({ navigation }) {
       );
       return;
     }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 0.5,
-      allowsEditing: true,
-    });
-
-    if (!result.canceled) {
-      setProfileImage(result.assets[0].uri);
-    }
   };
 
   const handleLogout = async () => {
     await signOut();
-    navigation.replace("Login");
-  };
-
-  const handleDeleteAccount = async () => {
-    await clearStorage();
     navigation.replace("Login");
   };
 
@@ -95,11 +78,33 @@ export default function ProfileScreen({ navigation }) {
 
         <View style={styles.userBlock}>
           <TouchableOpacity onPress={pickImage}>
-            {profileImage ? (
+            {profile && profile.avatarUrl ? (
+              <Image
+                source={{ uri: profile.avatarUrl }}
+                style={styles.profileImage}
+              />
+            ) : profileImage ? (
               <Image
                 source={{ uri: profileImage }}
                 style={styles.profileImage}
               />
+            ) : profile && profile.avatarColor ? (
+              <View
+                style={[
+                  styles.profileImage,
+                  {
+                    backgroundColor: profile.avatarColor,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  },
+                ]}
+              >
+                <Text
+                  style={{ color: "#fff", fontSize: 32, fontWeight: "bold" }}
+                >
+                  {profile.name ? profile.name.charAt(0).toUpperCase() : "?"}
+                </Text>
+              </View>
             ) : (
               <FontAwesome name="user-circle" size={70} color="#2A77A2" />
             )}
@@ -165,6 +170,49 @@ export default function ProfileScreen({ navigation }) {
           <View style={styles.modalBackground} />
 
           <View style={styles.modalContainer}>
+            {modalVisible === "deletar" && (
+              <>
+                <Text style={styles.modalTitle}>Deletar Conta</Text>
+                <Text style={{ marginBottom: 12 }}>
+                  Tem certeza que deseja deletar sua conta? Esta ação não pode
+                  ser desfeita.
+                </Text>
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    onPress={() => setModalVisible(null)}
+                    style={styles.modalCancel}
+                  >
+                    <Text>Cancelar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      try {
+                        console.log("Tentando deletar usuário", user?.id);
+                        const response = await fetch(
+                          `http://localhost:3000/profile/${user.id}`,
+                          { method: "DELETE" }
+                        );
+                        console.log("Status da resposta:", response.status);
+                        if (response.ok) {
+                          await clearStorage();
+                          navigation.replace("Login");
+                        } else {
+                          const text = await response.text();
+                          console.log("Erro ao deletar:", text);
+                          Alert.alert("Erro ao deletar conta");
+                        }
+                      } catch (e) {
+                        console.log("Exceção ao deletar:", e);
+                        Alert.alert("Erro ao deletar conta");
+                      }
+                    }}
+                    style={styles.modalConfirm}
+                  >
+                    <Text style={{ color: "#fff" }}>Deletar</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
             {modalVisible === "email" && (
               <>
                 <Text style={styles.modalTitle}>Atualizar Email</Text>
@@ -203,15 +251,6 @@ export default function ProfileScreen({ navigation }) {
                         } else {
                           Alert.alert("Erro ao atualizar email");
                         }
-                        if (response.ok) {
-                          const updated = await response.json();
-                          setProfile && setProfile(updated);
-                          Alert.alert("Email atualizado!");
-                          setModalVisible(null);
-                          setNewEmail("");
-                        } else {
-                          Alert.alert("Erro ao atualizar email");
-                        }
                       } catch {
                         Alert.alert("Erro ao atualizar email");
                       }
@@ -242,38 +281,33 @@ export default function ProfileScreen({ navigation }) {
                     <Text>Cancelar</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => {
-                      Alert.alert("Senha alterada!");
-                      setModalVisible(null);
-                      setNewPassword("");
+                    onPress={async () => {
+                      if (!newPassword) return;
+                      try {
+                        const response = await fetch(
+                          `http://localhost:3000/profile/${user.id}`,
+                          {
+                            method: "PATCH",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ password: newPassword }),
+                          }
+                        );
+                        if (response.ok) {
+                          const updated = await response.json();
+                          setProfile && setProfile(updated.profile || updated);
+                          Alert.alert("Senha atualizada!");
+                          setModalVisible(null);
+                          setNewPassword("");
+                        } else {
+                          Alert.alert("Erro ao atualizar senha");
+                        }
+                      } catch {
+                        Alert.alert("Erro ao atualizar senha");
+                      }
                     }}
                     style={styles.modalConfirm}
                   >
                     <Text style={{ color: "#fff" }}>Salvar</Text>
-                  </TouchableOpacity>
-                </View>
-              </>
-            )}
-
-            {modalVisible === "deletar" && (
-              <>
-                <Text style={styles.modalTitle}>Deletar Conta</Text>
-                <Text style={{ marginBottom: 12 }}>
-                  Tem certeza que deseja deletar sua conta? Esta ação não pode
-                  ser desfeita.
-                </Text>
-                <View style={styles.modalButtons}>
-                  <TouchableOpacity
-                    onPress={() => setModalVisible(null)}
-                    style={styles.modalCancel}
-                  >
-                    <Text>Cancelar</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={handleDeleteAccount}
-                    style={styles.modalConfirm}
-                  >
-                    <Text style={{ color: "#fff" }}>Deletar</Text>
                   </TouchableOpacity>
                 </View>
               </>

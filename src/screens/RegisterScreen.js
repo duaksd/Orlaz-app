@@ -35,8 +35,13 @@ export default function RegisterScreen({ navigation }) {
       const data = await response.json();
       // O backend retorna { profile: { ...dadosDoUsuario... } }
       if (response.ok && data && data.profile && data.profile.id) {
-        await signIn(data.profile);
-        navigation.replace("ProfileMain");
+        // Salva apenas o id no contexto/auth
+        const success = await signIn({ id: data.profile.id });
+        if (success) {
+          navigation.replace("ProfileMain");
+        } else {
+          Alert.alert("Erro", "Não foi possível criar a conta.");
+        }
       } else {
         Alert.alert("Erro", data?.message || "Não foi possível criar a conta.");
       }
