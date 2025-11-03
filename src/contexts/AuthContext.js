@@ -1,47 +1,45 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { saveUser, getUser, saveToken, getToken, clearStorage } from '../services/auth';
+import { saveUser, getUser, clearStorage, saveIsLogged, getIsLogged } from '../services/auth';
 
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [isLogged, setIsLogged] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadStoredData();
-  }, []);
-
-  async function loadStoredData() {
-    try {
-      const storedUser = await getUser();
-      const storedToken = await getToken();
-
-      if (storedUser && storedToken) {
-        setUser(storedUser);
+    (async () => {
+      try {
+        console.log('[AuthContext] loadStoredData start');
+        const storedUser = await getUser();
+        const storedIsLogged = await getIsLogged();
+        console.log('[AuthContext] loadStoredData got', storedUser, storedIsLogged);
+        if (storedUser) setUser(storedUser);
+        if (storedIsLogged) setIsLogged(true);
+      } catch (error) {
+        console.error('Erro ao carregar dados do auth:', error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Erro ao carregar dados armazenados:', error);
-    } finally {
-      setLoading(false);
-    }
-  }
+    })();
+  }, []);
 
   const signIn = async (userData) => {
     try {
-      // Aqui você faria a chamada para a API de login
-      // Por enquanto vamos simular um token
-      const token = 'fake-token-' + Date.now();
-      
-      // Salvando dados no AsyncStorage
-      await saveToken(token);
-      await saveUser(userData);
-      
-      // Atualizando o estado
-      setUser(userData);
-      
+      console.log('[AuthContext] signIn called with', userData);
+      const minimal = { id: userData?.id };
+      const userSaved = await saveUser(minimal);
+      const isLoggedSaved = await saveIsLogged(true);
+      console.log('[AuthContext] save results', { userSaved, isLoggedSaved });
+      if (!userSaved || !isLoggedSaved) {
+        return false;
+      }
+      setUser(minimal);
+      setIsLogged(true);
       return true;
     } catch (error) {
-      console.error('Erro ao fazer login:', error);
+      console.error('Erro no signIn:', error);
       return false;
     }
   };
@@ -50,32 +48,24 @@ export const AuthProvider = ({ children }) => {
     try {
       await clearStorage();
       setUser(null);
+      setIsLogged(false);
     } catch (error) {
-      console.error('Erro ao fazer logout:', error);
+      console.error('Erro no signOut:', error);
     }
   };
 
   const updateUser = async (newData) => {
     try {
-      const updatedUser = { ...user, ...newData };
-      await saveUser(updatedUser);
-      setUser(updatedUser);
+      const updated = { ...user, ...newData };
+      await saveUser(updated);
+      setUser(updated);
     } catch (error) {
       console.error('Erro ao atualizar usuário:', error);
     }
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        signed: !!user,
-        user,
-        loading,
-        signIn,
-        signOut,
-        updateUser,
-      }}
-    >
+    <AuthContext.Provider value={{ signed: !!user, isLogged, user, loading, signIn, signOut, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
@@ -83,10 +73,6 @@ export const AuthProvider = ({ children }) => {
 
 export function useAuth() {
   const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
-  }
-
+  if (!context) throw new Error('useAuth deve ser usado dentro de um AuthProvider');
   return context;
 }

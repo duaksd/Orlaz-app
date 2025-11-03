@@ -25,6 +25,7 @@ export default function LoginScreen({ navigation }) {
 
     setLoading(true);
     try {
+      console.log('[LoginScreen] handleLogin: trying login with', email);
       const res = await fetch("http://localhost:3000/profile");
       const data = await res.json();
       const users = data.profiles || [];
@@ -33,17 +34,21 @@ export default function LoginScreen({ navigation }) {
         (u) => u.email === email && u.password === password
       );
       if (user) {
+        console.log('[LoginScreen] handleLogin: user found', user);
         // Salva apenas o id no contexto/auth
         const success = await signIn({ id: user.id });
+        console.log('[LoginScreen] handleLogin: signIn returned', success);
         if (success) {
           navigation.replace("ProfileMain");
         } else {
           Alert.alert("Erro", "Não foi possível fazer login.");
         }
       } else {
+        console.log('[LoginScreen] handleLogin: user not found');
         Alert.alert("Erro", "Email ou senha inválidos.");
       }
     } catch (error) {
+      console.log('[LoginScreen] handleLogin: error', error);
       Alert.alert("Erro", "Ocorreu um erro ao fazer login.");
     } finally {
       setLoading(false);
