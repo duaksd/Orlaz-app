@@ -10,6 +10,7 @@ import {
   Poppins_700Bold,
 } from "@expo-google-fonts/poppins";
 import { AuthProvider } from "./src/contexts/AuthContext";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 // Screens principais
 import HomeScreen from "./src/screens/HomeScreen";
 import Favorites from "./src/screens/FavoritesScreen";
@@ -210,26 +211,28 @@ export default function App() {
   }
 
   return (
-    <AuthProvider>
-      <NavigationContainer>
-        <Tab.Navigator
-          tabBar={(props) => <BottomNav {...props} />}
-          screenOptions={{
-            headerShown: false,
-            tabBarStyle: {
-              backgroundColor: "#EFEFEF",
-              borderTopWidth: 0,
-              height: 70,
-            },
-          }}
-        >
-          <Tab.Screen name="Home" component={HomeStack} />
-          <Tab.Screen name="Favoritos" component={Favorites} />
-          <Tab.Screen name="Perfil" component={ProfileStack} />
-          <Tab.Screen name="Restaurantes" component={RestaurantesStack} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <NavigationContainer>
+          <Tab.Navigator
+            tabBar={(props) => <BottomNav {...props} />}
+            screenOptions={{
+              headerShown: false,
+              tabBarStyle: {
+                backgroundColor: "#EFEFEF",
+                borderTopWidth: 0,
+                height: 70,
+              },
+            }}
+          >
+            <Tab.Screen name="Home" component={HomeStack} />
+            <Tab.Screen name="Favoritos" component={Favorites} />
+            <Tab.Screen name="Perfil" component={ProfileStack} />
+            <Tab.Screen name="Restaurantes" component={RestaurantesStack} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }
 
