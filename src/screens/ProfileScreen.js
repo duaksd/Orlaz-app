@@ -10,6 +10,7 @@ import {
   TextInput,
   Image,
   ScrollView,
+  Platform,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -21,6 +22,7 @@ export default function ProfileScreen({ navigation }) {
   const [profile, setProfile] = useState(null);
   const [displayName, setDisplayName] = useState("");
   const [profileImage, setProfileImage] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const [modalVisible, setModalVisible] = useState(null); // "email" | "senha" | "deletar" | null
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -45,13 +47,127 @@ export default function ProfileScreen({ navigation }) {
   }, [loading, user, navigation]);
 
   const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
       Alert.alert(
         "Permissão necessária",
         "Precisamos de acesso à galeria para alterar a foto."
       );
       return;
+    }
+
+    try {
+        // Use new API shape: result may contain `canceled`/`cancelled` and an `assets` array
+        // mediaTypes constant may be available under MediaType or MediaTypeOptions depending on expo-image-picker version
+        let mediaTypesOption;
+        try {
+          mediaTypesOption = (ImagePicker.MediaType && ImagePicker.MediaType.Images) ||
+            (ImagePicker.MediaTypeOptions && ImagePicker.MediaTypeOptions.Images);
+        } catch (e) {
+          mediaTypesOption = undefined;
+        }
+
+        const launchOpts = { allowsEditing: true, aspect: [1, 1], quality: 0.7 };
+        if (mediaTypesOption) launchOpts.mediaTypes = mediaTypesOption;
+
+        const result = await ImagePicker.launchImageLibraryAsync(launchOpts);
+
+        if (result.canceled || result.cancelled) return;
+
+        // pick asset (newer API returns assets array)
+        const asset = (result.assets && result.assets.length > 0) ? result.assets[0] : result;
+        const localUri = asset.uri || asset.localUri;
+        if (!localUri) throw new Error('Nenhuma URI da imagem retornada');
+
+        // Mostra preview imediatamente
+        setProfileImage(localUri);
+
+        // Prepare file name & type
+        const filename = asset.fileName || (localUri ? localUri.split('/').pop() : `photo.jpg`);
+        const match = /\.(\w+)$/.exec(filename || '');
+        const type = match ? `image/${match[1]}` : (asset.type || 'image');
+
+        const formData = new FormData();
+        // 'avatar' é o campo esperado - ajuste se seu backend usar outro
+        if (Platform.OS === 'web') {
+          // On web, convert the URI to a blob then to a File
+          const response = await fetch(localUri);
+          const blob = await response.blob();
+          const fileName = filename || `photo.${blob.type.split('/')[1] || 'jpg'}`;
+          const file = new File([blob], fileName, { type: blob.type || type });
+          formData.append('avatar', file);
+        } else {
+          formData.append('avatar', {
+            uri: localUri,
+            name: filename,
+            type,
+          });
+        }
+
+      // opcional: mostrar indicador de upload
+      setProfileImage(result.uri);
+      setUploading(true);
+
+      // Use PATCH and don't set Content-Type so the browser/react-native sets the multipart boundary
+      const uploadResponse = await fetch(`http://localhost:3000/profile/${user.id}/avatar`, {
+        method: 'PATCH',
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        const txt = await uploadResponse.text();
+        console.log('Upload failed:', txt);
+        Alert.alert('Erro', 'Falha ao enviar a imagem');
+        // limpar preview se necessário
+        setProfileImage(null);
+        return;
+      }
+
+      const uploaded = await uploadResponse.json();
+  // Espera-se que o backend retorne { profile: { avatarUrl: '...' } } ou { user: { avatarUrl: '...' } }
+      // Forçar recarregamento do perfil do backend para garantir que a URL venha atualizada
+      try {
+        const res = await fetch(`http://localhost:3000/profile/${user.id}`);
+        if (res.ok) {
+          const data = await res.json();
+          const fresh = data.profile || null;
+          // se avatarUrl existe, adiciona cache-bust
+          if (fresh && fresh.avatarUrl) {
+            fresh.avatarUrl = `${fresh.avatarUrl}${fresh.avatarUrl.includes('?') ? '&' : '?'}t=${Date.now()}`;
+          }
+          setProfile(fresh);
+        } else {
+          // fallback para resposta do upload
+          if (uploaded && (uploaded.profile || uploaded.avatarUrl || uploaded.user)) {
+            const newProfile = uploaded.profile || uploaded.user || { ...profile, avatarUrl: uploaded.avatarUrl };
+            if (newProfile.avatarUrl) newProfile.avatarUrl = `${newProfile.avatarUrl}${newProfile.avatarUrl.includes('?') ? '&' : '?'}t=${Date.now()}`;
+            setProfile(newProfile);
+            // If auth context stores user, try updating it too
+            try {
+              // optional: update context user if updateUser exists
+              // updateUser && updateUser(newProfile);
+            } catch (e) {
+              // ignore if updateUser is not available
+            }
+          }
+        }
+        Alert.alert('Sucesso', 'Foto atualizada!');
+      } catch (e) {
+        console.error('Erro ao recarregar perfil:', e);
+        if (uploaded && (uploaded.profile || uploaded.avatarUrl)) {
+          const newProfile = uploaded.profile || { ...profile, avatarUrl: uploaded.avatarUrl };
+          if (newProfile.avatarUrl) newProfile.avatarUrl = `${newProfile.avatarUrl}${newProfile.avatarUrl.includes('?') ? '&' : '?'}t=${Date.now()}`;
+          setProfile(newProfile);
+        }
+        Alert.alert('Sucesso', 'Foto atualizada!');
+      } finally {
+        setUploading(false);
+        setProfileImage(null);
+      }
+    } catch (e) {
+      console.error('Erro ao selecionar/enviar imagem:', e);
+      Alert.alert('Erro', 'Não foi possível alterar a foto.');
+      setUploading(false);
     }
   };
 
@@ -109,6 +225,13 @@ export default function ProfileScreen({ navigation }) {
               <FontAwesome name="user-circle" size={70} color="#2A77A2" />
             )}
           </TouchableOpacity>
+
+          {/* Uploading overlay */}
+          {uploading && (
+            <View style={styles.uploadOverlay} pointerEvents="none">
+              <ActivityIndicator size="large" color="#fff" />
+            </View>
+          )}
 
           <View style={styles.userInfoContainer}>
             <Text style={styles.greeting}>Olá, {displayName}! ☀️🏖️</Text>
