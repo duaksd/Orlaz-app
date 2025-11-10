@@ -20,24 +20,28 @@ export default function CidadesScreen({ navigation }) {
   const cidades = [
     {
       nome: "Caraguatatuba",
+      route: "Caraguatatuba",
       descricao:
         "Descubra praias paradisíacas e a alma caiçara pulsando em cada canto.",
       imagem: require("../../assets/images/sobrecaragua.png"),
     },
     {
       nome: "São Sebastião",
+      route: "SaoSebastiao",
       descricao:
         "Explore um centro histórico charmoso e paisagens naturais de tirar o fôlego.",
       imagem: require("../../assets/images/sobresaoseba.png"),
     },
     {
       nome: "Ubatuba",
+      route: "Ubatuba",
       descricao:
         "Mergulhe em trilhas secretas, praias intocadas e uma vida marinha surpreendente.",
       imagem: require("../../assets/images/sobreubatuba.png"),
     },
     {
       nome: "Ilhabela",
+      route: "Ilhabela",
       descricao:
         "Aventure-se entre cachoeiras, praias escondidas e atividades que aceleram o coração.",
       imagem: require("../../assets/images/sobreilhabela.png"),
@@ -86,16 +90,21 @@ Explore esses refúgios autênticos, sinta a energia da cultura caiçara e permi
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.cardHorizontal}
-                onPress={() => navigation.navigate(item.nome.replace(/\s/g, ""))}
+                onPress={() => navigation.navigate(item.route)}
               >
-                <Image source={item.imagem} style={styles.cardImageHorizontal} />
+                <Image
+                  source={item.imagem}
+                  style={styles.cardImageHorizontal}
+                />
                 <LinearGradient
                   colors={["transparent", "rgba(0,0,0,0.6)"]}
                   style={styles.overlay}
                 />
                 <View style={styles.cardContentHorizontal}>
                   <Text style={styles.cardTitleHorizontal}>{item.nome}</Text>
-                  <Text style={styles.cardDescriptionHorizontal}>{item.descricao}</Text>
+                  <Text style={styles.cardDescriptionHorizontal}>
+                    {item.descricao}
+                  </Text>
                 </View>
               </TouchableOpacity>
             )}
