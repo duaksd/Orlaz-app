@@ -13,6 +13,8 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "../contexts/AuthContext";
+import { useRating } from "../contexts/RatingContext";
 
 export default function DetailScreen({
   title,
@@ -28,7 +30,8 @@ export default function DetailScreen({
   const { ratings, updateRating } = useRating(); // Obtenha o contexto de avaliação
 
   const [isFavorite, setIsFavorite] = useState(false);
-  const [rating, setRating] = useState(0);
+  const [favLoading, setFavLoading] = useState(false);
+  const [favRecord, setFavRecord] = useState(null);
   const [selectedImage, setSelectedImage] = useState(images[0] || null);
   const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState("");
@@ -54,100 +57,62 @@ export default function DetailScreen({
     setModalVisible(false);
   };
 
-  // Favorite handling: sync with backend favorites for logged user when placeId is provided
-  const { user, updateUser } = useAuth();
-
   const refreshFavorites = async () => {
     if (!user?.id || !placeId) return;
     try {
       const res = await fetch(`http://localhost:3000/favorite/${user.id}`);
       if (!res.ok) return;
       const data = await res.json();
-      // backend may return { favorites: [...] } or an array directly
-      const favs = Array.isArray(data) ? data : Array.isArray(data.favorites) ? data.favorites : [];
-      // find matching favorite record
-      const match = favs.find((f) => {
-        // try a few common property names
-        const pid = f.placeId || f.place_id || f.touristSpotId || f.place || f.spotId || f.tourist_spot_id || f.placeId;
-        return pid === placeId || f.placeId === placeId || f.place === placeId || f.id === placeId || (f.tourist_spot && (f.tourist_spot.id === placeId || f.tourist_spot._id === placeId));
-      });
+      const favs = Array.isArray(data) ? data : data.favorites || [];
+      const match = favs.find((f) => f.placeId === placeId);
       setFavRecord(match || null);
       setIsFavorite(!!match);
-      // update cached user info in context if available
-      if (updateUser) updateUser({ favorites: favs });
     } catch (e) {
-      // ignore for now
-      console.warn('[DetailScreen] refreshFavorites error', e);
+      console.warn("[DetailScreen] refreshFavorites error", e);
     }
   };
 
   useEffect(() => {
-    // only check favorites for dynamic spots that have placeId
     let mounted = true;
     (async () => {
-      if (!mounted) return;
-      if (placeId && user?.id) await refreshFavorites();
+      if (mounted && placeId && user?.id) await refreshFavorites();
     })();
-    return () => { mounted = false; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      mounted = false;
+    };
   }, [placeId, user?.id]);
 
   const handleToggleFavorite = async () => {
     if (!user?.id) {
-      // navigate to login if user not logged
-      navigation.navigate && navigation.navigate('Login');
+      navigation.navigate("Login");
       return;
     }
     if (!placeId) return;
     setFavLoading(true);
     try {
       if (!isFavorite) {
-        // create favorite
-        const res = await fetch('http://localhost:3000/favorite', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const res = await fetch("http://localhost:3000/favorite", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId: user.id, placeId }),
         });
         if (res.ok) {
-          // refresh state from server
           await refreshFavorites();
-        } else {
-          console.warn('[DetailScreen] favorite create failed', await res.text());
         }
       } else {
-        // remove favorite: try to use favRecord.id, otherwise refresh to find it
-        let fid = favRecord?.id;
-        if (!fid) {
-          await refreshFavorites();
-          fid = favRecord?.id;
-        }
-        if (!fid) {
-          // try to find from server list
-          const res = await fetch(`http://localhost:3000/favorite/${user.id}`);
-          if (res.ok) {
-            const data = await res.json();
-            const favs = Array.isArray(data) ? data : Array.isArray(data.favorites) ? data.favorites : [];
-            const match = favs.find((f) => (f.placeId === placeId || f.place === placeId || (f.tourist_spot && (f.tourist_spot.id === placeId || f.tourist_spot._id === placeId))));
-            fid = match?.id;
-          }
-        }
+        const fid = favRecord?.id;
         if (fid) {
-          await fetch(`http://localhost:3000/favorite/${fid}/${user.id}`, { method: 'DELETE' });
+          await fetch(`http://localhost:3000/favorite/${fid}`, { method: "DELETE" });
           await refreshFavorites();
-        } else {
-          // fallback: just toggle local state
-          setIsFavorite(false);
-          setFavRecord(null);
         }
       }
     } catch (e) {
-      console.error('[DetailScreen] toggle favorite error', e);
+      console.error("[DetailScreen] toggle favorite error", e);
     } finally {
       setFavLoading(false);
     }
   };
 
-  // Componente interno para descrição com "Ver mais / Ver menos"
   const ExpandableText = ({ text, maxLength = 150 }) => {
     const [expanded, setExpanded] = useState(false);
     const toggleExpanded = () => setExpanded(!expanded);
@@ -173,7 +138,6 @@ export default function DetailScreen({
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollContent}>
-        {/* Botão de Voltar */}
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backButton}
@@ -181,19 +145,15 @@ export default function DetailScreen({
           <Ionicons name="chevron-back" size={28} color="#000" />
         </TouchableOpacity>
 
-        {/* Título */}
         <Text style={styles.title}>{title}</Text>
 
-        {/* Linha principal: imagem + botões */}
         <View style={styles.imageRow}>
-          {/* Imagem principal */}
           <Image
             source={{ uri: selectedImage }}
             style={styles.mainBlock}
             resizeMode="cover"
           />
 
-          {/* Coluna de botões */}
           <View style={styles.actionsColumn}>
             <TouchableOpacity style={styles.locationButton}>
               <Ionicons name="location-sharp" size={16} color="#E60000" />
@@ -205,7 +165,6 @@ export default function DetailScreen({
               <Text style={styles.shareText}>Compartilhar</Text>
             </TouchableOpacity>
 
-            {/* Botão Dinâmico: Favoritar ou Avaliar */}
             {actionType === "favorite" ? (
               <TouchableOpacity
                 style={
@@ -238,8 +197,8 @@ export default function DetailScreen({
                 style={rating > 0 ? styles.ratedButton : styles.unratedButton}
                 onPress={() => {
                   if (user) {
-                    setTempRating(rating); // Carregar a avaliação atual no modal
-                    setModalVisible(true); // Permitir avaliação se o usuário estiver logado
+                    setTempRating(rating);
+                    setModalVisible(true);
                   } else {
                     alert("Você precisa estar logado para avaliar.");
                   }
@@ -260,7 +219,6 @@ export default function DetailScreen({
           </View>
         </View>
 
-        {/* Galeria de miniaturas */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -280,10 +238,8 @@ export default function DetailScreen({
           ))}
         </ScrollView>
 
-        {/* Descrição com "Ver mais" */}
         <ExpandableText text={description} maxLength={150} />
 
-        {/* Comentários */}
         <Text style={styles.section}>Comentários</Text>
 
         <View style={styles.commentInputRow}>
@@ -327,7 +283,6 @@ export default function DetailScreen({
         />
       </ScrollView>
 
-      {/* MODAL DE AVALIAÇÃO */}
       {modalVisible && (
         <View style={styles.modalWrapper}>
           <View style={styles.modalBackground} />
