@@ -263,13 +263,6 @@ export default function ProfileScreen({ navigation }) {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate("Restaurantes")}
-          >
-            <Text style={styles.buttonText}>🍽️ Restaurantes Parceiros</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
             style={[styles.button, styles.redButton]}
             onPress={() => setModalVisible("deletar")}
           >
