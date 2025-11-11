@@ -86,6 +86,7 @@ import CamaraoMoranga from "./src/screens/CamaraoMoranga";
 // Componentes
 import BottomNav from "./src/components/BottomNav";
 import PointsScreen from "./src/screens/PointsScreen";
+import TouristSpotDetail from "./src/screens/TouristSpotDetail";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -166,6 +167,8 @@ function HomeStack() {
       {/* Festivais */}
       <Stack.Screen name="FestivalDeVerao" component={FestivalDeVerao} />
       <Stack.Screen name="FestaSaoSeba" component={FestaSaoSeba} />
+      {/* Detail from dynamic tourist spot */}
+      <Stack.Screen name="TouristSpotDetail" component={TouristSpotDetail} />
     </Stack.Navigator>
   );
 }

@@ -6,6 +6,44 @@ export default function PointsScreen({ navigation }) {
   const { user } = useAuth();
   const [spots, setSpots] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filtered, setFiltered] = useState([]);
+  const [cityFilter, setCityFilter] = useState(null);
+  const [typeFilter, setTypeFilter] = useState(null);
+  const [showCityPanel, setShowCityPanel] = useState(false);
+  const [showTypePanel, setShowTypePanel] = useState(false);
+  // filter constants (use enum-like keys for consistent comparison)
+  const CITIES = [
+    { key: null, label: 'Todas Cidades' },
+    { key: 'CARAGUATATUBA', label: 'Caraguatatuba' },
+    { key: 'UBATUBA', label: 'Ubatuba' },
+    { key: 'SAO_SEBASTIAO', label: 'São Sebastião' },
+    { key: 'ILHABELA', label: 'Ilhabela' },
+  ];
+
+  const TYPES = [
+    { key: null, label: 'Todos Tipos' },
+    { key: 'PRAIA', label: 'Praia' },
+    { key: 'URBANO', label: 'Urbano' },
+    { key: 'NATUREZA', label: 'Natureza' },
+  ];
+
+  // Centralized filter computation
+  useEffect(() => {
+    let list = spots.slice();
+    if (cityFilter) {
+      // try to match by enum key or by city name
+      list = list.filter(s => {
+        const cityName = (s.city || '').toUpperCase();
+        if (cityName === cityFilter) return true;
+        // normalize accents/spaces by removing non letters for simple compare
+        return cityName.replace(/[^A-Z0-9]/g, '').includes(cityFilter.replace(/[^A-Z0-9]/g, ''));
+      });
+    }
+    if (typeFilter) {
+      list = list.filter(s => (s.type || '').toUpperCase() === typeFilter);
+    }
+    setFiltered(list);
+  }, [spots, cityFilter, typeFilter]);
 
   useEffect(() => {
     let active = true;
@@ -24,6 +62,7 @@ export default function PointsScreen({ navigation }) {
           return { ...spot, image };
         });
         setSpots(normalized);
+        setFiltered(normalized);
       } catch (e) {
         setSpots([]);
       } finally {
@@ -40,9 +79,44 @@ export default function PointsScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      {/* Filters: two buttons that open vertical panels */}
+      <View style={styles.filterButtonsRow}>
+        <TouchableOpacity style={[styles.filterButton, cityFilter && styles.filterButtonActive]} onPress={() => { setShowCityPanel(v => !v); setShowTypePanel(false); }}>
+          <Text style={[styles.filterButtonText, cityFilter && styles.filterButtonTextActive]}>{cityFilter ? `Cidade: ${cityFilter}` : 'Filtrar por cidade'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.filterButton, typeFilter && styles.filterButtonActive]} onPress={() => { setShowTypePanel(v => !v); setShowCityPanel(false); }}>
+          <Text style={[styles.filterButtonText, typeFilter && styles.filterButtonTextActive]}>{typeFilter ? `Categoria: ${typeFilter}` : 'Filtrar por categoria'}</Text>
+        </TouchableOpacity>
+      </View>
+
+      {showCityPanel && (
+        <View style={styles.panel}>
+          {CITIES.map(c => (
+            <TouchableOpacity key={String(c.key)} style={[styles.panelItem, cityFilter === c.key && styles.panelItemActive]} onPress={() => { setCityFilter(c.key); setShowCityPanel(false); }}>
+              <Text style={[styles.panelItemText, cityFilter === c.key && styles.panelItemTextActive]}>{c.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+
+      {showTypePanel && (
+        <View style={styles.panel}>
+          {TYPES.map(t => (
+            <TouchableOpacity key={String(t.key)} style={[styles.panelItem, typeFilter === t.key && styles.panelItemActive]} onPress={() => { setTypeFilter(t.key); setShowTypePanel(false); }}>
+              <Text style={[styles.panelItemText, typeFilter === t.key && styles.panelItemTextActive]}>{t.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+
+      <View style={{ alignItems: 'center', marginBottom: 8 }}>
+        <TouchableOpacity onPress={() => { setCityFilter(null); setTypeFilter(null); }} style={styles.clearButton}>
+          <Text style={styles.clearButtonText}>Limpar filtros</Text>
+        </TouchableOpacity>
+      </View>
       <Text style={styles.title}>Pontos Turísticos</Text>
       <FlatList
-        data={spots}
+        data={filtered}
         keyExtractor={(item) => (item.id || item._id || Math.random()).toString()}
         numColumns={2}
         contentContainerStyle={styles.grid}
@@ -51,7 +125,7 @@ export default function PointsScreen({ navigation }) {
             <Image source={{ uri: item.image }} style={styles.image} />
             <Text style={styles.city}>{item.city}</Text>
             <Text style={styles.place}>{item.name || item.title}</Text>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Atracoes', { screen: 'Atracoes' })}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home', { screen: 'TouristSpotDetail', params: { id: item.id } })}>
               <Text style={styles.buttonText}>Ver</Text>
             </TouchableOpacity>
           </View>
@@ -72,4 +146,37 @@ const styles = StyleSheet.create({
   place: { fontSize: 14, fontWeight: '600' },
   button: { marginTop: 8, backgroundColor: '#1E77A5', paddingVertical: 6, paddingHorizontal: 12, borderRadius: 6 },
   buttonText: { color: '#fff', fontWeight: '600' },
+  filterRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 8, justifyContent: 'center' },
+  chip: { paddingVertical: 6, paddingHorizontal: 10, borderRadius: 20, backgroundColor: '#fff', borderWidth: 1, borderColor: '#ddd', marginHorizontal: 4 },
+  chipSelected: { backgroundColor: '#2A77A2', borderColor: '#2A77A2' },
+  chipText: { color: '#333' },
+  chipTextSelected: { color: '#fff' },
+  filterButtonsRow: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 8 },
+  filterButton: { paddingVertical: 10, paddingHorizontal: 14, borderRadius: 8, backgroundColor: '#fff', borderWidth: 1, borderColor: '#ddd' },
+  filterButtonActive: { backgroundColor: '#2A77A2', borderColor: '#2A77A2' },
+  filterButtonText: { color: '#333', fontWeight: '600' },
+  filterButtonTextActive: { color: '#fff' },
+  panel: { backgroundColor: '#fff', borderRadius: 8, padding: 8, marginBottom: 8, marginHorizontal: 8 },
+  panelItem: { paddingVertical: 10, paddingHorizontal: 12, borderBottomWidth: 1, borderBottomColor: '#eee' },
+  panelItemActive: { backgroundColor: '#E6F0F7' },
+  panelItemText: { color: '#333' },
+  panelItemTextActive: { color: '#1E77A5', fontWeight: '700' },
+  clearButton: { backgroundColor: '#fff', borderRadius: 20, paddingHorizontal: 12, paddingVertical: 8, borderWidth: 1, borderColor: '#ddd' },
+  clearButtonText: { color: '#333' },
 });
+
+function FilterChip({ label, selected, onPress }) {
+  return (
+    <TouchableOpacity onPress={onPress} style={[styles.chip, selected && styles.chipSelected]}>
+      <Text style={[styles.chipText, selected && styles.chipTextSelected]}>{label}</Text>
+    </TouchableOpacity>
+  );
+}
+
+function applyCity(city) {
+  // this will be replaced via closure in the component when used; noop here to satisfy hoisting
+}
+
+function applyType(type) {
+  // this will be replaced via closure in the component when used; noop here to satisfy hoisting
+}
