@@ -33,34 +33,41 @@ export default function BottomNav({ state, navigation }) {
             const isBlackHome = blackHomeScreens.includes(activeRouteName);
 
             icon = (
-              <View style={styles.iconContainer}>
                 <Ionicons
                   name="home-sharp"
                   size={26}
                   color={isBlackHome ? "#000000" : isFocused ? "#2A77A2" : "#000000"}
                 />
-              </View>
+            );
+          } else if (route.name === "Pontos") {
+            icon = (
+                <FontAwesome name="map" size={26} color={isFocused ? "#2A77A2" : "#000000"} />
             );
           } else if (route.name === "Favoritos") {
             icon = (
-              <View style={styles.iconContainer}>
                 <FontAwesome
                   name="heart"
                   size={26}
                   color={isFocused ? "#2A77A2" : "#000000"}
                 />
-              </View>
             );
           } else if (route.name === "Perfil") {
             icon = (
-              <View style={styles.iconContainer}>
                 <FontAwesome
                   name="user-circle"
                   size={26}
                   color={isFocused ? "#2A77A2" : "#000000"}
                 />
-              </View>
             );
+          }
+
+          // Fallback for routes not explicitly handled (e.g. Restaurantes)
+          if (!icon) {
+            const nameMap = {
+              Restaurantes: 'cutlery',
+            };
+            const faName = nameMap[route.name] || 'ellipsis-h';
+            icon = <FontAwesome name={faName} size={26} color={isFocused ? "#2A77A2" : "#000000"} />;
           }
 
           return (
@@ -78,7 +85,9 @@ export default function BottomNav({ state, navigation }) {
               style={styles.tabButton}
               activeOpacity={0.7}
             >
-              {icon}
+              <View style={[styles.iconWrapper, isFocused && styles.activeIconWrapper]}>
+                {icon}
+              </View>
             </TouchableOpacity>
           );
         })}
@@ -101,9 +110,26 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
   },
   tabButton: {
-    width: "33.33%",     // cada botão ocupa 1/3 da tela
+    flex: 1,               // cada botão ocupa igualmente a largura disponível
     alignItems: "center",
     justifyContent: "center",
+  },
+  iconWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 56,
+    height: 56,
+    borderRadius: 10,
+  },
+  activeIconWrapper: {
+    borderWidth: 2,
+    borderColor: '#F4B400',
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOpacity: 0.12,
+    shadowRadius: 4,
+    elevation: 4,
+    transform: [{ translateY: -6 }],
   },
 });
 

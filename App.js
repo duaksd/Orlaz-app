@@ -85,6 +85,7 @@ import CamaraoMoranga from "./src/screens/CamaraoMoranga";
 
 // Componentes
 import BottomNav from "./src/components/BottomNav";
+import PointsScreen from "./src/screens/PointsScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -226,6 +227,7 @@ export default function App() {
             }}
           >
             <Tab.Screen name="Home" component={HomeStack} />
+            <Tab.Screen name="Pontos" component={PointsScreen} />
             <Tab.Screen name="Favoritos" component={Favorites} />
             <Tab.Screen name="Perfil" component={ProfileStack} />
             <Tab.Screen name="Restaurantes" component={RestaurantesStack} />
