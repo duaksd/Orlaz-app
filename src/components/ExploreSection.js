@@ -50,18 +50,9 @@ export default function ExploreSection() {
                                 style={styles.favorite}
                                 onPress={() => handleFavorite(item)}
                             >
-                                <FontAwesome
-                                    name={favorites[item.id] ? "heart" : "heart-o"}
-                                    size={20}
-                                    color={favorites[item.id] ? "#1E77A5" : "rgba(6, 6, 6, 0.5)"}
-                                />
                             </TouchableOpacity>
                         </View>
                         <Text style={styles.city}>{item.name}</Text>
-                        <View style={styles.rating}>
-                            <FontAwesome name="star" size={14} color="#000" />
-                            <Text style={styles.ratingText}>{item.rating}</Text>
-                        </View>
                     </TouchableOpacity>
                 )}
                 contentContainerStyle={{ paddingLeft: 10, paddingRight: 20 }}
