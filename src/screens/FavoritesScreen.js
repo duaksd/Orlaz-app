@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from "react
 import { FontAwesome } from "@expo/vector-icons";
 import { useAuth } from "../contexts/AuthContext";
 
-export default function Favorites() {
+export default function Favorites({ navigation }) {
   const { user, updateUser } = useAuth();
   const [favorites, setFavorites] = useState([]);
 
@@ -56,7 +56,28 @@ export default function Favorites() {
       try {
         // If the item was removed, call delete endpoint
         if (!updatedFavorites.some(f => f.id === item.id)) {
-          await fetch(`http://localhost:3000/favorite/${item.id}/${user.id}`, { method: 'DELETE' });
+          // Prefer explicit favId (returned from backend earlier). Fallback to finding fav record.
+          let fid = item.favId || item.fav_id || item.favoriteId || null;
+          if (!fid) {
+            // try to find matching favorite id from server
+            const re = await fetch(`http://localhost:3000/favorite/${user.id}`);
+            if (re.ok) {
+              const d = await re.json();
+              const currentFavs = Array.isArray(d.favorites) ? d.favorites : Array.isArray(d) ? d : [];
+              const match = currentFavs.find(f => (f.placeId === (item.placeId || item.id) || f.place === item.place || f.tourist_spot && (f.tourist_spot.id === item.id || f.tourist_spot._id === item.id)));
+              fid = match?.id;
+            }
+          }
+          if (fid) {
+            await fetch(`http://localhost:3000/favorite/${fid}/${user.id}`, { method: 'DELETE' });
+          } else {
+            // no fav id found; best-effort: attempt to delete by place id
+            try {
+              await fetch(`http://localhost:3000/favorite/${item.id}/${user.id}`, { method: 'DELETE' });
+            } catch (e) {
+              // ignore
+            }
+          }
         } else {
           // If adding favorite, call backend add endpoint if available (not implemented here)
         }
@@ -120,18 +141,18 @@ export default function Favorites() {
           numColumns={2}
           contentContainerStyle={styles.grid}
           renderItem={({ item }) => (
-            <View style={styles.card}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Home', { screen: 'TouristSpotDetail', params: { id: item.id, favId: item.favId } })}>
               <Image source={{ uri: item.image }} style={styles.image} />
               <Text style={styles.city}>{item.city}</Text>
               <Text style={styles.place}>{item.place}</Text>
               <TouchableOpacity
                 style={styles.removeButton}
-                onPress={() => toggleFavorite(item)}
+                onPress={(e) => { e.stopPropagation && e.stopPropagation(); toggleFavorite(item); }}
               >
                 <FontAwesome name="heart" size={14} color="#E91E63" />
                 <Text style={styles.removeText}>Remover dos favoritos</Text>
               </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           )}
         />
       )}

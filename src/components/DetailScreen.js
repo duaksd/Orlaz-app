@@ -11,6 +11,7 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
+import { BackHandler, Platform } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../contexts/AuthContext";
@@ -21,14 +22,15 @@ export default function DetailScreen({
   description,
   location,
   placeId,
+  favId = null,
   actionType = "favorite", // "favorite" ou "rate"
   initialComments = [], // comentários específicos da página
 }) {
   const navigation = useNavigation();
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(!!favId);
   const [favLoading, setFavLoading] = useState(false);
-  const [favRecord, setFavRecord] = useState(null); // store favorite record from backend (if any)
+  const [favRecord, setFavRecord] = useState(favId ? { id: favId } : null); // store favorite record from backend (if any)
   const [rating, setRating] = useState(0);
   const [selectedImage, setSelectedImage] = useState(images[0] || null);
   const [comments, setComments] = useState(initialComments);
@@ -87,6 +89,20 @@ export default function DetailScreen({
     return () => { mounted = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [placeId, user?.id]);
+
+  useEffect(() => {
+    // Handle Android hardware back to go to Pontos tab instead of default
+    if (Platform.OS === 'android') {
+      const onBackPress = () => {
+        navigation.navigate && navigation.navigate('Pontos');
+        return true; // prevent default
+      };
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }
+    // no-op for other platforms
+    return undefined;
+  }, [navigation]);
 
   const handleToggleFavorite = async () => {
     if (!user?.id) {
@@ -169,9 +185,9 @@ export default function DetailScreen({
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollContent}>
-        {/* Botão de Voltar */}
+        {/* Botão de Voltar (leva para a aba Pontos) */}
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate && navigation.navigate('Pontos')}
           style={styles.backButton}
         >
           <Ionicons name="chevron-back" size={28} color="#000" />

@@ -3,7 +3,7 @@ import { View, ActivityIndicator, Text } from 'react-native';
 import DetailScreen from '../components/DetailScreen';
 
 export default function TouristSpotDetail({ route, navigation }) {
-  const { id } = route.params || {};
+  const { id, favId } = route.params || {};
   const [spot, setSpot] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,6 +33,7 @@ export default function TouristSpotDetail({ route, navigation }) {
 
         const normalized = {
           placeId: raw.id || raw._id || raw.placeId || null,
+          favId: favId || null,
           title: raw.name || raw.title || raw.name_pt || 'Ponto turístico',
           images,
           description: raw.description || raw.content || '',
