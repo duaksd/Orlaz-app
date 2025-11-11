@@ -10,8 +10,9 @@ import {
   Image,
   SafeAreaView,
   ActivityIndicator,
+  BackHandler,
+  Platform,
 } from "react-native";
-import { BackHandler, Platform } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../contexts/AuthContext";
@@ -33,19 +34,21 @@ export default function DetailScreen({
 
   const [isFavorite, setIsFavorite] = useState(!!favId);
   const [favLoading, setFavLoading] = useState(false);
-<<<<<<< HEAD
   const [favRecord, setFavRecord] = useState(favId ? { id: favId } : null); // store favorite record from backend (if any)
-  const [rating, setRating] = useState(0);
-=======
-  const [favRecord, setFavRecord] = useState(null);
->>>>>>> 847b9b0c9b57814782dfd952300f2b59c748a942
-  const [selectedImage, setSelectedImage] = useState(images[0] || null);
+  const [selectedImage, setSelectedImage] = useState(images && images[0] ? images[0] : null);
   const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState("");
 
   // Recuperar avaliação do contexto
-  const screenName = title; // Use o título como identificador único
-  const [rating, setRating] = useState(ratings[screenName] || 0);
+  const screenName = title || placeId || 'detail'; // Use o título (ou placeId) como identificador único
+  const [rating, setRating] = useState(() => (ratings && ratings[screenName]) ? ratings[screenName] : 0);
+
+  // Keep local rating in sync if context changes
+  useEffect(() => {
+    if (ratings && typeof ratings[screenName] !== 'undefined') {
+      setRating(ratings[screenName]);
+    }
+  }, [ratings, screenName]);
 
   // Modal de avaliação
   const [modalVisible, setModalVisible] = useState(false);
@@ -159,10 +162,7 @@ export default function DetailScreen({
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollContent}>
-<<<<<<< HEAD
-        {/* Botão de Voltar (leva para a aba Pontos) */}
-=======
->>>>>>> 847b9b0c9b57814782dfd952300f2b59c748a942
+  {/* Botão de Voltar (leva para a aba Pontos) */}
         <TouchableOpacity
           onPress={() => navigation.navigate && navigation.navigate('Pontos')}
           style={styles.backButton}
