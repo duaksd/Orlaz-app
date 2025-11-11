@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,21 +9,26 @@ import {
   TouchableOpacity,
   Image,
   SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function DetailScreen({
   title,
   images,
   description,
   location,
+  placeId,
   actionType = "favorite", // "favorite" ou "rate"
   initialComments = [], // comentários específicos da página
 }) {
   const navigation = useNavigation();
 
   const [isFavorite, setIsFavorite] = useState(false);
+  const [favLoading, setFavLoading] = useState(false);
+  const [favRecord, setFavRecord] = useState(null); // store favorite record from backend (if any)
   const [rating, setRating] = useState(0);
   const [selectedImage, setSelectedImage] = useState(images[0] || null);
   const [comments, setComments] = useState(initialComments);
@@ -43,6 +48,99 @@ export default function DetailScreen({
   const handleConfirmRating = () => {
     setRating(tempRating);
     setModalVisible(false);
+  };
+
+  // Favorite handling: sync with backend favorites for logged user when placeId is provided
+  const { user, updateUser } = useAuth();
+
+  const refreshFavorites = async () => {
+    if (!user?.id || !placeId) return;
+    try {
+      const res = await fetch(`http://localhost:3000/favorite/${user.id}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      // backend may return { favorites: [...] } or an array directly
+      const favs = Array.isArray(data) ? data : Array.isArray(data.favorites) ? data.favorites : [];
+      // find matching favorite record
+      const match = favs.find((f) => {
+        // try a few common property names
+        const pid = f.placeId || f.place_id || f.touristSpotId || f.place || f.spotId || f.tourist_spot_id || f.placeId;
+        return pid === placeId || f.placeId === placeId || f.place === placeId || f.id === placeId || (f.tourist_spot && (f.tourist_spot.id === placeId || f.tourist_spot._id === placeId));
+      });
+      setFavRecord(match || null);
+      setIsFavorite(!!match);
+      // update cached user info in context if available
+      if (updateUser) updateUser({ favorites: favs });
+    } catch (e) {
+      // ignore for now
+      console.warn('[DetailScreen] refreshFavorites error', e);
+    }
+  };
+
+  useEffect(() => {
+    // only check favorites for dynamic spots that have placeId
+    let mounted = true;
+    (async () => {
+      if (!mounted) return;
+      if (placeId && user?.id) await refreshFavorites();
+    })();
+    return () => { mounted = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [placeId, user?.id]);
+
+  const handleToggleFavorite = async () => {
+    if (!user?.id) {
+      // navigate to login if user not logged
+      navigation.navigate && navigation.navigate('Login');
+      return;
+    }
+    if (!placeId) return;
+    setFavLoading(true);
+    try {
+      if (!isFavorite) {
+        // create favorite
+        const res = await fetch('http://localhost:3000/favorite', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: user.id, placeId }),
+        });
+        if (res.ok) {
+          // refresh state from server
+          await refreshFavorites();
+        } else {
+          console.warn('[DetailScreen] favorite create failed', await res.text());
+        }
+      } else {
+        // remove favorite: try to use favRecord.id, otherwise refresh to find it
+        let fid = favRecord?.id;
+        if (!fid) {
+          await refreshFavorites();
+          fid = favRecord?.id;
+        }
+        if (!fid) {
+          // try to find from server list
+          const res = await fetch(`http://localhost:3000/favorite/${user.id}`);
+          if (res.ok) {
+            const data = await res.json();
+            const favs = Array.isArray(data) ? data : Array.isArray(data.favorites) ? data.favorites : [];
+            const match = favs.find((f) => (f.placeId === placeId || f.place === placeId || (f.tourist_spot && (f.tourist_spot.id === placeId || f.tourist_spot._id === placeId))));
+            fid = match?.id;
+          }
+        }
+        if (fid) {
+          await fetch(`http://localhost:3000/favorite/${fid}/${user.id}`, { method: 'DELETE' });
+          await refreshFavorites();
+        } else {
+          // fallback: just toggle local state
+          setIsFavorite(false);
+          setFavRecord(null);
+        }
+      }
+    } catch (e) {
+      console.error('[DetailScreen] toggle favorite error', e);
+    } finally {
+      setFavLoading(false);
+    }
   };
 
   // Componente interno para descrição com "Ver mais / Ver menos"
@@ -109,20 +207,27 @@ export default function DetailScreen({
                 style={
                   isFavorite ? styles.favoriteButton : styles.unfavoriteButton
                 }
-                onPress={() => setIsFavorite(!isFavorite)}
+                onPress={handleToggleFavorite}
+                disabled={favLoading}
               >
-                <Ionicons
-                  name={isFavorite ? "heart" : "heart-outline"}
-                  size={16}
-                  color={isFavorite ? "#fff" : "#FF4081"}
-                />
-                <Text
-                  style={
-                    isFavorite ? styles.favoriteText : styles.unfavoriteText
-                  }
-                >
-                  {isFavorite ? "Favorito" : "Favoritar"}
-                </Text>
+                {favLoading ? (
+                  <ActivityIndicator size="small" color={isFavorite ? "#fff" : "#FF4081"} />
+                ) : (
+                  <>
+                    <Ionicons
+                      name={isFavorite ? "heart" : "heart-outline"}
+                      size={16}
+                      color={isFavorite ? "#fff" : "#FF4081"}
+                    />
+                    <Text
+                      style={
+                        isFavorite ? styles.favoriteText : styles.unfavoriteText
+                      }
+                    >
+                      {isFavorite ? "Favorito" : "Favoritar"}
+                    </Text>
+                  </>
+                )}
               </TouchableOpacity>
             ) : (
               <TouchableOpacity

@@ -32,6 +32,7 @@ export default function TouristSpotDetail({ route, navigation }) {
         }
 
         const normalized = {
+          placeId: raw.id || raw._id || raw.placeId || null,
           title: raw.name || raw.title || raw.name_pt || 'Ponto turístico',
           images,
           description: raw.description || raw.content || '',
