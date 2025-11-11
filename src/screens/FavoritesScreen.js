@@ -9,17 +9,88 @@ export default function Favorites() {
 
   // Carrega favoritos do usuário ao iniciar
   useEffect(() => {
-    if (user?.favorites) {
-      setFavorites(user.favorites);
-    } else {
-      setFavorites([]);
-    }
+    let isActive = true;
+    const loadFavorites = async () => {
+      if (!user?.id) return setFavorites([]);
+      try {
+        const res = await fetch(`http://localhost:3000/favorite/${user.id}`);
+        if (!res.ok) {
+          setFavorites(user.favorites || []);
+          return;
+        }
+        const data = await res.json();
+        const favs = Array.isArray(data.favorites) ? data.favorites : [];
+        // Fetch details for each favorite
+        const pontos = await Promise.all(
+          favs.map(async fav => {
+            try {
+              const r = await fetch(`http://localhost:3000/tourist-spot/${fav.placeId}`);
+              if (!r.ok) return null;
+              const ponto = await r.json();
+              const spot = ponto.touristSpot || ponto;
+              const image = (spot.images && spot.images.length > 0 && spot.images[0].url) || spot.image || null;
+              return { ...spot, image, favId: fav.id };
+            } catch (e) {
+              return null;
+            }
+          })
+        );
+        const filtered = pontos.filter(Boolean);
+        if (isActive) setFavorites(filtered);
+      } catch (e) {
+        setFavorites(user.favorites || []);
+      }
+    };
+    loadFavorites();
+    return () => { isActive = false; };
   }, [user]);
 
   const toggleFavorite = (item) => {
-    const updatedFavorites = favorites.filter((fav) => fav.id !== item.id);
+    const updatedFavorites = favorites.some(fav => fav.id === item.id)
+      ? favorites.filter((fav) => fav.id !== item.id)
+      : [item, ...favorites];
     setFavorites(updatedFavorites);
-    updateUser({ favorites: updatedFavorites }); // salva no contexto do usuário
+
+    // Call DELETE favorite endpoint and then refresh list from server
+    (async () => {
+      try {
+        // If the item was removed, call delete endpoint
+        if (!updatedFavorites.some(f => f.id === item.id)) {
+          await fetch(`http://localhost:3000/favorite/${item.id}/${user.id}`, { method: 'DELETE' });
+        } else {
+          // If adding favorite, call backend add endpoint if available (not implemented here)
+        }
+
+        // Re-fetch favorites list to ensure server state is authoritative
+        const res = await fetch(`http://localhost:3000/favorite/${user.id}`);
+        if (res.ok) {
+          const data = await res.json();
+          const favs = Array.isArray(data.favorites) ? data.favorites : [];
+          const pontos = await Promise.all(
+            favs.map(async fav => {
+              try {
+                const r = await fetch(`http://localhost:3000/tourist-spot/${fav.placeId}`);
+                if (!r.ok) return null;
+                const ponto = await r.json();
+                const spot = ponto.touristSpot || ponto;
+                const image = (spot.images && spot.images.length > 0 && spot.images[0].url) || spot.image || null;
+                return { ...spot, image, favId: fav.id };
+              } catch (e) {
+                return null;
+              }
+            })
+          );
+          setFavorites(pontos.filter(Boolean));
+          updateUser && updateUser({ favorites: favs });
+        } else {
+          // if re-fetch fails, keep local
+          setFavorites(updatedFavorites);
+        }
+      } catch (e) {
+        // on error, revert to prev
+        setFavorites(favorites);
+      }
+    })();
   };
 
   return (
