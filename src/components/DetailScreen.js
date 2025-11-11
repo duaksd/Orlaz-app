@@ -12,6 +12,8 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "../contexts/AuthContext";
+import { useRating } from "../contexts/RatingContext";
 
 export default function DetailScreen({
   title,
@@ -22,12 +24,17 @@ export default function DetailScreen({
   initialComments = [], // comentários específicos da página
 }) {
   const navigation = useNavigation();
+  const { user } = useAuth(); // Obtenha o estado de autenticação
+  const { ratings, updateRating } = useRating(); // Obtenha o contexto de avaliação
 
   const [isFavorite, setIsFavorite] = useState(false);
-  const [rating, setRating] = useState(0);
   const [selectedImage, setSelectedImage] = useState(images[0] || null);
   const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState("");
+
+  // Recuperar avaliação do contexto
+  const screenName = title; // Use o título como identificador único
+  const [rating, setRating] = useState(ratings[screenName] || 0);
 
   // Modal de avaliação
   const [modalVisible, setModalVisible] = useState(false);
@@ -42,6 +49,7 @@ export default function DetailScreen({
 
   const handleConfirmRating = () => {
     setRating(tempRating);
+    updateRating(screenName, tempRating); // Salve a avaliação no contexto
     setModalVisible(false);
   };
 
@@ -127,7 +135,14 @@ export default function DetailScreen({
             ) : (
               <TouchableOpacity
                 style={rating > 0 ? styles.ratedButton : styles.unratedButton}
-                onPress={() => setModalVisible(true)}
+                onPress={() => {
+                  if (user) {
+                    setTempRating(rating); // Carregar a avaliação atual no modal
+                    setModalVisible(true); // Permitir avaliação se o usuário estiver logado
+                  } else {
+                    alert("Você precisa estar logado para avaliar.");
+                  }
+                }}
               >
                 <Ionicons
                   name={rating > 0 ? "star" : "star-outline"}
