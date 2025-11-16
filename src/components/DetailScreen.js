@@ -14,6 +14,7 @@ import {
   Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useRouter } from 'expo-router';
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../contexts/AuthContext";
 import { useRating } from "../contexts/RatingContext";
@@ -29,6 +30,7 @@ export default function DetailScreen({
   initialComments = [], // comentários específicos da página
 }) {
   const navigation = useNavigation();
+  const router = useRouter();
   const { user } = useAuth(); // Obtenha o estado de autenticação
   const { ratings, updateRating } = useRating(); // Obtenha o contexto de avaliação
 
@@ -96,6 +98,14 @@ export default function DetailScreen({
     // Handle Android hardware back to go to Pontos tab instead of default
     if (Platform.OS === 'android') {
       const onBackPress = () => {
+        try {
+          if (router && typeof router.push === 'function') {
+            router.push('/pontos');
+            return true;
+          }
+        } catch (e) {
+          // fall back
+        }
         navigation.navigate && navigation.navigate('Pontos');
         return true; // prevent default
       };
@@ -108,6 +118,14 @@ export default function DetailScreen({
 
   const handleToggleFavorite = async () => {
     if (!user?.id) {
+      try {
+        if (router && typeof router.push === 'function') {
+          router.push('/login');
+          return;
+        }
+      } catch (e) {
+        // fallback
+      }
       navigation.navigate("Login");
       return;
     }

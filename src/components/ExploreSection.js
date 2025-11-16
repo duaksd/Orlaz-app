@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 const cities = [
     { id: '1', name: 'Caraguatatuba', screen: 'Caraguatatuba', rating: 4.0, image: require('../../assets/images/caraguatatuba.png') },
@@ -13,9 +14,19 @@ const cities = [
 export default function ExploreSection() {
     const [favorites, setFavorites] = useState({});
     const navigation = useNavigation();
+    const router = useRouter();
 
     const handlePress = (city) => {
         if (city.screen) {
+            // Prefer expo-router paths under /city/<ScreenName>
+            try {
+                if (router && typeof router.push === 'function') {
+                    router.push(`/(city)/${city.screen}`);
+                    return;
+                }
+            } catch (e) {
+                // fallback to react-navigation if router fails
+            }
             navigation.navigate(city.screen);
         } else {
             Alert.alert('Página não disponível', `Ainda não existe página para ${city.name}`);
@@ -49,7 +60,13 @@ export default function ExploreSection() {
                             <TouchableOpacity
                                 style={styles.favorite}
                                 onPress={() => handleFavorite(item)}
+                                accessibilityLabel={`Favoritar ${item.name}`}
                             >
+                                <FontAwesome
+                                    name={favorites[item.id] ? 'heart' : 'heart-o'}
+                                    size={16}
+                                    color={favorites[item.id] ? '#e0245e' : '#ffffff'}
+                                />
                             </TouchableOpacity>
                         </View>
                         <Text style={styles.city}>{item.name}</Text>

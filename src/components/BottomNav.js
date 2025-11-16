@@ -4,83 +4,68 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function BottomNav({ state, navigation }) {
-  // Lista de telas onde o ícone Home deve ficar sempre preto
-  const blackHomeScreens = 
-  ["ParqueEstadual", "Contato", "Martim", "Taioba", "Mexilhoes", "Frutos", 
-    "SantoAntonio", "PraiaCocanha", "Atracoes", "Cidades", "PraiaJuliao", "Castelhanos",
-    "Caraguatatuba", "Trilhas", "Esportes", "Gastronomia", "PraiaBonete",
-    "Festivais", "Ubatuba", "SaoSebastiao", "Ilhabela", "PraiaJabaquara", "Caldeirada",
-  "PeixeAssado", "RuinasLagoinha", "PraiaPortugues", "IlhaDasCouves", "CachoeiraPrumirim",
-"Moqueca", "LambeLambe", "CentroHistorico", "Juquehy", "Maresias", "ToqueToque", "PeixeSalgado", "CamaraoMoranga",
-"SaboresDoMar", "RestauranteCaicara", "FestivalDeVerao", "FestaSaoSeba", "Surf", "Standup",
-"TrilhaSetePraias", "TrilhaAguaBranca"];
+  // Apenas as abas permitidas (ordem desejada) — usar nomes de rota em minúsculas (conforme _layout.js)
+  const allowed = ["home", "pontos", "favoritos", "restaurantes", "profile"];
 
-  // Tela atual
+  // Tela atual (nome efetivo da rota exibida)
   const currentRoute = state.routes[state.index];
   const activeRouteName =
     currentRoute.state?.routes?.[currentRoute.state?.index]?.name || currentRoute.name;
 
+  // Constrói a lista de rotas que realmente serão exibidas, na ordem `allowed`.
+  const routesToShow = allowed
+    .map((name) => state.routes.find((r) => r.name === name))
+    .filter(Boolean);
+
   return (
     <SafeAreaView edges={["bottom"]} style={styles.safeArea}>
       <View style={styles.navContainer}>
-        {state.routes.map((route, index) => {
-          const isFocused = state.index === index;
+        {routesToShow.map((route) => {
+          const isFocused = activeRouteName === route.name;
 
-          let icon;
-
-          if (route.name === "Home") {
-            // Verifica se a tela atual está na lista de telas que devem ter Home preto
-            const isBlackHome = blackHomeScreens.includes(activeRouteName);
-
+          // Escolhe ícone por nome da rota (rotas em minúsculas)
+          let icon = null;
+          if (route.name === "home") {
+            // Home fica preto em algumas telas específicas (lista reduzida)
+            const blackHomeScreens = [
+              "parqueestadual",
+              "contato",
+              "martim",
+              "taioba",
+              "mexilhoes",
+              "frutos",
+              "santoantonio",
+              "praiacocanha",
+              "atracoes",
+              "cidades",
+              "prajulia0",
+              "castelhanos",
+              "caraguatatuba",
+            ];
+            const isBlackHome = blackHomeScreens.includes((activeRouteName || "").toLowerCase());
             icon = (
-                <Ionicons
-                  name="home-sharp"
-                  size={26}
-                  color={isBlackHome ? "#000000" : isFocused ? "#2A77A2" : "#000000"}
-                />
+              <Ionicons
+                name="home-sharp"
+                size={26}
+                color={isBlackHome ? "#000000" : isFocused ? "#2A77A2" : "#000000"}
+              />
             );
-          } else if (route.name === "Pontos") {
-            icon = (
-                <FontAwesome name="map" size={26} color={isFocused ? "#2A77A2" : "#000000"} />
-            );
-          } else if (route.name === "Favoritos") {
-            icon = (
-                <FontAwesome
-                  name="heart"
-                  size={26}
-                  color={isFocused ? "#2A77A2" : "#000000"}
-                />
-            );
-          } else if (route.name === "Perfil") {
-            icon = (
-                <FontAwesome
-                  name="user-circle"
-                  size={26}
-                  color={isFocused ? "#2A77A2" : "#000000"}
-                />
-            );
-          }
-
-          // Fallback for routes not explicitly handled (e.g. Restaurantes)
-          if (!icon) {
-            const nameMap = {
-              Restaurantes: 'cutlery',
-            };
-            const faName = nameMap[route.name] || 'ellipsis-h';
-            icon = <FontAwesome name={faName} size={26} color={isFocused ? "#2A77A2" : "#000000"} />;
+          } else if (route.name === "pontos") {
+            icon = <FontAwesome name="map" size={26} color={isFocused ? "#2A77A2" : "#000000"} />;
+          } else if (route.name === "favoritos") {
+            icon = <FontAwesome name="heart" size={26} color={isFocused ? "#2A77A2" : "#000000"} />;
+          } else if (route.name === "profile") {
+            icon = <FontAwesome name="user-circle" size={26} color={isFocused ? "#2A77A2" : "#000000"} />;
+          } else if (route.name === "restaurantes") {
+            icon = <FontAwesome name="cutlery" size={26} color={isFocused ? "#2A77A2" : "#000000"} />;
           }
 
           return (
             <TouchableOpacity
               key={route.key}
               onPress={() => {
-                if (route.name === "Home") {
-                  navigation.navigate("Home", { screen: "HomeMain" });
-                } else if (route.name === "Perfil") {
-                  navigation.navigate("Perfil", { screen: "ProfileMain" });
-                } else {
-                  navigation.navigate(route.name);
-                }
+                // Navega diretamente pelo nome da rota (em minúsculas)
+                navigation.navigate(route.name);
               }}
               style={styles.tabButton}
               activeOpacity={0.7}

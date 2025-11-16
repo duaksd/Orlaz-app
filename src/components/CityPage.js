@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, ImageBackground, Dimensions } from "react-native";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useRouter } from 'expo-router';
 
 const { width } = Dimensions.get("window");
 
@@ -20,6 +21,19 @@ export default function CityPage({
 }) {
   const [curiosityOpen, setCuriosityOpen] = useState(false);
   const navigation = useNavigation();
+  const router = useRouter();
+
+  const navBack = () => {
+    try {
+      if (router && typeof router.back === 'function') {
+        router.back();
+        return;
+      }
+    } catch (e) {
+      // fall through to navigation
+    }
+    navigation.navigate("HomeMain");
+  };
 
   const getImageSource = (img) => (img ? img : null);
 
@@ -55,7 +69,7 @@ const [showAllFoods, setShowAllFoods] = useState(false);
             )}
           </ImageBackground>
 
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate("HomeMain")}>
+          <TouchableOpacity style={styles.backButton} onPress={navBack}>
             <Ionicons name="chevron-back" size={28} color="#fff" />
           </TouchableOpacity>
         </View>
