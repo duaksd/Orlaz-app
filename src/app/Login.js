@@ -12,13 +12,15 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useAuth } from "../contexts/AuthContext";
 import { useRouter } from 'expo-router';
 import { API_BASE } from '../config';
+import { useAuthStore } from '../stores/useAuthStore';
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { signIn } = useAuth();
+  const loginStore = useAuthStore((s) => s.login);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -38,15 +40,31 @@ export default function LoginScreen({ navigation }) {
       );
       if (user) {
         console.log('[LoginScreen] handleLogin: user found', user);
-        // Salva apenas o id no contexto/auth
-        const success = await signIn({ id: user.id });
-        console.log('[LoginScreen] handleLogin: signIn returned', success);
+        // Salva apenas o id no contexto/auth. If signIn is not available
+        // (AuthProvider not mounted), fall back to the zustand store.
+        let success = false;
+        try {
+          if (typeof signIn === 'function') {
+            success = await signIn({ id: user.id });
+            console.log('[LoginScreen] handleLogin: signIn returned', success);
+          } else if (typeof loginStore === 'function') {
+            // fallback: set store directly (profile + token)
+            loginStore({ profile: user, token: null, isLogged: true });
+            success = true;
+            console.log('[LoginScreen] handleLogin: used loginStore fallback');
+          } else {
+            console.warn('[LoginScreen] handleLogin: no signIn or loginStore available');
+          }
+        } catch (err) {
+          console.error('[LoginScreen] handleLogin: sign-in/fallback error', err);
+        }
         if (success) {
-          // prefer router.replace; fallback to navigation.replace for compatibility
+          // prefer router.replace to move to profile
           try {
-            router.replace('/profile');
+            // ensure we land inside the tabs layout's home route
+            router.navigate('/home')
           } catch (e) {
-            navigation && navigation.replace && navigation.replace('ProfileMain');
+            console.warn('Login: router.replace failed', e);
           }
         } else {
           Alert.alert("Erro", "Não foi possível fazer login.");
@@ -107,15 +125,11 @@ export default function LoginScreen({ navigation }) {
         )}
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => {
-        try { router.push('/forgot-password'); } catch (e) { navigation && navigation.navigate && navigation.navigate('ForgotPassword'); }
-      }}>
+      <TouchableOpacity onPress={() => router.push('/forgot-password')}>
         <Text style={styles.forgotText}>Esqueceu sua senha?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => {
-        try { router.push('/signup'); } catch (e) { navigation && navigation.navigate && navigation.navigate('Register'); }
-      }}>
+      <TouchableOpacity onPress={() => router.push('/signup')}>
         <Text style={styles.registerText}>
           Não tem uma conta? <Text style={styles.linkText}>Crie uma</Text>
         </Text>

@@ -12,7 +12,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { API_BASE } from '../config';
 
-export default function RegisterScreen({ navigation }) {
+export default function RegisterScreen() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -36,23 +36,14 @@ export default function RegisterScreen({ navigation }) {
       const data = await response.json();
       // O backend retorna { profile: { ...dadosDoUsuario... } }
       if (response.ok && data && data.profile && data.profile.id) {
-        // Conta criada com sucesso — redireciona para a tela de login
-        Alert.alert(
-          "Sucesso",
-          "Conta criada com sucesso. Faça login para continuar.",
-          [
-            {
-              text: "OK",
-              onPress: () => {
-                try {
-                  router.replace("/Login");
-                } catch (e) {
-                  navigation && navigation.replace && navigation.replace("Login");
-                }
-              },
-            },
-          ]
-        );
+        // Conta criada com sucesso — redireciona imediatamente para a tela de login
+        try {
+          router.navigate('/Login')
+        } catch (e) {
+          console.warn('signup: router.replace failed', e);
+        }
+        // Também mostra uma confirmação simples
+        Alert.alert("Sucesso", "Conta criada com sucesso. Faça login para continuar.");
       } else {
         Alert.alert("Erro", data?.message || "Não foi possível criar a conta.");
       }
@@ -118,14 +109,7 @@ export default function RegisterScreen({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => {
-          // usar router.push('/login') com fallback
-          try {
-            router.push("/login");
-          } catch (e) {
-            navigation && navigation.navigate && navigation.navigate("Login");
-          }
-        }}
+    onPress={() => router.push("/Login")}
       >
         <Text style={styles.loginText}>
           Já tem uma conta? <Text style={styles.linkText}>Entre</Text>
