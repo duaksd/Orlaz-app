@@ -4,52 +4,49 @@ import {
   ScrollView,
   View,
   Text,
-  StyleSheet,
-  TouchableOpacity,
   Image,
-  StatusBar,
-  Platform,
+  TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from 'expo-router';
-import {styles} from "../../../components/ListScreen";
+import { styles } from "../../../components/ListScreen";
 
-
-export default function EsportesScreen() {
+export default function FestivaisScreen() {
   const router = useRouter();
   const items = [
     {
-      name: "Surf",
-      location: "Ubatuba",
-      description: "Praias com ondas perfeitas para surfistas de todos os níveis.",
-      image: require("../../../../assets/images/surf.jpg"),
+      name: "Festival de Verão",
+      location: "Ilhabela",
+      description: "Shows e apresentações culturais à beira-mar.",
+      image: require("../../../../assets/images/fesilha.jpg"),
     },
     {
-      name: "Stand-up Paddle",
-      location: "Caraguatatuba",
-      description: "Atividade relaxante para explorar o mar tranquilo.",
-      image: require("../../../../assets/images/standup.jpg"),
+      name: "Festa de São Sebastião",
+      location: "São Sebastião",
+      description: "Tradição religiosa e cultural da região.",
+      image: require("../../../../assets/images/religioso.jpg"),
     },
   ];
 
   return (
     <SafeAreaView style={styles.safeContainer}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => { try { router.back(); } catch (e) {} }}>
+          <TouchableOpacity onPress={() => router.back()}>
             <Ionicons name="chevron-back" size={28} color="#000" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Esportes Aquáticos</Text>
+          <Text style={styles.headerTitle}>Festivais e Eventos</Text>
         </View>
 
         <Text style={styles.subtitle}>
-          Explore os esportes aquáticos e atividades ao ar livre no Litoral Norte.
+          Conheça os principais festivais e festas tradicionais do Litoral Norte.
         </Text>
 
         <View style={styles.grid}>
           {items.map((item, index) => (
             <View key={index} style={styles.card}>
-              <Image source={item.image} style={styles.cardImage} />
+                  <Image source={item.image} style={styles.cardImage} />
               <View style={styles.cardContent}>
                 <Text style={styles.location}>
                   <Ionicons name="location-outline" size={14} color="#555" />{" "}
@@ -57,17 +54,15 @@ export default function EsportesScreen() {
                 </Text>
                 <Text style={styles.cardTitle}>{item.name}</Text>
                 <Text style={styles.cardDescription}>{item.description}</Text>
-                <TouchableOpacity 
+
+                {/* Botão Ver Mais */}
+                <TouchableOpacity
                   style={styles.button}
                   onPress={() => {
-                    try {
-                      if (item.name === "Surf") {
-                        router.push(`/surf`);
-                      } else if (item.name === "Stand-up Paddle") {
-                        router.push(`/standup`);
-                      }
-                    } catch (e) {
-                      // fallback: nothing, or could use navigation if available
+                    if (item.name === "Festival de Verão") {
+                      router.push('/FestivalDeVerao');
+                    } else if (item.name === "Festa de São Sebastião") {
+                      router.push('/FestaSaoSeba');
                     }
                   }}
                 >

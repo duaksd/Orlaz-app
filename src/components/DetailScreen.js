@@ -180,9 +180,27 @@ export default function DetailScreen({
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollContent}>
-  {/* Botão de Voltar (leva para a aba Pontos) */}
+  {/* Botão de Voltar (prioriza expo-router; fallback para react-navigation) */}
         <TouchableOpacity
-          onPress={() => navigation.navigate && navigation.navigate('Pontos')}
+          onPress={() => {
+            try {
+              // prefer router.back()
+              if (router && typeof router.back === 'function') {
+                router.back();
+                return;
+              }
+            } catch (e) {}
+            try {
+              // explicit route to pontos
+              if (router && typeof router.push === 'function') {
+                router.push('/pontos');
+                return;
+              }
+            } catch (e) {}
+            try {
+              navigation && navigation.navigate && navigation.navigate('Pontos');
+            } catch (e) {}
+          }}
           style={styles.backButton}
         >
           <Ionicons name="chevron-back" size={28} color="#000" />

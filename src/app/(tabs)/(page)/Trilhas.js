@@ -4,48 +4,49 @@ import {
   ScrollView,
   View,
   Text,
-  StyleSheet,
-  TouchableOpacity,
   Image,
-  StatusBar,
-  Platform,
+  TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from 'expo-router';
-import {styles} from "../../../components/ListScreen";
+import { styles } from "../../../components/ListScreen";
 
-
-export default function EsportesScreen() {
+export default function TrilhasScreen() {
   const router = useRouter();
+
   const items = [
     {
-      name: "Surf",
+      name: "Trilha das Sete Praias",
       location: "Ubatuba",
-      description: "Praias com ondas perfeitas para surfistas de todos os níveis.",
-      image: require("../../../../assets/images/surf.jpg"),
+      description:
+        "Caminhada que conecta praias paradisíacas e desertas, passando por mirantes e praias selvagens.",
+      image: require("../../../../assets/images/7praias.jpg"),
     },
     {
-      name: "Stand-up Paddle",
-      location: "Caraguatatuba",
-      description: "Atividade relaxante para explorar o mar tranquilo.",
-      image: require("../../../../assets/images/standup.jpg"),
+      name: "Trilha da Água Branca",
+      location: "Ilhabela",
+      description:
+        "Contato direto com a Mata Atlântica preservada, cachoeiras e natureza exuberante.",
+      image: require("../../../../assets/images/trilhaagua.jpg"),
     },
   ];
 
   return (
     <SafeAreaView style={styles.safeContainer}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* Cabeçalho */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => { try { router.back(); } catch (e) {} }}>
+          <TouchableOpacity onPress={() => router.back()}>
             <Ionicons name="chevron-back" size={28} color="#000" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Esportes Aquáticos</Text>
+          <Text style={styles.headerTitle}>Trilhas</Text>
         </View>
 
         <Text style={styles.subtitle}>
-          Explore os esportes aquáticos e atividades ao ar livre no Litoral Norte.
+          Explore trilhas incríveis em meio à Mata Atlântica no Litoral Norte.
         </Text>
 
+        {/* Lista de trilhas */}
         <View style={styles.grid}>
           {items.map((item, index) => (
             <View key={index} style={styles.card}>
@@ -57,17 +58,15 @@ export default function EsportesScreen() {
                 </Text>
                 <Text style={styles.cardTitle}>{item.name}</Text>
                 <Text style={styles.cardDescription}>{item.description}</Text>
-                <TouchableOpacity 
+
+                {/* Botão Ver Mais */}
+                <TouchableOpacity
                   style={styles.button}
                   onPress={() => {
-                    try {
-                      if (item.name === "Surf") {
-                        router.push(`/surf`);
-                      } else if (item.name === "Stand-up Paddle") {
-                        router.push(`/standup`);
-                      }
-                    } catch (e) {
-                      // fallback: nothing, or could use navigation if available
+                    if (item.name === "Trilha das Sete Praias") {
+                      router.push('/TrilhaSetePraias');
+                    } else if (item.name === "Trilha da Água Branca") {
+                      router.push('/TrilhaAguaBranca');
                     }
                   }}
                 >

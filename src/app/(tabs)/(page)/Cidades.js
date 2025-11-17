@@ -15,7 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from 'expo-router';
 
-export default function CidadesScreen() {
+export default function Cidades() {
   const [mostrarTextoCompleto, setMostrarTextoCompleto] = useState(false);
 
   const cidades = [

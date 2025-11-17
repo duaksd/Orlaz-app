@@ -19,4 +19,14 @@ export const RatingProvider = ({ children }) => {
   );
 };
 
-export const useRating = () => useContext(RatingContext);
+export const useRating = () => {
+  const context = useContext(RatingContext);
+  if (!context) {
+    console.warn('[useRating] RatingProvider is missing in the component tree. Returning fallback.');
+    return {
+      ratings: {},
+      updateRating: () => {},
+    };
+  }
+  return context;
+};
