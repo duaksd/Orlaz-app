@@ -34,7 +34,7 @@ export default function ProfileScreen({ navigation }) {
     if (!loading && !user) {
       // prefer router.replace, fallback to navigation
       try {
-        router.replace('/login');
+        router.replace('/Login');
       } catch (e) {
         navigation && navigation.replace && navigation.replace('Login');
       }

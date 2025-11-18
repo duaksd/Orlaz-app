@@ -1,5 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // SecureStore keys must contain only alphanumeric characters, '.', '-' and '_'
 const SECURE_USER_KEY = 'Orlaz_user_secure';
@@ -18,14 +19,13 @@ const setSecureValue = async (key, value) => {
   if (hasSecureStore()) {
     return SecureStore.setItemAsync(key, value);
   }
-  // fallback to browser localStorage
+  // fallback to AsyncStorage (cross-platform). Using AsyncStorage is preferable to
+  // directly touching window.localStorage because it works on native and web
   try {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      window.localStorage.setItem(key, value);
-      return true;
-    }
+    await AsyncStorage.setItem(key, value);
+    return true;
   } catch (e) {
-    console.error('[auth] localStorage set failed', e);
+    console.error('[auth] AsyncStorage set failed', e);
     return false;
   }
 };
@@ -35,11 +35,10 @@ const getSecureValue = async (key) => {
     return SecureStore.getItemAsync(key);
   }
   try {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      return window.localStorage.getItem(key);
-    }
+    const v = await AsyncStorage.getItem(key);
+    return v;
   } catch (e) {
-    console.error('[auth] localStorage get failed', e);
+    console.error('[auth] AsyncStorage get failed', e);
     return null;
   }
   return null;
@@ -50,12 +49,10 @@ const deleteSecureValue = async (key) => {
     return SecureStore.deleteItemAsync(key);
   }
   try {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      window.localStorage.removeItem(key);
-      return true;
-    }
+    await AsyncStorage.removeItem(key);
+    return true;
   } catch (e) {
-    console.error('[auth] localStorage remove failed', e);
+    console.error('[auth] AsyncStorage remove failed', e);
     return false;
   }
 };

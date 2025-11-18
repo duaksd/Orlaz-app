@@ -21,7 +21,9 @@ export default function ExploreSection() {
             // Prefer expo-router paths under /city/<ScreenName>
             try {
                 if (router && typeof router.push === 'function') {
-                    router.push(`/(city)/${city.screen}`);
+                    // route groups with parentheses are not part of the URL;
+                    // the file `src/app/(tabs)/(city)/Caraguatatuba.js` is exposed as `/Caraguatatuba`
+                    router.push(`/${city.screen}`);
                     return;
                 }
             } catch (e) {

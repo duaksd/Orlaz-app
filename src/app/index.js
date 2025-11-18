@@ -1,8 +1,8 @@
 import { View, Text, Button, StyleSheet, ActivityIndicator } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useEffect } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAuthStore } from '../stores/useAuthStore'
+import { getUser, getIsLogged } from '../services/auth'
 
 export default function Initializer() {
 
@@ -14,13 +14,12 @@ export default function Initializer() {
             // NOTE: chave usada no AsyncStorage para persistir user.
             // Na migração: centralize esse nome em um arquivo de config (ex: src/config.js)
             // para evitar strings espalhadas pelo projeto.
-            const userLoggedString = await AsyncStorage.getItem('userLogged')
-            const userLogged = userLoggedString ? JSON.parse(userLoggedString) : null
-            if(userLogged?.token){
-                // Aqui fazemos o login no store global e redirecionamos para a rota principal.
-                // Ao migrar para expo-router, manter o uso de `useAuthStore` (ou context) e
-                // garantir que o provider esteja envolvido em `app/_layout.js`.
-                login(userLogged)
+            // Use the centralized auth storage so it matches saveUser/getUser
+            const storedUser = await getUser()
+            const storedIsLogged = await getIsLogged()
+            if (storedIsLogged && storedUser && storedUser.id) {
+                // login expects { profile, token }
+                login({ profile: storedUser, token: null })
                 router.replace('/home')
             } else {
                 router.replace('/Login')

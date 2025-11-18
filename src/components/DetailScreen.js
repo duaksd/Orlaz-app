@@ -120,7 +120,7 @@ export default function DetailScreen({
     if (!user?.id) {
       try {
         if (router && typeof router.push === 'function') {
-          router.push('/login');
+          router.push('/Login');
           return;
         }
       } catch (e) {
@@ -139,12 +139,39 @@ export default function DetailScreen({
           body: JSON.stringify({ userId: user.id, placeId }),
         });
         if (res.ok) {
+          // try to read returned favorite record
+          try {
+            const json = await res.json();
+            // backend might return the created object or { favorite: {...} }
+            const created = json && (json.favorite || json.data || json) ;
+            // normalize created id
+            const fid = created && (created.id || created._id || created.favoriteId || created.favId);
+            if (fid) {
+              setFavRecord({ id: fid });
+              setIsFavorite(true);
+            }
+          } catch (e) {
+            // ignore JSON parse error, still refresh
+          }
           await refreshFavorites();
+        } else {
+          console.warn('[DetailScreen] add favorite failed', res.status);
         }
       } else {
         const fid = favRecord?.id;
         if (fid) {
-          await fetch(`http://localhost:3000/favorite/${fid}`, { method: "DELETE" });
+          const delRes = await fetch(`http://localhost:3000/favorite/${fid}`, { method: "DELETE" });
+          if (delRes.ok) {
+            setFavRecord(null);
+            setIsFavorite(false);
+          } else {
+            // try alternative delete signature
+            try {
+              await fetch(`http://localhost:3000/favorite/${fid}/${user.id}`, { method: 'DELETE' });
+              setFavRecord(null);
+              setIsFavorite(false);
+            } catch (e) {}
+          }
           await refreshFavorites();
         }
       }
