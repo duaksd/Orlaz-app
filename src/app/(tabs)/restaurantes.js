@@ -11,34 +11,32 @@ export default function RestaurantesScreen() {
     let active = true;
     const load = async () => {
       try {
-        // primary endpoint
-        const endpoints = [
-          'http://localhost:3000/restaurant',
-          'http://localhost:3000/restaurants',
-          'http://localhost:3000/restaurante',
-        ];
+        const endpoint = 'http://localhost:3000/restaurant';
         let res, data;
-        for (const ep of endpoints) {
-          try {
-            res = await fetch(ep);
-            if (res.ok) {
-              data = await res.json();
-              break;
-            }
-          } catch (e) {
-            // try next
+        try {
+          res = await fetch(endpoint);
+          if (res.ok) {
+            data = await res.json();
           }
+        } catch (e) {
+          console.warn('[Restaurantes] fetch error', e);
         }
-        if (!data) return setRestaurantes([]);
+
+        if (!data) {
+          if (active) setRestaurantes([]);
+          return;
+        }
+
         const list = Array.isArray(data) ? data : (data.restaurants || data.restaurant || data.items || []);
         const normalized = list.map(r => {
           const rest = r.restaurant || r;
           const image = (rest.images && rest.images.length > 0 && rest.images[0].url) || rest.image || null;
           return { ...rest, image };
         });
+
         if (active) setRestaurantes(normalized);
       } catch (e) {
-        console.warn('[Restaurantes] fetch error', e);
+        console.warn('[Restaurantes] unexpected error', e);
         if (active) setRestaurantes([]);
       } finally {
         if (active) setLoading(false);
