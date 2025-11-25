@@ -1,7 +1,7 @@
 {
   "name": "orlaz-app",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -24,6 +24,7 @@
     "expo-image-picker": "~17.0.8",
     "expo-linear-gradient": "~15.0.7",
     "expo-linking": "^8.0.8",
+    "expo-router": "^6.0.14",
     "expo-secure-store": "~15.0.7",
     "expo-status-bar": "~3.0.8",
     "install": "^0.13.0",

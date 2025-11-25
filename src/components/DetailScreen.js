@@ -14,6 +14,7 @@ import {
   Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useRouter } from 'expo-router';
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../contexts/AuthContext";
 import { useRating } from "../contexts/RatingContext";
@@ -29,7 +30,8 @@ export default function DetailScreen({
   initialComments = [], // comentários específicos da página
 }) {
   const navigation = useNavigation();
-  const { user } = useAuth(); // Obtenha o estado de autenticação
+  const router = useRouter();
+  const { user, token } = useAuth(); // Obtenha o estado de autenticação
   const { ratings, updateRating } = useRating(); // Obtenha o contexto de avaliação
 
   const [isFavorite, setIsFavorite] = useState(!!favId);
@@ -70,7 +72,7 @@ export default function DetailScreen({
   const refreshFavorites = async () => {
     if (!user?.id || !placeId) return;
     try {
-      const res = await fetch(`http://localhost:3000/favorite/${user.id}`);
+      const res = await fetch(`http://localhost:3000/favorite/${user.id}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
       if (!res.ok) return;
       const data = await res.json();
       const favs = Array.isArray(data) ? data : data.favorites || [];
@@ -96,6 +98,14 @@ export default function DetailScreen({
     // Handle Android hardware back to go to Pontos tab instead of default
     if (Platform.OS === 'android') {
       const onBackPress = () => {
+        try {
+          if (router && typeof router.push === 'function') {
+            router.push('/pontos');
+            return true;
+          }
+        } catch (e) {
+          // fall back
+        }
         navigation.navigate && navigation.navigate('Pontos');
         return true; // prevent default
       };
@@ -108,6 +118,14 @@ export default function DetailScreen({
 
   const handleToggleFavorite = async () => {
     if (!user?.id) {
+      try {
+        if (router && typeof router.push === 'function') {
+          router.push('/Login');
+          return;
+        }
+      } catch (e) {
+        // fallback
+      }
       navigation.navigate("Login");
       return;
     }
@@ -117,16 +135,43 @@ export default function DetailScreen({
       if (!isFavorite) {
         const res = await fetch("http://localhost:3000/favorite", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}) },
           body: JSON.stringify({ userId: user.id, placeId }),
         });
         if (res.ok) {
+          // try to read returned favorite record
+          try {
+            const json = await res.json();
+            // backend might return the created object or { favorite: {...} }
+            const created = json && (json.favorite || json.data || json) ;
+            // normalize created id
+            const fid = created && (created.id || created._id || created.favoriteId || created.favId);
+            if (fid) {
+              setFavRecord({ id: fid });
+              setIsFavorite(true);
+            }
+          } catch (e) {
+            // ignore JSON parse error, still refresh
+          }
           await refreshFavorites();
+        } else {
+          console.warn('[DetailScreen] add favorite failed', res.status);
         }
       } else {
         const fid = favRecord?.id;
         if (fid) {
-          await fetch(`http://localhost:3000/favorite/${fid}`, { method: "DELETE" });
+          const delRes = await fetch(`http://localhost:3000/favorite/${fid}`, { method: "DELETE", headers: token ? { Authorization: `Bearer ${token}` } : {} });
+          if (delRes.ok) {
+            setFavRecord(null);
+            setIsFavorite(false);
+          } else {
+            // try alternative delete signature
+            try {
+              await fetch(`http://localhost:3000/favorite/${fid}/${user.id}`, { method: 'DELETE', headers: token ? { Authorization: `Bearer ${token}` } : {} });
+              setFavRecord(null);
+              setIsFavorite(false);
+            } catch (e) {}
+          }
           await refreshFavorites();
         }
       }
@@ -162,9 +207,27 @@ export default function DetailScreen({
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollContent}>
-  {/* Botão de Voltar (leva para a aba Pontos) */}
+  {/* Botão de Voltar (prioriza expo-router; fallback para react-navigation) */}
         <TouchableOpacity
-          onPress={() => navigation.navigate && navigation.navigate('Pontos')}
+          onPress={() => {
+            try {
+              // prefer router.back()
+              if (router && typeof router.back === 'function') {
+                router.back();
+                return;
+              }
+            } catch (e) {}
+            try {
+              // explicit route to pontos
+              if (router && typeof router.push === 'function') {
+                router.push('/pontos');
+                return;
+              }
+            } catch (e) {}
+            try {
+              navigation && navigation.navigate && navigation.navigate('Pontos');
+            } catch (e) {}
+          }}
           style={styles.backButton}
         >
           <Ionicons name="chevron-back" size={28} color="#000" />
