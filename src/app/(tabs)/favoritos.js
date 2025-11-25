@@ -6,7 +6,7 @@ import { useAuth } from "../../contexts/AuthContext";
 
 export default function Favorites() {
   const router = useRouter();
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, token } = useAuth();
   const [favorites, setFavorites] = useState([]);
 
   // Carrega favoritos do usuário ao iniciar
@@ -15,7 +15,7 @@ export default function Favorites() {
     const loadFavorites = async () => {
       if (!user?.id) return setFavorites([]);
       try {
-        const res = await fetch(`http://localhost:3000/favorite/${user.id}`);
+  const res = await fetch(`http://localhost:3000/favorite/${user.id}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
         if (!res.ok) {
           setFavorites(user.favorites || []);
           return;
@@ -26,7 +26,7 @@ export default function Favorites() {
         const pontos = await Promise.all(
           favs.map(async fav => {
             try {
-              const r = await fetch(`http://localhost:3000/tourist-spot/${fav.placeId}`);
+              const r = await fetch(`http://localhost:3000/tourist-spot/${fav.placeId}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
               if (!r.ok) return null;
               const ponto = await r.json();
               const spot = ponto.touristSpot || ponto;
@@ -57,24 +57,24 @@ export default function Favorites() {
           // prefer using favId if present
           const fid = item.favId || item.fav_id || item.favoriteId || null;
           if (fid) {
-            await fetch(`http://localhost:3000/favorite/${fid}/${user.id}`, { method: 'DELETE' });
+            await fetch(`http://localhost:3000/favorite/${fid}/${user.id}`, { method: 'DELETE', headers: token ? { Authorization: `Bearer ${token}` } : {} });
           } else {
             // fallback: attempt by place id
-            await fetch(`http://localhost:3000/favorite/${item.id}/${user.id}`, { method: 'DELETE' });
+            await fetch(`http://localhost:3000/favorite/${item.id}/${user.id}`, { method: 'DELETE', headers: token ? { Authorization: `Bearer ${token}` } : {} });
           }
         } catch (e) {
           console.warn('[FavoritesScreen] delete favorite error', e);
         } finally {
           // refresh from server
           try {
-            const res = await fetch(`http://localhost:3000/favorite/${user.id}`);
+            const res = await fetch(`http://localhost:3000/favorite/${user.id}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
             if (res.ok) {
               const data = await res.json();
               const favs = Array.isArray(data.favorites) ? data.favorites : [];
               const pontos = await Promise.all(
                 favs.map(async fav => {
                   try {
-                    const r = await fetch(`http://localhost:3000/tourist-spot/${fav.placeId}`);
+                    const r = await fetch(`http://localhost:3000/tourist-spot/${fav.placeId}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
                     if (!r.ok) return null;
                     const ponto = await r.json();
                     const spot = ponto.touristSpot || ponto;
@@ -97,7 +97,7 @@ export default function Favorites() {
         try {
           const res = await fetch('http://localhost:3000/favorite', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
             body: JSON.stringify({ userId: user.id, placeId: item.id }),
           });
           if (res.ok) {
@@ -105,7 +105,7 @@ export default function Favorites() {
             const created = json && (json.favorite || json.data || json);
             const fid = created && (created.id || created._id || created.favoriteId || created.favId);
             // refresh favorites
-            const refresh = await fetch(`http://localhost:3000/favorite/${user.id}`);
+            const refresh = await fetch(`http://localhost:3000/favorite/${user.id}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
             if (refresh.ok) {
               const data = await refresh.json();
               const favs = Array.isArray(data.favorites) ? data.favorites : [];

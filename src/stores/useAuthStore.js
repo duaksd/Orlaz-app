@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { saveUser, saveIsLogged } from '../services/auth'
+import { saveUser, saveIsLogged, saveToken } from '../services/auth'
 
 export const useAuthStore = create((set) => ({
     profile: null,
@@ -13,6 +13,7 @@ export const useAuthStore = create((set) => ({
             const minimal = { id: userLogged.profile?.id ?? userLogged.id ?? null }
             saveUser(minimal).catch(e => console.warn('[useAuthStore] saveUser failed', e))
             saveIsLogged(true).catch(e => console.warn('[useAuthStore] saveIsLogged failed', e))
+            if (userLogged.token) saveToken(userLogged.token).catch(e => console.warn('[useAuthStore] saveToken failed', e))
         } catch (e) {
             console.warn('[useAuthStore] persistence error', e)
         }

@@ -182,7 +182,7 @@ export default function ProfileScreen({ navigation }) {
   const handleLogout = async () => {
     await signOut();
     try {
-      router.replace('/login');
+      router.replace('/Login');
     } catch (e) {
       navigation && navigation.replace && navigation.replace('Login');
     }
@@ -324,7 +324,7 @@ export default function ProfileScreen({ navigation }) {
                         if (response.ok) {
                           await clearStorage();
                           try {
-                            router.replace('/login');
+                            router.replace('/Login');
                           } catch (e) {
                             navigation && navigation.replace && navigation.replace('Login');
                           }

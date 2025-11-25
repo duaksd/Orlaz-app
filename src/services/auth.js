@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // SecureStore keys must contain only alphanumeric characters, '.', '-' and '_'
 const SECURE_USER_KEY = 'Orlaz_user_secure';
 const SECURE_ISLOGGED_KEY = 'Orlaz_isLogged_secure';
+const SECURE_TOKEN_KEY = 'Orlaz_token_secure';
 
 // Helper to detect if SecureStore is usable (some web builds may not support it)
 const hasSecureStore = () => {
@@ -104,10 +105,42 @@ export const clearStorage = async () => {
   try {
     await deleteSecureValue(SECURE_USER_KEY);
     await deleteSecureValue(SECURE_ISLOGGED_KEY);
+    await deleteSecureValue(SECURE_TOKEN_KEY);
     console.log('[auth] clearStorage: cleared secure keys (or localStorage)');
     return true;
   } catch (error) {
     console.error('Erro ao limpar storage seguro:', error);
+    return false;
+  }
+};
+
+export const saveToken = async (token) => {
+  try {
+    const res = await setSecureValue(SECURE_TOKEN_KEY, token || '');
+    console.log('[auth] saveToken result', !!res);
+    return !!res;
+  } catch (error) {
+    console.error('Erro ao salvar token seguro:', error);
+    return false;
+  }
+};
+
+export const getToken = async () => {
+  try {
+    const t = await getSecureValue(SECURE_TOKEN_KEY);
+    return t || null;
+  } catch (error) {
+    console.error('Erro ao recuperar token seguro:', error);
+    return null;
+  }
+};
+
+export const deleteToken = async () => {
+  try {
+    await deleteSecureValue(SECURE_TOKEN_KEY);
+    return true;
+  } catch (e) {
+    console.error('[auth] deleteToken failed', e);
     return false;
   }
 };
@@ -118,4 +151,7 @@ export default {
   saveIsLogged,
   getIsLogged,
   clearStorage,
+  saveToken,
+  getToken,
+  deleteToken,
 };

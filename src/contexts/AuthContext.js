@@ -6,11 +6,13 @@ import {
   saveIsLogged,
   getIsLogged,
 } from "../services/auth";
+import { saveToken, getToken, deleteToken } from '../services/auth';
 
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [isLogged, setIsLogged] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -19,13 +21,16 @@ export const AuthProvider = ({ children }) => {
       try {
         console.log("[AuthContext] loadStoredData start");
         const storedUser = await getUser();
+        const storedToken = await (typeof getToken === 'function' ? getToken() : null);
         const storedIsLogged = await getIsLogged();
         console.log(
           "[AuthContext] loadStoredData got",
           storedUser,
+          storedToken,
           storedIsLogged
         );
         if (storedUser) setUser(storedUser);
+        if (storedToken) setToken(storedToken);
         if (storedIsLogged) setIsLogged(true);
       } catch (error) {
         console.error("Erro ao carregar dados do auth:", error);
@@ -38,14 +43,19 @@ export const AuthProvider = ({ children }) => {
   const signIn = async (userData) => {
     try {
       console.log("[AuthContext] signIn called with", userData);
-      const minimal = { id: userData?.id };
+      // Expecting userData to include { profile, token }
+      const profile = userData?.profile || userData || null;
+      const tokenValue = userData?.token || null;
+      const minimal = profile ? profile : { id: userData?.id };
       const userSaved = await saveUser(minimal);
+      const tokenSaved = tokenValue ? await saveToken(tokenValue) : true;
       const isLoggedSaved = await saveIsLogged(true);
       console.log("[AuthContext] save results", { userSaved, isLoggedSaved });
-      if (!userSaved || !isLoggedSaved) {
+      if (!userSaved || !isLoggedSaved || !tokenSaved) {
         return false;
       }
       setUser(minimal);
+      if (tokenValue) setToken(tokenValue);
       setIsLogged(true);
       return true;
     } catch (error) {
@@ -58,6 +68,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await clearStorage();
       setUser(null);
+      setToken(null);
       setIsLogged(false);
     } catch (error) {
       console.error("Erro no signOut:", error);
@@ -80,6 +91,7 @@ export const AuthProvider = ({ children }) => {
         signed: !!user,
         isLogged,
         user,
+        token,
         loading,
         signIn,
         signOut,

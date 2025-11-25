@@ -31,7 +31,7 @@ export default function DetailScreen({
 }) {
   const navigation = useNavigation();
   const router = useRouter();
-  const { user } = useAuth(); // Obtenha o estado de autenticação
+  const { user, token } = useAuth(); // Obtenha o estado de autenticação
   const { ratings, updateRating } = useRating(); // Obtenha o contexto de avaliação
 
   const [isFavorite, setIsFavorite] = useState(!!favId);
@@ -72,7 +72,7 @@ export default function DetailScreen({
   const refreshFavorites = async () => {
     if (!user?.id || !placeId) return;
     try {
-      const res = await fetch(`http://localhost:3000/favorite/${user.id}`);
+      const res = await fetch(`http://localhost:3000/favorite/${user.id}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
       if (!res.ok) return;
       const data = await res.json();
       const favs = Array.isArray(data) ? data : data.favorites || [];
@@ -135,7 +135,7 @@ export default function DetailScreen({
       if (!isFavorite) {
         const res = await fetch("http://localhost:3000/favorite", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}) },
           body: JSON.stringify({ userId: user.id, placeId }),
         });
         if (res.ok) {
@@ -160,14 +160,14 @@ export default function DetailScreen({
       } else {
         const fid = favRecord?.id;
         if (fid) {
-          const delRes = await fetch(`http://localhost:3000/favorite/${fid}`, { method: "DELETE" });
+          const delRes = await fetch(`http://localhost:3000/favorite/${fid}`, { method: "DELETE", headers: token ? { Authorization: `Bearer ${token}` } : {} });
           if (delRes.ok) {
             setFavRecord(null);
             setIsFavorite(false);
           } else {
             // try alternative delete signature
             try {
-              await fetch(`http://localhost:3000/favorite/${fid}/${user.id}`, { method: 'DELETE' });
+              await fetch(`http://localhost:3000/favorite/${fid}/${user.id}`, { method: 'DELETE', headers: token ? { Authorization: `Bearer ${token}` } : {} });
               setFavRecord(null);
               setIsFavorite(false);
             } catch (e) {}

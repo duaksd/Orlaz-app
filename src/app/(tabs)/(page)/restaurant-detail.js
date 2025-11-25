@@ -3,6 +3,7 @@ import { View, ActivityIndicator, Text } from 'react-native';
 import * as Linking from 'expo-linking';
 import { useRouter } from 'expo-router';
 import DetailScreen from '../../../components/DetailScreen';
+import { useAuth } from '../../../contexts/AuthContext';
 
 export default function TouristSpotDetail(props) {
   const router = useRouter();
@@ -74,6 +75,7 @@ export default function TouristSpotDetail(props) {
   const [spot, setSpot] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { token } = useAuth();
 
   useEffect(() => {
     // Depend on routeParams so we run when id becomes available
@@ -122,7 +124,7 @@ export default function TouristSpotDetail(props) {
       }
         try {
         // finalId may be a string (GUID or numeric), so don't coerce to Number
-        const res = await fetch(`http://localhost:3000/restaurant/${finalId}`);
+  const res = await fetch(`http://localhost:3000/restaurant/${finalId}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
         if (!res.ok) throw new Error('Erro ao carregar restaurante');
         const data = await res.json();
         const raw = data.restaurant || data || null;

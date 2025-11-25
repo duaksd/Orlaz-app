@@ -30,48 +30,52 @@ export default function LoginScreen() {
 
     setLoading(true);
     try {
-      console.log('[LoginScreen] handleLogin: trying login with', email);
-      const res = await fetch(`${API_BASE}/profile`);
-      const data = await res.json();
-      const users = data.profiles || [];
-      // Procura usuário com email e senha
-      const user = users.find(
-        (u) => u.email === email && u.password === password
-      );
-      if (user) {
-        console.log('[LoginScreen] handleLogin: user found', user);
-        // Salva apenas o id no contexto/auth. If signIn is not available
-        // (AuthProvider not mounted), fall back to the zustand store.
-        let success = false;
-        try {
-          if (typeof signIn === 'function') {
-            success = await signIn({ id: user.id });
-            console.log('[LoginScreen] handleLogin: signIn returned', success);
-          } else if (typeof loginStore === 'function') {
-            // fallback: set store directly (profile + token)
-            loginStore({ profile: user, token: null, isLogged: true });
-            success = true;
-            console.log('[LoginScreen] handleLogin: used loginStore fallback');
-          } else {
-            console.warn('[LoginScreen] handleLogin: no signIn or loginStore available');
-          }
-        } catch (err) {
-          console.error('[LoginScreen] handleLogin: sign-in/fallback error', err);
-        }
-        if (success) {
-          // prefer router.replace to move to profile
-          try {
-            // ensure we land inside the tabs layout's home route
-            router.navigate('/home')
-          } catch (e) {
-            console.warn('Login: router.replace failed', e);
-          }
+      console.log('[LoginScreen] handleLogin: POST /auth/login', email);
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) {
+        if (res.status === 401) {
+          Alert.alert('Erro', 'Email ou senha inválidos.');
         } else {
-          Alert.alert("Erro", "Não foi possível fazer login.");
+          Alert.alert('Erro', 'Erro ao efetuar login.');
+        }
+        return;
+      }
+      const json = await res.json();
+      // Expect { profile, token }
+      const profile = json.profile || json.user || null;
+      const token = json.token || json.accessToken || null;
+      if (!profile || !token) {
+        Alert.alert('Erro', 'Resposta inválida do servidor.');
+        return;
+      }
+      let success = false;
+      try {
+        if (typeof signIn === 'function') {
+          success = await signIn({ profile, token });
+          console.log('[LoginScreen] handleLogin: signIn returned', success);
+        } else if (typeof loginStore === 'function') {
+          // fallback: set store directly (profile + token)
+          loginStore({ profile, token, isLogged: true });
+          success = true;
+          console.log('[LoginScreen] handleLogin: used loginStore fallback');
+        } else {
+          console.warn('[LoginScreen] handleLogin: no signIn or loginStore available');
+        }
+      } catch (err) {
+        console.error('[LoginScreen] handleLogin: sign-in/fallback error', err);
+      }
+      if (success) {
+        try {
+          router.push('/home');
+        } catch (e) {
+          console.warn('Login: router.push failed', e);
         }
       } else {
-          console.log('[LoginScreen] handleLogin: user not found');
-          Alert.alert("Erro", "Email ou senha inválidos.");
+        Alert.alert('Erro', 'Não foi possível fazer login.');
       }
     } catch (error) {
       console.log('[LoginScreen] handleLogin: error', error);
