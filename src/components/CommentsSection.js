@@ -12,6 +12,7 @@ import {
   Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { API_BASE } from "../config";
 
 export default function CommentsSection({
   initialComments = [],
@@ -24,10 +25,50 @@ export default function CommentsSection({
   endpoint = "http://localhost:3000/comment",
 }) {
   const [comments, setComments] = useState(Array.isArray(initialComments) ? initialComments : []);
+  const [authorsMap, setAuthorsMap] = useState({}); // userId -> profile
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
+
+  // ---- Author fetching helper (hoisted function) ----
+  async function ensureAuthorsForComments(list) {
+    if (!Array.isArray(list) || list.length === 0) return;
+    const ids = Array.from(new Set(list.map((c) => getCommentUserId(c)).filter(Boolean)));
+    const missing = ids.filter((id) => !authorsMap[String(id)]);
+    if (missing.length === 0) return;
+    const fetchProfile = async (id) => {
+      const candidates = [
+        `${API_BASE}/profile/${id}`,
+        `${API_BASE}/users/${id}`,
+        `${API_BASE}/user/${id}`,
+      ];
+      for (const url of candidates) {
+        try {
+          const res = await fetch(url, { headers: token ? { Authorization: `Bearer ${token}` } : {}, mode: 'cors' });
+          if (res && res.ok) {
+            const json = await res.json().catch(() => null);
+            return json && (json.user || json.data || json.profile || json || null);
+          }
+        } catch (e) {
+          // ignore and try next
+        }
+      }
+      return null;
+    };
+
+    try {
+      const results = await Promise.all(missing.map((id) => fetchProfile(id)));
+      const next = { ...authorsMap };
+      missing.forEach((id, idx) => {
+        const r = results[idx];
+        if (r) next[String(id)] = r;
+      });
+      setAuthorsMap(next);
+    } catch (e) {
+      console.warn('[CommentsSection] ensureAuthorsForComments error', e);
+    }
+  }
 
   useEffect(() => {
     setComments(Array.isArray(initialComments) ? initialComments : []);
@@ -59,17 +100,26 @@ export default function CommentsSection({
         const q = commentKey === 'touristSpotId' ? 'touristId' : (commentKey || 'restaurantId');
         const url = `${endpoint}?${encodeURIComponent(q)}=${encodeURIComponent(placeId)}`;
         console.log('[CommentsSection] GET', url);
-        const res = await fetch(url);
+        const res = await fetch(url, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
         if (!res.ok) {
           console.warn('[CommentsSection] get failed', res.status, url);
         } else {
           const data = await res.json().catch(() => null);
+          let list = [];
           if (Array.isArray(data)) {
-            setComments(data);
+            list = data;
           } else {
-            const list = data && (data.comments || data.data || data.results || []);
-            if (Array.isArray(list)) setComments(list);
+            list = data && (data.comments || data.data || data.results || []) || [];
           }
+          // Filter to comments that belong to this placeId
+          const matchesPlace = (c) => {
+            if (!c) return false;
+            const candidate = c[commentKey] ?? c[commentKey.replace(/Id$/,'_id')] ?? c.placeId ?? c.place_id ?? c.touristId ?? c.restaurantId ?? c.tourist_id ?? c.restaurant_id;
+            return typeof candidate !== 'undefined' && String(candidate) === String(placeId);
+          };
+          const filtered = Array.isArray(list) ? list.filter(matchesPlace) : [];
+          setComments(filtered);
+          ensureAuthorsForComments(filtered);
         }
       } catch (e) {
         console.warn('[CommentsSection] fetch error', e);
@@ -77,7 +127,7 @@ export default function CommentsSection({
         setLoading(false);
       }
     })();
-  }, [placeId, fetchComments, commentKey, endpoint]);
+  }, [placeId, fetchComments, commentKey, endpoint, token]);
 
   const refresh = async () => {
     if (typeof fetchComments === "function") {
@@ -100,17 +150,22 @@ export default function CommentsSection({
       const q = commentKey === 'touristSpotId' ? 'touristId' : (commentKey || 'restaurantId');
       const url = `${endpoint}?${encodeURIComponent(q)}=${encodeURIComponent(placeId)}`;
       console.log('[CommentsSection] refresh GET', url);
-      const res = await fetch(url);
+      const res = await fetch(url, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
       if (!res.ok) {
         console.warn('[CommentsSection] refresh get failed', res.status, url);
       } else {
         const data = await res.json().catch(() => null);
-        if (Array.isArray(data)) {
-          setComments(data);
-        } else {
-          const list = data && (data.comments || data.data || data.results || []);
-          if (Array.isArray(list)) setComments(list);
-        }
+        let list = [];
+        if (Array.isArray(data)) list = data;
+        else list = data && (data.comments || data.data || data.results || []) || [];
+        const matchesPlace = (c) => {
+          if (!c) return false;
+          const candidate = c[commentKey] ?? c[commentKey.replace(/Id$/,'_id')] ?? c.placeId ?? c.place_id ?? c.touristId ?? c.restaurantId ?? c.tourist_id ?? c.restaurant_id;
+          return typeof candidate !== 'undefined' && String(candidate) === String(placeId);
+        };
+        const filtered = Array.isArray(list) ? list.filter(matchesPlace) : [];
+        setComments(filtered);
+        ensureAuthorsForComments(filtered);
       }
     } catch (e) {
       console.warn('[CommentsSection] refresh error', e);
@@ -124,10 +179,31 @@ export default function CommentsSection({
   const getCommentText = (c) => c && (c.text || c.content || c.body || c.message || "");
   const getCommentAuthor = (c) => {
     if (!c) return null;
+    const uid = getCommentUserId(c);
+    if (uid && authorsMap && authorsMap[String(uid)]) {
+      return (
+        authorsMap[String(uid)].name ||
+        authorsMap[String(uid)].displayName ||
+        authorsMap[String(uid)].username ||
+        authorsMap[String(uid)].fullName ||
+        authorsMap[String(uid)].email ||
+        null
+      );
+    }
     return c.author || c.name || c.profile?.name || c.user?.name || c.user?.username || c.user?.fullName || c.displayName || null;
   };
   const getCommentAvatar = (c) => {
     if (!c) return null;
+    const uid = getCommentUserId(c);
+    if (uid && authorsMap && authorsMap[String(uid)]) {
+      return (
+        authorsMap[String(uid)].avatar ||
+        authorsMap[String(uid)].avatarUrl ||
+        authorsMap[String(uid)].photo ||
+        authorsMap[String(uid)].profilePic ||
+        null
+      );
+    }
     return c.avatar || c.profile?.avatarUrl || c.user?.avatar || c.user?.avatarUrl || c.avatarUrl || c.photo || c.profilePic || null;
   };
   const getCommentAvatarColor = (c) => {
