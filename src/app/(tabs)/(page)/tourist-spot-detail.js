@@ -174,5 +174,5 @@ export default function TouristSpotDetail(props) {
     </View>
   );
 
-  return <DetailScreen {...spot} />;
+  return <DetailScreen {...spot} commentKey="touristSpotId" />;
 }

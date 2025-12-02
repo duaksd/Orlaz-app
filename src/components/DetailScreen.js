@@ -18,6 +18,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../contexts/AuthContext";
 import { useRating } from "../contexts/RatingContext";
+import CommentsSection from "./CommentsSection";
 
 export default function DetailScreen({
   title,
@@ -28,6 +29,7 @@ export default function DetailScreen({
   favId = null,
   actionType = "favorite", // "favorite" ou "rate"
   initialComments = [], // comentários específicos da página
+  commentKey = "restaurantId", // key used by backend: 'restaurantId' or 'touristSpotId'
 }) {
   const navigation = useNavigation();
   const router = useRouter();
@@ -38,8 +40,7 @@ export default function DetailScreen({
   const [favLoading, setFavLoading] = useState(false);
   const [favRecord, setFavRecord] = useState(favId ? { id: favId } : null); // store favorite record from backend (if any)
   const [selectedImage, setSelectedImage] = useState(images && images[0] ? images[0] : null);
-  const [comments, setComments] = useState(initialComments);
-  const [newComment, setNewComment] = useState("");
+  // comments are now handled by a dedicated component `CommentsSection`
 
   // Recuperar avaliação do contexto
   const screenName = title || placeId || 'detail'; // Use o título (ou placeId) como identificador único
@@ -56,12 +57,10 @@ export default function DetailScreen({
   const [modalVisible, setModalVisible] = useState(false);
   const [tempRating, setTempRating] = useState(0);
 
-  const handleSendComment = () => {
-    if (newComment.trim()) {
-      setComments([...comments, { author: "Você", text: newComment }]);
-      setNewComment("");
-    }
-  };
+  // Comment sending is delegated to `CommentsSection` (see component props)
+
+  // comment POST is handled in `CommentsSection` by default; DetailScreen
+  // only provides the `commentKey` prop to select the correct backend field.
 
   const handleConfirmRating = () => {
     setRating(tempRating);
@@ -328,46 +327,12 @@ export default function DetailScreen({
 
         <ExpandableText text={description} maxLength={150} />
 
-        <Text style={styles.section}>Comentários</Text>
-
-        <View style={styles.commentInputRow}>
-          <View style={styles.inputBackground}>
-            <View style={styles.inputWrapper}>
-              <TextInput
-                style={styles.input}
-                placeholder="Adicione um comentário..."
-                placeholderTextColor="#999"
-                value={newComment}
-                onChangeText={setNewComment}
-              />
-            </View>
-          </View>
-          <TouchableOpacity style={styles.sendButton} onPress={handleSendComment}>
-            <Ionicons name="send" size={20} color="#fff" />
-          </TouchableOpacity>
-        </View>
-
-        <FlatList
-          data={comments}
-          keyExtractor={(_, i) => i.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.comment}>
-              <View style={styles.avatarBlock}>
-                {item.avatar ? (
-                  <Image
-                    source={{ uri: item.avatar }}
-                    style={{ width: 32, height: 32, borderRadius: 16 }}
-                  />
-                ) : (
-                  <Ionicons name="person" size={16} color="#fff" />
-                )}
-              </View>
-              <View style={styles.commentTextContainer}>
-                <Text style={styles.commentAuthor}>{item.author}</Text>
-                <Text style={styles.commentText}>{item.text}</Text>
-              </View>
-            </View>
-          )}
+        <CommentsSection
+          initialComments={initialComments}
+          placeId={placeId}
+          user={user}
+          token={token}
+          commentKey={commentKey}
         />
       </ScrollView>
 
