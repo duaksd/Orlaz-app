@@ -122,6 +122,24 @@ export default function CommentsSection({
   const getCommentId = (c) => c && (c.id || c._id || c.commentId || c.comment_id || c._idcomment || c.commentID);
   const getCommentUserId = (c) => c && (c.userId || c.user_id || c.authorId || c.author_id || c.userId);
   const getCommentText = (c) => c && (c.text || c.content || c.body || c.message || "");
+  const getCommentAuthor = (c) => {
+    if (!c) return null;
+    return c.author || c.name || c.profile?.name || c.user?.name || c.user?.username || c.user?.fullName || c.displayName || null;
+  };
+  const getCommentAvatar = (c) => {
+    if (!c) return null;
+    return c.avatar || c.profile?.avatarUrl || c.user?.avatar || c.user?.avatarUrl || c.avatarUrl || c.photo || c.profilePic || null;
+  };
+  const getCommentAvatarColor = (c) => {
+    if (!c) return null;
+    return c.profile?.avatarColor || c.avatarColor || null;
+  };
+  const getInitials = (name) => {
+    if (!name) return '';
+    const parts = String(name).trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  };
 
   const canModify = (item) => {
     if (!user) return false;
@@ -240,7 +258,7 @@ export default function CommentsSection({
         const result = await onSendComment(text, { placeId, user, token });
         if (result === true || typeof result === "undefined") {
           // parent handled but didn't return a created comment -> optimistic append
-          setComments((s) => [...s, { author: user?.name || "Você", text, avatar: user?.avatar }]);
+          setComments((s) => [...s, { author: user?.name || "Você", text, avatar: user?.avatar, profile: { name: user?.name, avatarUrl: user?.avatar || user?.avatarUrl, avatarColor: user?.avatarColor } }]);
         } else if (result) {
           // parent returned created comment object
           setComments((s) => [...s, result]);
@@ -285,12 +303,12 @@ export default function CommentsSection({
               console.warn('[CommentsSection] post failed', endpoint, res ? res.status : 'no-response', bodyText);
               Alert.alert('Erro', 'Não foi possível enviar o comentário.');
               // optimistic append so UX isn't blocked
-              setComments((s) => [...s, { author: user?.name || 'Você', text, avatar: user?.avatar }]);
+              setComments((s) => [...s, { author: user?.name || 'Você', text, avatar: user?.avatar, profile: { name: user?.name, avatarUrl: user?.avatar || user?.avatarUrl, avatarColor: user?.avatarColor } }]);
             }
           } catch (err) {
             console.error('[CommentsSection] fetch error for', endpoint, err);
             Alert.alert('Erro', 'Ocorreu um erro ao enviar o comentário.');
-            setComments((s) => [...s, { author: user?.name || 'Você', text, avatar: user?.avatar }]);
+            setComments((s) => [...s, { author: user?.name || 'Você', text, avatar: user?.avatar, profile: { name: user?.name, avatarUrl: user?.avatar || user?.avatarUrl, avatarColor: user?.avatarColor } }]);
           }
         } catch (e) {
           console.error('[CommentsSection] default post error', e);
@@ -345,14 +363,18 @@ export default function CommentsSection({
           return (
             <View style={localStyles.comment}>
               <View style={localStyles.avatarBlock}>
-                {item.avatar ? (
-                  <Image source={{ uri: item.avatar }} style={{ width: 32, height: 32, borderRadius: 16 }} />
+                {getCommentAvatar(item) ? (
+                  <Image source={{ uri: getCommentAvatar(item) }} style={{ width: 32, height: 32, borderRadius: 16 }} />
+                ) : getCommentAvatarColor(item) ? (
+                  <View style={[localStyles.initialsCircle, { backgroundColor: getCommentAvatarColor(item) }]}>
+                    <Text style={localStyles.initialsText}>{getInitials(getCommentAuthor(item))}</Text>
+                  </View>
                 ) : (
                   <Ionicons name="person" size={16} color="#fff" />
                 )}
               </View>
               <View style={localStyles.commentTextContainer}>
-                <Text style={localStyles.commentAuthor}>{item.author}</Text>
+                <Text style={localStyles.commentAuthor}>{getCommentAuthor(item) || 'Usuário'}</Text>
                 {isEditing ? (
                   <View>
                     <TextInput
@@ -408,4 +430,6 @@ const localStyles = StyleSheet.create({
   actionColumn: { width: 48, justifyContent: 'flex-start', alignItems: 'center', marginLeft: 8 },
   actionButton: { width: 36, height: 36, borderRadius: 8, backgroundColor: '#e6eef6', justifyContent: 'center', alignItems: 'center' },
   smallButton: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 6, backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center' },
+  initialsCircle: { width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
+  initialsText: { color: '#fff', fontWeight: 'bold' },
 });
